@@ -87,7 +87,5 @@ Greedy-argmax char-accuracy is computed on the first 60,000 chars of each split;
 5. Attain **val char-acc ≥ 0.70** on the first 60,000 chars of the val split.
 
 
-## Notes
-
 [^1]: More energy efficient
 [^2]: As of writing this
