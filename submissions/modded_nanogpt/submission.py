@@ -29,6 +29,7 @@ from __future__ import annotations
 __author__ = "@ab-10"
 
 import math
+import os
 import time
 
 import torch
@@ -284,7 +285,7 @@ class TrainConfig:
         head_dim=64,
         max_len=1024,
         batch_size=32,
-        n_steps=2400,
+        n_steps=2150,
         cooldown_frac=0.7,
         embed_lr=0.3,
         head_lr=1.0 / 320,
@@ -426,7 +427,7 @@ class ModdedNanoGPTCharModel(CharModel):
         self._pos = 0
         # Seed with a single zero byte — a stream-start sentinel that
         # gives predict() a valid distribution before any real char is
-        # observed. Same convention as baseline_transformer.
+        # observed.
         x = torch.zeros(1, 1, dtype=torch.long, device=self.device)
         logits, self._kv = self.model(x, None, offset=self._pos)
         self._next_logits = logits[0, -1]
@@ -472,6 +473,17 @@ class ModdedNanoGPTCharModel(CharModel):
 # ---------------------------------------------------------------------------
 
 def train(train_text: str, valid_text: str | None = None) -> CharModel:
+    # Optional reproducibility hook for floor-calibration sweeps. CUDA
+    # kernels remain partly nondeterministic even when seeded — this
+    # pins the sampling indices and init RNG, which is the dominant
+    # run-to-run variance source for this submission.
+    seed_env = os.environ.get("SEED")
+    if seed_env:
+        seed = int(seed_env)
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed)
+        print(f"[modded] SEED={seed}")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     cfg = TrainConfig()
     model = _train_modded(train_text, cfg, device)

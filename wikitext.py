@@ -15,6 +15,10 @@ Defines:
   without NVML the meter reports ``available=False`` and an energy of
   ``None`` — the eval still runs for development, but submissions must
   use a verified NVML host such as the pinned Modal A100 runner.
+* ``wall_clock_guard(max_seconds)`` — SIGALRM-based hard wall-clock cap
+  enforcing README rule 4. Raises ``TrainingTimeoutError`` when the
+  budget elapses inside the ``with`` block. No-op when ``max_seconds``
+  is ``None`` or when not on the main thread.
 * ``load_wikitext103(data_dir, split)`` — load the raw WikiText-103
   splits (``wiki.{train,valid,test}.raw``) as a single string.
 
@@ -23,9 +27,7 @@ note: training-only). Eval is *not* energy-accounted.
 """
 from __future__ import annotations
 
-import os
 import signal
-import threading
 import time
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
@@ -34,11 +36,9 @@ from pathlib import Path
 from typing import Iterable, Iterator
 
 
-class BudgetExceededError(RuntimeError):
-    """Raised inside ``EnergyMeter.measure()`` when running net energy
-    crosses the configured ``e_max_joules`` budget. The submission is
-    disqualified; partial duration / energy are still recorded on the
-    yielded ``Measurement``.
+class TrainingTimeoutError(RuntimeError):
+    """Raised inside ``wall_clock_guard`` when the configured wall-clock
+    budget elapses. The submission is reported DISQUALIFIED.
     """
 
 
@@ -159,13 +159,11 @@ def evaluate(
 class Measurement:
     energy_joules: float | None = None
     duration_s: float = 0.0
-    budget_exceeded: bool = False
 
     def __str__(self) -> str:
         e = (f"{self.energy_joules:,.1f} J"
              if self.energy_joules is not None else "energy: not measured")
-        dq = "  [BUDGET EXCEEDED]" if self.budget_exceeded else ""
-        return f"{e}   duration={self.duration_s:.1f}s{dq}"
+        return f"{e}   duration={self.duration_s:.1f}s"
 
 
 class EnergyMeter:
@@ -186,26 +184,14 @@ class EnergyMeter:
     and ``Measurement.energy_joules`` is ``None``. Submissions to the
     leaderboard must run on a host where ``available`` is ``True``.
 
-    If ``e_max_joules`` is set, a watchdog thread polls NVML every
-    ``poll_interval_s`` seconds during ``measure()``; when the running
-    net energy crosses the budget, ``BudgetExceededError`` is raised
-    into the main thread via SIGUSR1. The watchdog is a no-op on hosts
-    without NVML and on non-main-thread callers (signal install fails);
-    those callers hit the wall-clock hard floor instead.
+    Energy is the leaderboard ranking metric (lower wins), not a gate —
+    so the meter does not enforce any budget. The wall-clock cap of
+    README rule 4 lives in ``wall_clock_guard`` instead.
     """
 
-    def __init__(
-        self,
-        *,
-        gpu_index: int = 0,
-        idle_watts: float = 50.0,
-        e_max_joules: float | None = None,
-        poll_interval_s: float = 0.25,
-    ):
+    def __init__(self, *, gpu_index: int = 0, idle_watts: float = 50.0):
         self.gpu_index = gpu_index
         self.idle_watts = idle_watts
-        self.e_max_joules = e_max_joules
-        self.poll_interval_s = poll_interval_s
         self.available = False
         self._handle = None
         self._pynvml = None
@@ -227,89 +213,67 @@ class EnergyMeter:
         if self.available and self._pynvml is not None:
             e0 = self._pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
         t0 = time.monotonic()
-
-        watchdog_stop = threading.Event()
-        watchdog_thread: threading.Thread | None = None
-        prev_handler = None
-        budget_armed = (
-            self.e_max_joules is not None
-            and self.available
-            and self._pynvml is not None
-            and e0 is not None
-        )
-
-        if budget_armed:
-            try:
-                prev_handler = signal.signal(
-                    signal.SIGUSR1, _make_budget_signal_handler(m, self.e_max_joules)
-                )
-            except (ValueError, OSError):
-                # Not on main thread, or signal not available — fall back
-                # to os._exit() inside the watchdog.
-                prev_handler = None
-
-            main_pid = os.getpid()
-            handler_installed = prev_handler is not None
-            e_max = float(self.e_max_joules)  # type: ignore[arg-type]
-            pynvml = self._pynvml
-            handle = self._handle
-            idle_w = self.idle_watts
-            poll = self.poll_interval_s
-
-            def _watchdog() -> None:
-                while not watchdog_stop.wait(poll):
-                    try:
-                        e_now = pynvml.nvmlDeviceGetTotalEnergyConsumption(handle)
-                    except Exception:
-                        return
-                    duration = time.monotonic() - t0
-                    e_run_j = (e_now - e0) / 1000.0
-                    e_net_j = max(0.0, e_run_j - duration * idle_w)
-                    if e_net_j > e_max:
-                        m.budget_exceeded = True
-                        m.energy_joules = e_net_j
-                        m.duration_s = duration
-                        if handler_installed:
-                            os.kill(main_pid, signal.SIGUSR1)
-                        else:
-                            # Best-effort hard kill when we can't raise
-                            # into the main thread cleanly.
-                            os._exit(124)
-                        return
-
-            watchdog_thread = threading.Thread(target=_watchdog, daemon=True)
-            watchdog_thread.start()
-
         try:
             yield m
         finally:
-            watchdog_stop.set()
-            if watchdog_thread is not None:
-                watchdog_thread.join(timeout=2.0)
-            if prev_handler is not None:
-                try:
-                    signal.signal(signal.SIGUSR1, prev_handler)
-                except (ValueError, OSError):
-                    pass
-            # If the watchdog already filled these in, leave them — the
-            # post-fire NVML read can race the kill and produce a smaller
-            # delta. Otherwise compute as usual.
-            if not m.budget_exceeded:
-                m.duration_s = time.monotonic() - t0
-                if self.available and self._pynvml is not None and e0 is not None:
-                    e1 = self._pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
-                    e_run_j = (e1 - e0) / 1000.0  # NVML returns millijoules
-                    e_idle_j = m.duration_s * self.idle_watts
-                    m.energy_joules = max(0.0, e_run_j - e_idle_j)
+            # Capture duration / energy even if the body raised (e.g.
+            # TrainingTimeoutError from wall_clock_guard) — caller can
+            # then report the partial numbers on the DQ row.
+            m.duration_s = time.monotonic() - t0
+            if self.available and self._pynvml is not None and e0 is not None:
+                e1 = self._pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
+                e_run_j = (e1 - e0) / 1000.0  # NVML returns millijoules
+                e_idle_j = m.duration_s * self.idle_watts
+                m.energy_joules = max(0.0, e_run_j - e_idle_j)
 
 
-def _make_budget_signal_handler(m: Measurement, e_max: float | None):
+# ---------------------------------------------------------------------------
+# Wall-clock cap (README rule 4)
+# ---------------------------------------------------------------------------
+
+@contextmanager
+def wall_clock_guard(max_seconds: float | None) -> Iterator[None]:
+    """Raise ``TrainingTimeoutError`` if the ``with`` block runs past
+    ``max_seconds`` wall-clock seconds.
+
+    Implementation: ``signal.setitimer(ITIMER_REAL, max_seconds)`` arms
+    a one-shot SIGALRM whose handler raises ``TrainingTimeoutError``.
+    Cleared on normal exit.
+
+    No-op when ``max_seconds`` is ``None``, when not on the main thread,
+    or when signals aren't available (e.g. Windows ``SIGALRM`` is
+    absent). The Modal worker hits this path on the main thread, so
+    the enforcement is real where it matters.
+    """
+    if max_seconds is None or max_seconds <= 0:
+        yield
+        return
+
     def _handler(signum, frame):  # noqa: ARG001
-        raise BudgetExceededError(
-            f"training energy budget exceeded "
-            f"(e_max={e_max:,.0f} J, used≈{m.energy_joules or 0:,.0f} J)"
+        raise TrainingTimeoutError(
+            f"training wall-clock budget exceeded ({max_seconds:.1f} s)"
         )
-    return _handler
+
+    if not hasattr(signal, "SIGALRM") or not hasattr(signal, "setitimer"):
+        yield
+        return
+
+    try:
+        prev_handler = signal.signal(signal.SIGALRM, _handler)
+    except (ValueError, OSError):
+        # Not on main thread; cannot install signal handler.
+        yield
+        return
+
+    signal.setitimer(signal.ITIMER_REAL, max_seconds)
+    try:
+        yield
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        try:
+            signal.signal(signal.SIGALRM, prev_handler)
+        except (ValueError, OSError):
+            pass
 
 
 # ---------------------------------------------------------------------------
@@ -320,10 +284,10 @@ def load_wikitext103(data_dir: Path | str, split: str) -> str:
     """Return one of the WikiText-103 raw splits as a single string.
 
     Expects ``data_dir`` to contain ``wiki.train.raw``, ``wiki.valid.raw``,
-    ``wiki.test.raw``. The historical ``s3.amazonaws.com/research.metamind.io``
-    URL no longer resolves; fetch from the public GCS mirror at
-    ``gs://wikitext-103-raw-v1`` instead — see ``RUNBOOK.md`` step 2 for the
-    snippet that materialises these files.
+    ``wiki.test.raw``. The Modal runner bakes these into ``/data`` via
+    the prebuilt registry image (see ``Dockerfile`` and ``bake_wikitext.py``).
+    For local dev, ``fetch_data.py`` materialises them from the public
+    GCS mirror at ``gs://wikitext-103-raw-v1``.
     """
     valid = {"train", "valid", "test"}
     if split not in valid:
@@ -333,6 +297,6 @@ def load_wikitext103(data_dir: Path | str, split: str) -> str:
         raise FileNotFoundError(
             f"WikiText-103 raw file not found: {p}\n"
             f"Fetch from gs://wikitext-103-raw-v1 by running "
-            f"`python fetch_data.py {data_dir}` — see RUNBOOK.md step 2."
+            f"`python fetch_data.py {data_dir}`."
         )
     return p.read_text(encoding="utf-8")

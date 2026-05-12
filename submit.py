@@ -43,10 +43,10 @@ HERE = Path(__file__).resolve().parent
 
 # Modal A100-40GB list price as of 2026-05: $2.10/hr.
 # A typical run is ~15 min (image cold-start + verify_nvml + ~5 min
-# training capped by E_MAX_JOULES + ~2 min eval). The image is the
-# prebuilt public ghcr.io artifact with torch + WikiText-103 already
-# baked in, so cold start is just the registry pull (~85s); no GCS
-# download or pip install at run time.
+# training capped by task.MAX_TRAIN_SECONDS + ~2 min eval over val+test).
+# The image is the prebuilt public ghcr.io artifact with torch +
+# WikiText-103 already baked in, so cold start is just the registry
+# pull (~85s); no GCS download or pip install at run time.
 EST_RUNTIME_MIN = 15
 EST_RATE_USD_PER_HR = 2.10
 EST_COST_USD = round(EST_RUNTIME_MIN * EST_RATE_USD_PER_HR / 60, 2)
@@ -76,8 +76,6 @@ if _provider != "modal" or not MODAL_GPU:
 
 HARNESS_FILES = (
     "wikitext.py",
-    "baseline_ngram.py",
-    "baseline_transformer.py",
     "run_eval.py",
     "verify_nvml.py",
     "task.py",
@@ -124,14 +122,26 @@ for _f in HARNESS_FILES:
 @app.function(
     image=image,
     gpu=MODAL_GPU,
-    # Hard wall-clock cap. Training is bounded at ~5 min by
-    # task.E_MAX_JOULES (NVML watchdog), plus image cold-start +
-    # eval ≈ <15 min realistic. 30 min gives 2× safety.
-    timeout=30 * 60,
+    # Hard wall-clock cap on the whole function. Training itself is
+    # bounded by task.MAX_TRAIN_SECONDS (SIGALRM-based wall_clock_guard
+    # inside run_eval.py); the remaining budget covers image cold-start
+    # plus 2×60K-char autoregressive eval. Observed eval throughput
+    # varies ~1.4× across Modal workers (88–125 char/s); on a slow
+    # worker the full pipeline is ~29 min, so 50 min gives headroom.
+    timeout=50 * 60,
 )
-def run_submission(submission_bytes: bytes, submission_name: str) -> dict:
+def run_submission(
+    submission_bytes: bytes,
+    submission_name: str,
+    seed: int | None = None,
+) -> dict:
     """Run a submission end-to-end on the pinned Modal GPU and return
-    the result dict that submit.py will save and record."""
+    the result dict that submit.py will save and record.
+
+    ``seed`` is exposed to the submission via the ``SEED`` env var (read
+    by submission.py if present). Used by the floor-calibration sweep;
+    None for normal record-class runs.
+    """
     import json
     import os
     import subprocess
@@ -140,6 +150,9 @@ def run_submission(submission_bytes: bytes, submission_name: str) -> dict:
 
     workspace = Path("/workspace")
     os.chdir(workspace)
+    if seed is not None:
+        os.environ["SEED"] = str(seed)
+        print(f"[modal] SEED={seed} (calibration run)")
 
     # WikiText-103 is baked into /data inside the prebuilt registry image
     # (see Dockerfile + WIKITEXT_IMAGE_REF above).
@@ -186,7 +199,8 @@ def run_submission(submission_bytes: bytes, submission_name: str) -> dict:
     import importlib
     task_mod = importlib.import_module("task")
     test_chars = task_mod.TEST_CHARS
-    e_max = task_mod.E_MAX_JOULES
+    max_train_seconds = task_mod.MAX_TRAIN_SECONDS
+    acc_min = task_mod.ACC_MIN
 
     eval_args = [
         sys.executable, "run_eval.py",
@@ -195,22 +209,28 @@ def run_submission(submission_bytes: bytes, submission_name: str) -> dict:
         "--results-json", "/tmp/result.json",
         "--max-test-chars", str(test_chars),
     ]
-    if e_max is not None:
-        eval_args += ["--e-max-joules", str(e_max)]
+    if max_train_seconds is not None:
+        eval_args += ["--max-train-seconds", str(max_train_seconds)]
+    if acc_min is not None:
+        eval_args += ["--acc-min", str(acc_min)]
 
     print(f"[modal] running submission "
-          f"(TEST_CHARS={test_chars} E_MAX={e_max}) ...")
+          f"(TEST_CHARS={test_chars} "
+          f"MAX_TRAIN_SECONDS={max_train_seconds} "
+          f"ACC_MIN={acc_min}) ...")
     rc = subprocess.run(eval_args).returncode
 
-    # run_eval exits 2 on the energy-budget DQ path *with* a written
-    # result.json — that's a valid leaderboard outcome and we ship it.
-    # Anything else missing the JSON is a harness failure.
+    # run_eval exits 2 on either DQ path (wall-clock or val accuracy)
+    # *with* a written result.json — that's a valid leaderboard outcome
+    # and we ship it. Anything else missing the JSON is a harness failure.
     rj = Path("/tmp/result.json")
     if not rj.exists():
         raise RuntimeError(f"run_eval.py failed (rc={rc}); no result.json written")
 
     result = json.loads(rj.read_text())
     result["_nvml"] = nvml_summary
+    if seed is not None:
+        result["seed"] = seed
     return result
 
 
@@ -256,13 +276,23 @@ def precheck_submission(submission_path: Path) -> str:
     return author or "@you"
 
 
-def save_result(result: dict, sub_dir: Path) -> Path:
-    out_path = sub_dir / "result.json"
+def _suffixed(name: str, seed: int | None) -> str:
+    """``"result.json"`` → ``"result.json"`` or ``"result.seed3.json"``."""
+    if seed is None:
+        return name
+    stem, _, ext = name.partition(".")
+    return f"{stem}.seed{seed}.{ext}" if ext else f"{stem}.seed{seed}"
+
+
+def save_result(result: dict, sub_dir: Path, *, seed: int | None = None) -> Path:
+    out_path = sub_dir / _suffixed("result.json", seed)
     out_path.write_text(json.dumps(result, indent=2) + "\n")
     return out_path
 
 
-def save_nvml_artifact(result: dict, sub_dir: Path) -> Path | None:
+def save_nvml_artifact(
+    result: dict, sub_dir: Path, *, seed: int | None = None,
+) -> Path | None:
     """Write ``<sub_dir>/nvml.json`` evidence from the embedded
     ``_nvml`` field returned by the Modal function.
 
@@ -271,7 +301,7 @@ def save_nvml_artifact(result: dict, sub_dir: Path) -> Path | None:
     nvml = result.get("_nvml")
     if not nvml:
         return None
-    out_path = sub_dir / "nvml.json"
+    out_path = sub_dir / _suffixed("nvml.json", seed)
     out_path.write_text(json.dumps(nvml, indent=2) + "\n")
     return out_path
 
@@ -290,7 +320,7 @@ def append_record(result: dict, dir_relpath: str) -> None:
     if result.get("disqualified"):
         acc_cell = "      DQ"
     else:
-        acc_cell = f"{result['test_char_accuracy']:.4f}"
+        acc_cell = f"{result['val_char_accuracy']:.4f}"
     contributor = result.get("contributor") or "@you"
     row = (
         f"| {result['date_utc'][:10]} "
@@ -335,6 +365,11 @@ def main() -> int:
                         "into this directory.")
     p.add_argument("--yes", action="store_true",
                    help="Skip cost confirmation prompt")
+    p.add_argument("--seed", type=int, default=None,
+                   help="If set, exposed to the submission as SEED env var "
+                        "and treated as a floor-calibration run: artifacts "
+                        "are written with a .seed{N} suffix and the result "
+                        "is NOT appended to the Record History table.")
     args = p.parse_args()
 
     sub_dir = args.submission_dir.resolve()
@@ -358,48 +393,62 @@ def main() -> int:
     contributor = precheck_submission(sub_path)
     submission_bytes = sub_path.read_bytes()
 
-    log_path = sub_dir / "run.log"
+    log_path = sub_dir / _suffixed("run.log", args.seed)
     log_f = log_path.open("w")
+    seed_tag = f"  SEED={args.seed}" if args.seed is not None else ""
     log_f.write(
-        f"# wikitext submit.py log — {submission_name} — "
+        f"# wikitext submit.py log — {submission_name}{seed_tag} — "
         f"{datetime.now(timezone.utc).replace(microsecond=0).isoformat()}Z\n"
     )
 
     real_stdout = sys.stdout
     sys.stdout = _Tee(real_stdout, log_f)
     try:
-        print(f"[modal] launching {MODAL_GPU} ...")
+        print(f"[modal] launching {MODAL_GPU}{seed_tag} ...")
         # modal.enable_output() writes to the real stdout fd, so its
         # progress feed is visible in the terminal but not captured into
         # run.log. Our prints + the result block are captured.
         with modal.enable_output(), app.run():
-            result = run_submission.remote(submission_bytes, submission_name)
+            result = run_submission.remote(
+                submission_bytes, submission_name, seed=args.seed,
+            )
     finally:
         sys.stdout = real_stdout
 
     result["contributor"] = contributor
-    out_path = save_result(result, sub_dir)
-    save_nvml_artifact(result, sub_dir)
-    rel_dir = sub_dir.relative_to(HERE).as_posix()
-    append_record(result, dir_relpath=rel_dir)
+    out_path = save_result(result, sub_dir, seed=args.seed)
+    save_nvml_artifact(result, sub_dir, seed=args.seed)
+    # Seeded calibration runs don't enter the leaderboard.
+    if args.seed is None:
+        rel_dir = sub_dir.relative_to(HERE).as_posix()
+        append_record(result, dir_relpath=rel_dir)
 
     log_f.write("\n# final result\n")
     log_f.write(json.dumps(result, indent=2) + "\n")
     log_f.close()
 
     if result.get("disqualified"):
-        e_max = result.get("e_max_joules")
-        e_at_kill = result.get("training_energy_J")
+        reason = result.get("reason", "unknown")
         dur = result.get("training_duration_s")
-        print(f"[done] DISQUALIFIED — submission exceeded the training "
-              f"energy budget.")
-        print(f"       reason   = {result.get('reason', 'unknown')}")
-        if e_max is not None:
-            print(f"       e_max    = {e_max:,.0f} J")
-        if e_at_kill is not None:
-            print(f"       at_kill  = {e_at_kill:,.0f} J")
-        if dur is not None:
-            print(f"       duration = {dur:.1f} s")
+        energy = result.get("training_energy_J")
+        print(f"[done] DISQUALIFIED — {reason}")
+        if reason == "train_time_exceeded":
+            cap = result.get("max_train_seconds")
+            if cap is not None:
+                print(f"       cap      = {cap:.0f} s")
+            if dur is not None:
+                print(f"       at_kill  = {dur:.1f} s")
+        elif reason == "val_accuracy_below_floor":
+            floor = result.get("acc_min")
+            val_acc = result.get("val_char_accuracy")
+            if floor is not None:
+                print(f"       floor    = {floor:.4f}")
+            if val_acc is not None:
+                print(f"       val_acc  = {val_acc:.4f}")
+            if dur is not None:
+                print(f"       train_s  = {dur:.1f}")
+        if energy is not None:
+            print(f"       energy   = {energy:,.0f} J")
         print(f"       result   = {out_path}")
         # Non-zero exit so CI scripts can distinguish DQ from a clean
         # leaderboard submission, even though the harness ran cleanly.
@@ -411,7 +460,7 @@ def main() -> int:
         print(f"       energy = {energy:,.0f} J")
     else:
         print(f"       energy = NOT MEASURED")
-    print(f"       acc    = {result['test_char_accuracy']:.4f}")
+    print(f"       acc    = {result['val_char_accuracy']:.4f}")
     return 0
 
 
