@@ -231,7 +231,6 @@ against unintentional cheating from coding agents.
 | `fixtures/tiny/`           | tiny committed raw splits for local CPU smoke tests              |
 | `verify_nvml.py`           | NVML energy-counter verification for a target host               |
 | `test_wikitext.py`         | tests for the evaluator + n-gram                                 |
-| `RUNBOOK.md`               | NVML verification + manual baseline experimentation on Modal A100 |
 
 ## Record History
 

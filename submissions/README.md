@@ -27,6 +27,5 @@ python3 wip-wikitext/submit.py wip-wikitext/submissions/<name>
 
 `submit.py` writes `result.json`, `nvml.json`, and `run.log`
 automatically and appends the row to the Record History in
-[`../README.md`](../README.md). For manual runs via
-[`../RUNBOOK.md`](../RUNBOOK.md), drop the files in by hand and append
-the row yourself.
+[`../README.md`](../README.md). For manual runs, drop the files in by
+hand and append the row yourself.
