@@ -64,10 +64,11 @@ Just keep asking the coding agent to explain what's going on until you feel like
 This is just a suggested starting point.
 Customizing the agentic harness is a good next step!
 
-## Leaderboard
+## Record History
 
-- [ ] Make sure the leaderboard integrates with the submission script
-
+| Date | Energy (J) | Char-acc | Config | Submission | Contributor |
+|------|-----------:|---------:|--------|------------|-------------|
+| 2026-05-11 |     53,337 | 0.7300 | modded_nanogpt | [dir](submissions/modded_nanogpt) | @ab-10 |
 
 
 ## Rules
