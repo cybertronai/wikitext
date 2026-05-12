@@ -42,12 +42,12 @@ import task  # task-pinned constants — single source of truth
 HERE = Path(__file__).resolve().parent
 
 # Modal A100-40GB list price as of 2026-05: $2.10/hr.
-# A typical run is ~10 min (image cold-start + verify_nvml + ~5 min
+# A typical run is ~15 min (image cold-start + verify_nvml + ~5 min
 # training capped by E_MAX_JOULES + ~2 min eval). The image is the
 # prebuilt public ghcr.io artifact with torch + WikiText-103 already
 # baked in, so cold start is just the registry pull (~85s); no GCS
 # download or pip install at run time.
-EST_RUNTIME_MIN = 10
+EST_RUNTIME_MIN = 15
 EST_RATE_USD_PER_HR = 2.10
 EST_COST_USD = round(EST_RUNTIME_MIN * EST_RATE_USD_PER_HR / 60, 2)
 
