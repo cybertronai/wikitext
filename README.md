@@ -1,15 +1,30 @@
-# wikitext (WIP)
+# Can you come up with a better[^1] language model?
 
-Char-level WikiText-103 under a 100 kJ training-energy budget on a
-pinned Modal A100-40GB. Maximize greedy-argmax char-accuracy on the
-first 60K chars of test under the budget.
+Language models are very expensive to train.
+This repo is an ongoing effort to come up with alternative language model architectures that are cheaper to train.
+It's sufficiently accessible that you can make progress without prior ML knowledge.
+
+The goal of the wikitext challenge is to find an algorithm that learns the character probability distribution over Wikipedia in the most energy efficient way.
+We care about learning a probability distribution because that's the main way LLMs get their knowledge of language.
+This task makes an assumption that any algorithm that can predict text well will learn general linguistic intelligence.
+
+**What you'll need:**
+1. Claude Code subscription
+2. Modal account ($30 of free credits is more than enough to get started).
+3. A Python interpreter (version 3.11)
+
+**What you won't need:**
+1. Access to a GPU cluster
+2. Knowledge of linear algebra or multivariate calculus
+3. Previous background in ML or DL
 
 ## Quickstart
 
-**Pre-requisites:**
-1. Python 3.11+
-2. [Modal](https://modal.com) account.
+First, make sure you can replicate the existing state-of-the-art model.
 
+**Prerequisites:**
+1. [Modal](https://modal.com) account.
+2. Python 3.11
 
 ```bash
 # From wip-wikitext/
@@ -21,219 +36,55 @@ modal token new
 python submit.py submissions/modded_nanogpt
 ```
 
-In subsequent shells, just `source .venv/bin/activate` before steps 2/3.
-`requirements.txt` only pins `modal` + `pytest`; submission deps
-(`torch` etc.) live inside the Modal container, not the local venv.
+Well done, you just replicated the existing state-of-the-art[^2] [nanogpt speedrun](https://github.com/KellerJordan/modded-nanogpt) submission!
 
-The baseline run takes ~15 min and ~$0.53 on Modal's $2.10/hr A100-40GB
-rate, and lands the first row in the [Record History](#record-history)
-below.
+## Research Setup
 
-## Local CPU smoke
+Running existing work is all well and good, but we want to discover new stuff!
+Here's how you do that.
+We'll set up the Claude Code agent harness to iteratively research new approaches and test them.
 
-Run this first if you only want to check the evaluator and n-gram
-baseline locally. It does not require Docker, Modal, a GPU, NVML, cloud
-credentials, or a WikiText-103 download.
+1. Ask Claude Code to "set up github.com/cybertronai/sutroana's slash commands in the current project".
+    That's the agentic harness.
+2. Now, restart Claude Code to make `/optimize` slash command available.
+    Run `/optimize .`
+3. You can watch the progress by running `python monitor.py . --watch` (from your virtualenv).
 
-```bash
-# From wip-wikitext/, with the venv activated.
-python test_wikitext.py
-python run_eval.py \
-    --data-dir fixtures/tiny \
-    --baseline ngram --n 3 --max-test-chars 300 --progress-every 0
-```
 
-## Baseline submission
+(Recommended) While the agent is researching solutions, pick one of them that sounds interesting and ask Claude Code to explain it to you.
+Keep asking questions until it makes sense.
+Asking Claude to draw HTML visualizations as outputs instead of Markdown helps a lot here.
 
-[`submissions/modded_nanogpt/submission.py`](submissions/modded_nanogpt/submission.py)
-is a byte-vocab port of the modded-nanogpt "simple" recipe (Muon + RoPE
-+ QK RMSNorm + ReLU² + zero-init projections + stable-then-decay LR)
-for 1xA100-40GB. Defaults (in `TrainConfig`): ~22M params, 2400 steps,
-batch 32, seq 1024 — fits within the 100 kJ budget pinned in
-[`task.py`](task.py).
+**Feeling confused?**
+That's great!
+Understanding comes from resolving confusion.
+Just keep asking the coding agent to explain what's going on until you feel like you have a grasp of it.
 
-A *port*, not a 1:1 reproduction: upstream targets FineWeb tokens on
-8xH100 in <90 s; this is bytes on 1xA100-40GB under 100 kJ. LRs are
-still upstream defaults and almost certainly want re-tuning — the
-obvious next record-improvement. See the file's docstring for the full
-list of tricks ported / adapted / dropped.
 
-## Submitting your own model
+This is just a suggested starting point.
+Customizing the agentic harness is a good next step!
 
-1. Create a directory under `submissions/` named after your submission
-   (e.g. `submissions/my_model/`).
-2. Add a `submission.py` exposing:
+## Leaderboard
 
-   ```python
-   def train(train_text: str, valid_text: str | None = None) -> CharModel: ...
-   ```
+- [ ] Make sure the leaderboard integrates with the submission script
 
-   Optionally set `__author__ = "@you"` at module top — `submit.py`
-   credits it in the Record History row. Use the
-   [`modded_nanogpt`](submissions/modded_nanogpt/submission.py)
-   submission as a starting template.
-3. Ship it:
 
-   ```bash
-   python3 wip-wikitext/submit.py wip-wikitext/submissions/my_model
-   ```
 
-`submit.py` defines a Modal app that pulls a prebuilt public image
-(`ghcr.io/ab-10/wikitext-bench`, source: [`Dockerfile`](Dockerfile))
-containing torch + nvidia-ml-py + pyarrow with the WikiText-103 raw
-splits already baked into `/data`. It calls a single A100-40GB
-function with your file's bytes as the only argument and runs the
-pipeline end-to-end (NVML probe → train under `EnergyMeter` → 60K-char
-eval), returning the result dict. Modal caches the registry digest, so
-cold start is just the one-time ~85s pull; harness / submission edits
-do not re-pull or re-fetch the dataset.
+## Rules
 
-After the result lands locally, `submit.py` writes `result.json`,
-`nvml.json`, and `run.log` into the same submission directory and
-appends a row to the [Record History](#record-history).
+Train a character-level language model from scratch on **WikiText-103**.
+The runner scores it on the **first 60,000 chars** of the held-out test split by greedy-argmax char-accuracy.
 
-Per-config knobs (model size, n_steps, peak_lr, …) live inside your
-file's `train()` function. `submit.py` itself takes no model-sizing
-flags — `task.py`'s `TEST_CHARS=60_000`,
-`INSTANCE_TYPE=modal:A100-40GB`, `E_MAX_JOULES=100_000` are leaderboard
-rules and submitters cannot vary them.
+**Submissions must:**
 
-Submitter pays for their training run; an official re-evaluator (TBD —
-see [Open items](#open-items)) re-runs the same Modal function on the
-pushed submission to reproduce the reported (energy, accuracy) within
-tolerance.
+1. Train from scratch. (No pre-trained weights — WikiText overlaps WebText, so pre-trained init poisons the comparison.)
+2. Use the standard WikiText-103 train/valid/test split. (You can change batch size, sequence length, attention structure, etc.; just don't change the underlying streams of characters.)
+3. Expose a streaming next-character distribution via the `CharModel` API. (The runner calls `predict()` for position `i` strictly before `observe()` commits the ground-truth at position `i` — within-document future-peeking is structurally impossible.)
+    a. Implementing `CharModel` ABC from `wikitext.py` is the most straightforward way to do this.
+4. Fit within the energy budget pinned in [`task.py`](task.py): **100 kJ** on a Modal A100-40GB SXM4 (≈5 min × 329 W avg net).
 
-## Problem
 
-Train a character-level language model from scratch on **WikiText-103**
-using the standard train/valid/test split. The model exposes a
-streaming next-character distribution; the runner scores it on the
-**first 60,000 chars** of the held-out test split by greedy-argmax
-char-accuracy. (60K is fixed for comparability; ~2 min eval, ±0.4–1.3pp
-95% CI. Pass `--max-test-chars 0` to score the full 1.3M-char split;
-not required for the leaderboard.)
+## Notes
 
-Two leaderboard framings ship side-by-side; same two numbers, only the
-constraint differs:
-
-| framing          | knob          | metric              |
-|------------------|---------------|---------------------|
-| **fixed-budget** | `E_max` joules  | maximize char-acc   |
-| **fixed-floor**  | `acc_min`       | minimize joules     |
-
-`E_max` is pinned at **100 kJ** in [`task.py`](task.py) (≈5 min × 329 W
-avg net on the pinned A100 SXM4). `acc_min` is unset until a baseline
-record exists.
-
-Char-accuracy (greedy argmax over `P(next_char | prefix)`) is chosen
-over token-accuracy or cross-entropy specifically so the metric is
-**tokenization-agnostic**: any model that produces a next-character
-distribution is comparable, regardless of internal vocabulary.
-Pre-trained weights are disallowed (train-from-scratch only) —
-WikiText overlaps WebText, so allowing pretrained init poisons the
-comparison.
-
-## API
-
-```python
-import wikitext
-
-# Streaming next-character interface. Future-peeking is structurally
-# impossible: the runner calls predict() for position i strictly
-# before observe() commits the ground-truth char at position i.
-class CharModel:
-    def reset(self) -> None: ...
-    def predict(self) -> dict[str, float]: ...   # P(next_char | so_far)
-    def observe(self, char: str) -> None: ...    # commit ground-truth
-
-# Greedy-argmax char-accuracy; one stream, one reset() at start.
-result = wikitext.evaluate(model, test_text)
-print(result.accuracy)
-
-# nvmlDeviceGetTotalEnergyConsumption-based meter; reports
-# E_run - idle_watts * duration in joules. None on hosts without NVML.
-meter = wikitext.EnergyMeter()
-with meter.measure() as m:
-    train_my_model()
-print(m.energy_joules)
-```
-
-The two reference baselines plug into `CharModel`:
-
-```python
-from baseline_ngram import NGramModel
-from baseline_transformer import train_transformer, TransformerModel
-
-ngram = NGramModel(n=5);              ngram.train(train_text)
-xfmr  = train_transformer(train_text, config="small", n_steps=30_000)
-xfmr_streamer = TransformerModel(xfmr)   # KV-cached streaming wrapper
-```
-
-## Energy measurement
-
-- **Hardware**: pinned **Modal A100 40GB SXM4** (`gpu="A100-40GB"`).
-  Energy numbers are comparable only on this pinned SKU and runner
-  configuration unless a fallback provider is separately verified and
-  recorded as a distinct `INSTANCE_TYPE`.
-- **Counter**: `nvmlDeviceGetTotalEnergyConsumption` — monotonic
-  millijoule counter exposed on Volta+. Read at run start, read at run
-  end, subtract.
-- **Idle subtraction**: calibrate `idle_power × duration` once per host
-  (≈50 W on A100); subtract from `E_run`.
-- **Reported energy**: `E_run − E_idle`, in joules.
-- **Scope**: training only — inference-time energy is not charged in v0.
-
-[`verify_nvml.py`](verify_nvml.py) confirms the counter is exposed,
-monotonic, and produces plausible Watts on the chosen SKU before any
-record-class run. `submit.py` invokes it inside the Modal container on
-every run; first failure aborts before training spend.
-
-## Anti-cheat
-
-The streaming `CharModel` API makes within-document future-peeking
-structurally impossible: the model emits position-`i`'s distribution
-before being told the ground-truth at position `i`. This defends
-against a coding agent unintentionally introducing bidirectional
-attention, batched-prefix scoring, etc.
-
-Throughput is preserved via internal KV-cache: each `observe`/`predict`
-pair is `O(1)` marginal — same wall-time as a single batched forward
-pass.
-
-Beyond that:
-
-- The current Modal runner bakes the fixed train/valid/test raw splits
-  into `/data` for reproducibility and faster warm runs. This is not a
-  test-hiding mechanism.
-- No container-level network isolation or train/eval split remounting
-  is implemented in v0. Add those before treating this as an adversarial
-  leaderboard.
-- Pre-trained weights disallowed (train-from-scratch only).
-
-That's it for v0. We trust the submitter; the design above defends
-against unintentional cheating from coding agents.
-
-## Files
-
-| file                       | purpose                                                          |
-|----------------------------|------------------------------------------------------------------|
-| `wikitext.py`              | `CharModel` ABC, streaming `evaluate`, `EnergyMeter`, data loader |
-| `baseline_ngram.py`        | n-gram baseline with stupid-backoff smoothing (no torch dep)     |
-| `baseline_transformer.py`  | small GPT-2-style transformer with KV-cached streaming (PyTorch) |
-| `task.py`                  | task-pinned constants (`TEST_CHARS`, `INSTANCE_TYPE`, `E_MAX_JOULES`) |
-| `run_eval.py`              | CLI: trains a baseline or user submission (energy-measured), then evals |
-| `submit.py`                | end-to-end submission orchestrator: defines a Modal A100 function and runs it |
-| `Dockerfile`               | builds `ghcr.io/ab-10/wikitext-bench` (torch + pyarrow + WikiText-103 baked into `/data`) — pulled by `submit.py` via `Image.from_registry` |
-| `fetch_data.py`            | downloads WikiText-103 from `gs://wikitext-103-raw-v1` to a local dir — used to stage `wikitext-103-raw-v1/` for the Dockerfile build context |
-| `bake_wikitext.py`         | parquet → `wiki.{split}.raw` helper used by `fetch_data.py`      |
-| `submissions/`             | one subdirectory per submission: `submission.py` + `result.json` + `nvml.json` + `run.log` |
-| `submissions/modded_nanogpt/` | baseline submission — byte-vocab port of [modded-nanogpt](https://github.com/KellerJordan/modded-nanogpt) (Muon + RoPE + ReLU²) for 1xA100-40GB |
-| `fixtures/tiny/`           | tiny committed raw splits for local CPU smoke tests              |
-| `verify_nvml.py`           | NVML energy-counter verification for a target host               |
-| `test_wikitext.py`         | tests for the evaluator + n-gram                                 |
-
-## Record History
-
-| Date | Energy (J) | Char-acc | Config | Submission | Contributor |
-|------|-----------:|---------:|--------|------------|-------------|
-| 2026-05-11 |     53,337 | 0.7300 | modded_nanogpt | [dir](submissions/modded_nanogpt) | @ab-10 |
+[^1]: More energy efficient
+[^2]: As of writing this
