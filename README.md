@@ -74,7 +74,8 @@ Customizing the agentic harness is a good next step!
 ## Rules
 
 Train a character-level language model from scratch on **WikiText-103**.
-The runner scores it on the **first 60,000 chars** of the held-out test split by greedy-argmax char-accuracy.
+Submissions that meet the constraints below are ranked by **training energy (joules)**, lower wins.
+Greedy-argmax char-accuracy is computed on the first 60,000 chars of each split; val is gated by rule 5, test is reported alongside but not gated.
 
 **Submissions must:**
 
@@ -82,7 +83,8 @@ The runner scores it on the **first 60,000 chars** of the held-out test split by
 2. Use the standard WikiText-103 train/valid/test split. (You can change batch size, sequence length, attention structure, etc.; just don't change the underlying streams of characters.)
 3. Expose a streaming next-character distribution via the `CharModel` API. (The runner calls `predict()` for position `i` strictly before `observe()` commits the ground-truth at position `i` — within-document future-peeking is structurally impossible.)
     a. Implementing `CharModel` ABC from `wikitext.py` is the most straightforward way to do this.
-4. Fit within the energy budget pinned in [`task.py`](task.py): **100 kJ** on a Modal A100-40GB SXM4 (≈5 min × 329 W avg net).
+4. Finish training in **< 300 s wall-clock** on the pinned Modal A100-40GB SXM4, measured from the first call into `train()` to its return. (Eval is not charged against this budget.)
+5. Attain **val char-acc ≥ 0.70** on the first 60,000 chars of the val split.
 
 
 ## Notes
