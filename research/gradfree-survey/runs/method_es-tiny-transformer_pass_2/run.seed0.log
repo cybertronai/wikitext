@@ -1,0 +1,152 @@
+# wikitext submit.py log — method_es-tiny-transformer_pass_2  SEED=0 — 2026-05-17T13:47:11+00:00Z
+[modal] launching A100-80GB  SEED=0 ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-eHQ3htcrAl3j1IgKmATHgk
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+└── 🔨 Created function run_submission.
+[modal] SEED=0 (calibration run)
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 55.5 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.2 s
+  energy delta:   8,742.7 J
+  avg power:      235.0 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 55.54771666666666, "stress_watts_avg": 235.0363780502901, "stress_energy_joules": 8742.705, "stress_duration_s": 37.197241859, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/method_es-tiny-transformer_pass_2.py ...
+[es-p2] SEED=0
+[es-p2] model: L=2 d=32 h=32 mlp_mult=2 ctx=32  params=33,664  D=33,664
+[es-p2] population P=128 (antithetic half=64) sigma_start=0.05 sigma_end=0.01 alpha=0.03 batch=32 budget=260s iters_estimate=740
+[es-p2] rank weights: min=-0.0078 max=0.0595 ||w||_1=1.2028
+[es-p2] iter    1  mean_NLL=5.5880  best=5.5158  worst=5.6728  sigma=0.0500  ||theta||=94.04  ||upd||_inf=0.2500  elapsed=1s
+[es-p2] iter   25  mean_NLL=3.8016  best=3.6882  worst=3.9848  sigma=0.0487  ||theta||=130.80  ||upd||_inf=0.2435  elapsed=12s
+[es-p2] iter   50  mean_NLL=3.5846  best=3.4662  worst=3.7216  sigma=0.0474  ||theta||=161.42  ||upd||_inf=0.2368  elapsed=23s
+[es-p2] iter   75  mean_NLL=3.5040  best=3.4333  worst=3.6162  sigma=0.0460  ||theta||=189.06  ||upd||_inf=0.2300  elapsed=34s
+[es-p2] iter  100  mean_NLL=3.6555  best=3.4936  worst=3.8855  sigma=0.0446  ||theta||=213.14  ||upd||_inf=0.2232  elapsed=46s
+[es-p2] iter  125  mean_NLL=3.5783  best=3.5042  worst=3.6675  sigma=0.0433  ||theta||=235.21  ||upd||_inf=0.2165  elapsed=57s
+[es-p2] iter  150  mean_NLL=3.6039  best=3.5415  worst=3.6760  sigma=0.0419  ||theta||=256.65  ||upd||_inf=0.2097  elapsed=68s
+[es-p2] iter  175  mean_NLL=3.5866  best=3.5119  worst=3.6832  sigma=0.0406  ||theta||=276.27  ||upd||_inf=0.2030  elapsed=79s
+[es-p2] iter  200  mean_NLL=3.5888  best=3.5310  worst=3.6592  sigma=0.0392  ||theta||=295.23  ||upd||_inf=0.1962  elapsed=90s
+[es-p2] iter  225  mean_NLL=3.3535  best=3.3252  worst=3.3854  sigma=0.0379  ||theta||=313.43  ||upd||_inf=0.1895  elapsed=101s
+[es-p2] iter  250  mean_NLL=3.3448  best=3.3258  worst=3.3693  sigma=0.0365  ||theta||=330.65  ||upd||_inf=0.1827  elapsed=112s
+[es-p2] iter  275  mean_NLL=3.3161  best=3.3001  worst=3.3344  sigma=0.0352  ||theta||=347.62  ||upd||_inf=0.1759  elapsed=122s
+[es-p2] iter  300  mean_NLL=3.2401  best=3.2314  worst=3.2508  sigma=0.0338  ||theta||=363.87  ||upd||_inf=0.1692  elapsed=132s
+[es-p2] iter  325  mean_NLL=3.2475  best=3.2352  worst=3.2628  sigma=0.0325  ||theta||=379.83  ||upd||_inf=0.1624  elapsed=142s
+[es-p2] iter  350  mean_NLL=3.2702  best=3.2569  worst=3.2842  sigma=0.0311  ||theta||=394.18  ||upd||_inf=0.1557  elapsed=152s
+[es-p2] iter  375  mean_NLL=3.2280  best=3.2167  worst=3.2451  sigma=0.0298  ||theta||=407.51  ||upd||_inf=0.1489  elapsed=163s
+[es-p2] iter  400  mean_NLL=3.2136  best=3.2044  worst=3.2256  sigma=0.0284  ||theta||=420.07  ||upd||_inf=0.1422  elapsed=174s
+[es-p2] iter  425  mean_NLL=3.2558  best=3.2417  worst=3.2723  sigma=0.0271  ||theta||=432.28  ||upd||_inf=0.1354  elapsed=186s
+[es-p2] iter  450  mean_NLL=3.2698  best=3.2554  worst=3.2859  sigma=0.0257  ||theta||=443.61  ||upd||_inf=0.1286  elapsed=196s
+[es-p2] iter  475  mean_NLL=3.3004  best=3.2869  worst=3.3157  sigma=0.0244  ||theta||=453.80  ||upd||_inf=0.1219  elapsed=207s
+[es-p2] iter  500  mean_NLL=3.4078  best=3.3978  worst=3.4197  sigma=0.0230  ||theta||=463.26  ||upd||_inf=0.1151  elapsed=218s
+[es-p2] iter  525  mean_NLL=3.2446  best=3.2372  worst=3.2528  sigma=0.0217  ||theta||=471.88  ||upd||_inf=0.1084  elapsed=229s
+[es-p2] iter  550  mean_NLL=3.4190  best=3.4051  worst=3.4347  sigma=0.0203  ||theta||=480.20  ||upd||_inf=0.1016  elapsed=239s
+[es-p2] iter  575  mean_NLL=3.2285  best=3.2190  worst=3.2407  sigma=0.0190  ||theta||=487.38  ||upd||_inf=0.0949  elapsed=250s
+[es-p2] training done — iters=599 elapsed=260.3s final_sigma=0.0177 final_mean_NLL=3.4051
+training: 8,718.6 J   duration=261.7s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.2158      326 char/s  eta=   181s
+  eval      2,400/60,000 (  4.0%)  acc=0.2058      327 char/s  eta=   176s
+  eval      3,600/60,000 (  6.0%)  acc=0.2058      330 char/s  eta=   171s
+  eval      4,800/60,000 (  8.0%)  acc=0.2004      334 char/s  eta=   165s
+  eval      6,000/60,000 ( 10.0%)  acc=0.1973      340 char/s  eta=   159s
+  eval      7,200/60,000 ( 12.0%)  acc=0.1976      343 char/s  eta=   154s
+  eval      8,400/60,000 ( 14.0%)  acc=0.1962      345 char/s  eta=   150s
+  eval      9,600/60,000 ( 16.0%)  acc=0.1955      346 char/s  eta=   146s
+  eval     10,800/60,000 ( 18.0%)  acc=0.1961      347 char/s  eta=   142s
+  eval     12,000/60,000 ( 20.0%)  acc=0.1950      345 char/s  eta=   139s
+  eval     13,200/60,000 ( 22.0%)  acc=0.1942      343 char/s  eta=   137s
+  eval     14,400/60,000 ( 24.0%)  acc=0.1935      341 char/s  eta=   134s
+  eval     15,600/60,000 ( 26.0%)  acc=0.1922      340 char/s  eta=   131s
+  eval     16,800/60,000 ( 28.0%)  acc=0.1921      339 char/s  eta=   127s
+  eval     18,000/60,000 ( 30.0%)  acc=0.1916      338 char/s  eta=   124s
+  eval     19,200/60,000 ( 32.0%)  acc=0.1909      337 char/s  eta=   121s
+  eval     20,400/60,000 ( 34.0%)  acc=0.1905      336 char/s  eta=   118s
+  eval     21,600/60,000 ( 36.0%)  acc=0.1903      336 char/s  eta=   114s
+  eval     22,800/60,000 ( 38.0%)  acc=0.1899      336 char/s  eta=   111s
+  eval     24,000/60,000 ( 40.0%)  acc=0.1903      335 char/s  eta=   107s
+  eval     25,200/60,000 ( 42.0%)  acc=0.1905      335 char/s  eta=   104s
+  eval     26,400/60,000 ( 44.0%)  acc=0.1917      335 char/s  eta=   100s
+  eval     27,600/60,000 ( 46.0%)  acc=0.1921      335 char/s  eta=    97s
+  eval     28,800/60,000 ( 48.0%)  acc=0.1917      335 char/s  eta=    93s
+  eval     30,000/60,000 ( 50.0%)  acc=0.1915      335 char/s  eta=    90s
+  eval     31,200/60,000 ( 52.0%)  acc=0.1913      335 char/s  eta=    86s
+  eval     32,400/60,000 ( 54.0%)  acc=0.1909      335 char/s  eta=    82s
+  eval     33,600/60,000 ( 56.0%)  acc=0.1909      335 char/s  eta=    79s
+  eval     34,800/60,000 ( 58.0%)  acc=0.1906      334 char/s  eta=    75s
+  eval     36,000/60,000 ( 60.0%)  acc=0.1904      334 char/s  eta=    72s
+  eval     37,200/60,000 ( 62.0%)  acc=0.1904      334 char/s  eta=    68s
+  eval     38,400/60,000 ( 64.0%)  acc=0.1904      334 char/s  eta=    65s
+  eval     39,600/60,000 ( 66.0%)  acc=0.1907      334 char/s  eta=    61s
+  eval     40,800/60,000 ( 68.0%)  acc=0.1905      334 char/s  eta=    57s
+  eval     42,000/60,000 ( 70.0%)  acc=0.1906      334 char/s  eta=    54s
+  eval     43,200/60,000 ( 72.0%)  acc=0.1904      334 char/s  eta=    50s
+  eval     44,400/60,000 ( 74.0%)  acc=0.1902      334 char/s  eta=    47s
+  eval     45,600/60,000 ( 76.0%)  acc=0.1899      334 char/s  eta=    43s
+  eval     46,800/60,000 ( 78.0%)  acc=0.1899      334 char/s  eta=    39s
+  eval     48,000/60,000 ( 80.0%)  acc=0.1893      334 char/s  eta=    36s
+  eval     49,200/60,000 ( 82.0%)  acc=0.1888      334 char/s  eta=    32s
+  eval     50,400/60,000 ( 84.0%)  acc=0.1888      334 char/s  eta=    29s
+  eval     51,600/60,000 ( 86.0%)  acc=0.1885      334 char/s  eta=    25s
+  eval     52,800/60,000 ( 88.0%)  acc=0.1889      334 char/s  eta=    22s
+  eval     54,000/60,000 ( 90.0%)  acc=0.1888      334 char/s  eta=    18s
+  eval     55,200/60,000 ( 92.0%)  acc=0.1885      334 char/s  eta=    14s
+  eval     56,400/60,000 ( 94.0%)  acc=0.1884      334 char/s  eta=    11s
+  eval     57,600/60,000 ( 96.0%)  acc=0.1885      334 char/s  eta=     7s
+  eval     58,800/60,000 ( 98.0%)  acc=0.1892      334 char/s  eta=     4s
+  eval     60,000/60,000 (100.0%)  acc=0.1900      334 char/s  eta=     0s
+chars=60,000  acc=0.1900  eval_duration=179.5s
+---
+DISQUALIFIED: val accuracy 0.1900 below floor 0.7000
+submission         : method_es-tiny-transformer_pass_2
+training energy (J): 8,718.6
+training duration  : 261.7s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-eHQ3htcrAl3j1IgKmATHgk
+
+# final result
+{
+  "submission": "method_es-tiny-transformer_pass_2",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.18996666666666667,
+  "val_chars": 60000,
+  "training_energy_J": 8718.63029725,
+  "training_duration_s": 261.710954055,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-17T13:55:22Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 55.54771666666666,
+    "stress_watts_avg": 235.0363780502901,
+    "stress_energy_joules": 8742.705,
+    "stress_duration_s": 37.197241859,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "seed": 0,
+  "contributor": "@survey-es-p2"
+}

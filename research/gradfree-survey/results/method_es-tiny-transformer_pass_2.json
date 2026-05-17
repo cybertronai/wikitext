@@ -1,0 +1,18 @@
+{
+  "method_id": "es-tiny-transformer",
+  "pass": 2,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "val_accuracy_below_floor",
+  "met_success_criterion": false,
+  "val_char_acc": 0.18996666666666667,
+  "training_energy_J": 8718.63029725,
+  "training_duration_s": 261.710954055,
+  "modal_runs_attempted": 1,
+  "notes": "Antithetic OpenAI-ES with Wierstra centered rank-shaping (u_i = max(0, log(P/2+1) - log(i)), zero-mean) and linear sigma anneal 0.05 -> 0.01 on a 33,664-param micro char-transformer (L=2, d=32, mlp_mult=2, ctx=32). Used the full 260s training budget: completed 599 ES iters (P=128 antithetic, 64 noise draws/iter; ~0.43s/iter, somewhat slower than the spec's 0.35s/iter estimate -> 740 iters target). Mean per-iter NLL fell from 5.59 at iter 1 to a plateau around 3.20-3.41 by iter ~225 and oscillated there for the remaining ~370 iters with no further trend (final mean_NLL=3.4051, final_sigma=0.0177). Val char-acc 0.1900 (60k chars) is *identical to pass 1's* 0.1900 to 4 decimals, well below the spec's honest target of 0.32 and the 0.70 DQ floor. Result is a clean negative for the 'more iters + smaller model' direction A: NLL plateaued at ~50% of budget, indicating a capacity ceiling rather than an optimization budget bottleneck (per spec failure mode #1). 4.5x more iters and 7x fewer params over pass 1 bought zero additional val accuracy.",
+  "artifacts": {
+    "submission": "runs/method_es-tiny-transformer_pass_2/submission.py",
+    "raw_result": "runs/method_es-tiny-transformer_pass_2/result.seed0.json",
+    "log": "runs/method_es-tiny-transformer_pass_2/run.seed0.log"
+  }
+}

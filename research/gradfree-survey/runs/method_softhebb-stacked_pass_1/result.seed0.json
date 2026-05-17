@@ -1,0 +1,25 @@
+{
+  "submission": "method_softhebb-stacked_pass_1",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.11886666666666666,
+  "val_chars": 60000,
+  "training_energy_J": 21179.0483138,
+  "training_duration_s": 88.960193724,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-17T13:38:28Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 51.99510000000004,
+    "stress_watts_avg": 232.30011693433502,
+    "stress_energy_joules": 8485.176,
+    "stress_duration_s": 36.526783163,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "seed": 0,
+  "contributor": "@survey-softhebb"
+}

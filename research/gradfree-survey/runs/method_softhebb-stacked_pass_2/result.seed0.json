@@ -1,0 +1,23 @@
+{
+  "submission": "method_softhebb-stacked_pass_2",
+  "disqualified": true,
+  "reason": "train_time_exceeded",
+  "max_train_seconds": 300.0,
+  "training_energy_J": 93196.86366060001,
+  "training_duration_s": 300.050226788,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-17T13:54:52Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 65.02774576271183,
+    "stress_watts_avg": 349.72590697649827,
+    "stress_energy_joules": 13354.634,
+    "stress_duration_s": 38.186001475999994,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "seed": 0,
+  "contributor": "@survey-softhebb-p2"
+}

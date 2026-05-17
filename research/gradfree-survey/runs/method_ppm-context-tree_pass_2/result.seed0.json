@@ -1,0 +1,23 @@
+{
+  "submission": "method_ppm-context-tree_pass_2",
+  "disqualified": true,
+  "reason": "train_time_exceeded",
+  "max_train_seconds": 300.0,
+  "training_energy_J": 979.643554549999,
+  "training_duration_s": 300.00112890900004,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-17T13:54:40Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 53.82701666666666,
+    "stress_watts_avg": 232.71958372467012,
+    "stress_energy_joules": 8515.904,
+    "stress_duration_s": 36.592983984,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "seed": 0,
+  "contributor": "@survey-ppm-p2"
+}

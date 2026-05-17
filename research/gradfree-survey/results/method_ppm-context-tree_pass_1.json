@@ -1,0 +1,18 @@
+{
+  "method_id": "ppm-context-tree",
+  "pass": 1,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "val_accuracy_below_floor",
+  "met_success_criterion": false,
+  "val_char_acc": 0.63005,
+  "training_energy_J": 632.9240476499999,
+  "training_duration_s": 44.488419047,
+  "modal_runs_attempted": 1,
+  "notes": "PPMd K=6 in pure Python. Spec's early-abort guard fired: first 10 MB of train took 43.8 s (> 40 s threshold), so training locked in after 10 M bytes (1.56 M trie nodes) instead of the targeted 60 M. Val char-acc came in at 0.6300, below the 0.70 floor (DQ). Training energy was very low at 633 J (~80x under the 51.7 kJ transformer baseline) and wall time 44.5 s — well inside budget. No execution errors.",
+  "artifacts": {
+    "submission": "runs/method_ppm-context-tree_pass_1/submission.py",
+    "raw_result": "runs/method_ppm-context-tree_pass_1/result.seed0.json",
+    "log": "runs/method_ppm-context-tree_pass_1/run.seed0.log"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "submission": "method_esn-ridge-readout_pass_1",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.34673333333333334,
+  "val_chars": 60000,
+  "training_energy_J": 29762.3592535,
+  "training_duration_s": 285.31265493,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-17T13:37:07Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 61.46030508474585,
+    "stress_watts_avg": 331.2706735444254,
+    "stress_energy_joules": 12195.503,
+    "stress_duration_s": 36.814315222999994,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "seed": 0,
+  "contributor": "@survey-esn"
+}

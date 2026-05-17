@@ -12,6 +12,12 @@ __pycache__/
 venv/
 env/
 
+# Native build artifacts
+*.so
+
+# Local symlinks to sibling repos (not portable, not for sharing)
+.sutro-context
+
 # Env / OS
 .env
 .DS_Store

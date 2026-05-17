@@ -1,0 +1,25 @@
+{
+  "submission": "method_es-tiny-transformer_pass_1",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.18996666666666667,
+  "val_chars": 60000,
+  "training_energy_J": 1938.4464541000007,
+  "training_duration_s": 62.126290917999995,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-17T13:39:17Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 54.00489999999999,
+    "stress_watts_avg": 230.5502201420964,
+    "stress_energy_joules": 8660.715,
+    "stress_duration_s": 37.56541631,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "seed": 0,
+  "contributor": "@survey-es"
+}

@@ -1,0 +1,69 @@
+{
+  "n_methods": 5,
+  "methods": [
+    {
+      "id": "ppm-context-tree",
+      "name": "Prediction by Partial Matching (PPMd / variable-order Markov)",
+      "summary": "Adaptive variable-order character n-gram with escape-mechanism smoothing; trained by streaming-count updates over a context trie, no gradients anywhere.",
+      "key_refs": [
+        "Cleary & Witten 1984 PPM",
+        "wikipedia:Prediction_by_partial_matching",
+        "github:byronknoll/cmix"
+      ],
+      "why_promising_for_wikitext": "PPMd-style predictors are known to hit ~1.5-1.8 bpc on English Wikipedia, which corresponds to comfortably >70% greedy char-acc on raw WikiText-103 (since English char-acc at top-1 sits around 0.65-0.75 for well-smoothed order-5+ models). Training is pure counting — 530 MB of train bytes streamed once through a context trie fits in seconds of CPU/GPU time. The model is non-parametric so the 'no gradient' rule is trivially satisfied, and the streaming CharModel API maps onto PPM's natural left-to-right context update with zero adaptation overhead.",
+      "implementation_notes": "Implement a context trie up to order 6-8 with PPMd escape (method D). Store counts in a flat torch.int32 tensor for arena allocation; use a hash map (Python dict, or a CUDA hashmap if speed is needed) keyed by (context_hash, byte). Walk the trie at predict() to produce a 256-byte probability vector, then call observe() to bump counts along the active context chain. Pitfall: memory — order-8 contexts on the full train split can blow up to several GB; keep a max-node cap and prune by rare-count threshold. The streaming API is a perfect fit because predict()/observe() is exactly how PPM is specified.",
+      "fit_to_budget": "Lowest risk in the set. Training fits in well under 300 s on CPU (no GPU needed), so energy will be dominated by NVML idle baseline — should beat the 51.7 kJ baseline by an order of magnitude. The 0.70 acc bar is the main residual risk: order-6 PPMd on enwik8 reaches ~1.5 bpc; the greedy-argmax accuracy at that bpc is generally 0.68-0.74 on raw English text. Tight but plausible. If short, raise order or add longer-context arithmetic-coding-style mixing."
+    },
+    {
+      "id": "esn-ridge-readout",
+      "name": "Echo State Network with ridge-regression readout",
+      "summary": "A fixed random sparse recurrent reservoir of GRU/tanh units; only the linear softmax readout from reservoir state to 256-byte logits is fit, in closed form via ridge regression (no SGD).",
+      "key_refs": [
+        "arxiv:2507.15779",
+        "arxiv:2503.01724",
+        "Jaeger 2001 'Echo State' tech report"
+      ],
+      "why_promising_for_wikitext": "ESNs map perfectly to streaming character prediction: the reservoir's hidden state already conditions on full history, so reset()/observe()/predict() are O(1) per char with a single matvec. With a large reservoir (e.g. 8192 units) on A100 we can collect ~50M state vectors in <60 s and solve the ridge readout in closed form via a single 8192x8192 normal-equations system in float32 — that's a few seconds on A100. Recent work (Köster & Uchida 2025; Yamamoto et al. 2025) shows reservoirs are competitive with small transformers on character-level grammaticality and prediction tasks.",
+      "implementation_notes": "Reservoir: N=4096-16384 units with sparse (5% density) random recurrent matrix scaled to spectral radius ~0.95, leaky-integrator state x[t+1] = (1-a) x[t] + a tanh(W_res x[t] + W_in onehot(c)). Input is a learned 256-dim one-hot, no embedding. Build X (state matrix) and Y (next-char one-hot) by streaming N_train ~ 1-5M chars, then solve W_out = (X^T X + lambda I)^-1 X^T Y. Pitfalls: numerical conditioning of normal equations at large N (use float64 or Cholesky on GPU); spectral radius and input scaling are sensitive — sweep 2-3 settings inside the 300 s budget. Use torch.linalg.cholesky_solve to keep everything on the A100.",
+      "fit_to_budget": "Fits the time budget easily — single streaming pass + one Cholesky solve. The 0.70 char-acc bar is the real risk: published ESNs hit competitive perplexity but greedy top-1 acc on raw English (not stripped text8) typically lands in the 0.55-0.65 band without architectural tricks. Plausible to break 0.70 with a wide reservoir, char+bigram-input augmentation, or a small chain of stacked reservoirs, but not guaranteed. Honest call: borderline; would benefit from a small in-budget hyperparam sweep."
+    },
+    {
+      "id": "softhebb-stacked",
+      "name": "Stacked SoftHebb conv-1D with linear softmax readout",
+      "summary": "A deep 1-D convolutional stack trained layer-wise with the SoftHebb soft-WTA Hebbian rule (no targets, no backprop); the final 256-way softmax classifier is fit by closed-form ridge on frozen features.",
+      "key_refs": [
+        "arxiv:2209.11883",
+        "github:NeuromorphicComputing/SoftHebb"
+      ],
+      "why_promising_for_wikitext": "SoftHebb is the strongest backprop-free local learning rule for deep nets (matches BP within ~4% on ImageNet ResNet-50). Adapted to 1-D temporal convolutions over byte streams it produces a hierarchy of unsupervised feature detectors. The features are dense and stable, so a linear softmax readout via closed-form ridge can convert them into a next-byte distribution. Streaming inference is a windowed conv pass — trivially compatible with the CharModel API.",
+      "implementation_notes": "Build a 4-5 layer 1-D causal conv stack (kernel 5, dilations 1/2/4/8, 256-512 channels). Train layer-wise with the SoftHebb update (soft winner-take-all + anti-Hebbian competition) — paper provides reference torch code; main translation work is causal padding and 1-D conv. After each layer is converged (single epoch suffices on 100 M chars), freeze and proceed. Final layer: linear from concatenated layer activations to 256 logits, fit by ridge. Pitfalls: SoftHebb has never been demonstrated on language; the inductive bias may not transfer from images. Causal conv at order ~75 (cumulative receptive field) is shorter than ESN/PPM history.",
+      "fit_to_budget": "Layer-wise Hebbian training is single-pass and very fast (no backprop graph, no optimizer state) — 5 layers x 100M chars at 4096-wide stream should comfortably fit in 300 s on A100. Honest long-shot for 0.70 char-acc: zero published results for SoftHebb on language modeling, and its competitive accuracy on vision drops sharply outside CIFAR-scale. Likely lands at 0.55-0.65; could just clear 0.70 with a large enough hidden width and good readout."
+    },
+    {
+      "id": "es-tiny-transformer",
+      "name": "Separable NES / OpenAI-ES on a tiny char-Transformer",
+      "summary": "Train a small (~100k-500k param) character transformer/RNN by population-based natural evolution strategy: sample antithetic Gaussian perturbations, rank by validation char log-likelihood, update mean by fitness-weighted average — no gradients, no backprop graph constructed.",
+      "key_refs": [
+        "arxiv:1703.03864",
+        "github:openai/evolution-strategies-starter",
+        "Hansen 2016 CMA-ES tutorial"
+      ],
+      "why_promising_for_wikitext": "ES parallelizes embarrassingly across the A100's 80 GB: with a 200k-param transformer we can evaluate hundreds of perturbed forward passes in a single batched call. The benchmark is friendly because: (a) only forward passes are needed, so we can run in bf16 and skip the activation memory of backprop; (b) the architecture is identical to a backprop net at inference, so the CharModel wrapper from the modded_nanogpt baseline can be reused verbatim. ES is uniquely well-suited to non-differentiable losses, but here it just optimizes ordinary NLL.",
+      "implementation_notes": "Architecture: 4-layer 96-dim 4-head transformer, ~250k params, ctx=128. Each ES iter: sample N=64 antithetic noise vectors (theta + sigma*eps, theta - sigma*eps), compute mean NLL on a fixed-size batch (e.g. 32 sequences of 128 chars) for each perturbed model — vectorize as one big batched forward via vmap or by stacking into the batch dim. Rank-normalize fitnesses, update theta. Pitfalls: signal-to-noise is brutal at 250k params — perturbation sigma needs careful tuning, and convergence rate is many orders of magnitude slower than SGD. Expect ~30-100 ES iters in 300 s; each iter does a few epochs of effective data exposure.",
+      "fit_to_budget": "Tight time budget is the dominant risk. ES needs millions of forward passes worth of compute to reach SGD-quality solutions on a 250k-param net; in 300 s we can do maybe 30k-100k forward passes of the small model. Honest assessment: 0.70 char-acc is a stretch — published ES neural-net runs reach SGD-comparable loss only after hours-days of compute, even when parallelized. Including for family diversity; expect 0.50-0.65 in practice unless an aggressive variance reduction trick (e.g. baseline subtraction, guided ES) lands."
+    },
+    {
+      "id": "forward-forward-causal",
+      "name": "Causal Forward-Forward language model",
+      "summary": "Hinton's Forward-Forward: per-layer local goodness objective (sum of squared activations) trained to be high on real positive char-windows and low on synthetic negative windows; no global backward pass and no end-to-end gradient.",
+      "key_refs": [
+        "arxiv:2212.13345",
+        "arxiv:2307.04205",
+        "arxiv:2504.21662"
+      ],
+      "why_promising_for_wikitext": "Each layer optimizes only its own weights from forward-only signals, so memory is constant per layer and the whole stack can be trained in parallel as independent local problems. For LM, the natural setup is per-character causal windows: positive = real (context, next-char) pair, negative = (context, sampled-wrong-char). Final prediction = softmax over the per-byte goodness scores. Streaming inference matches the CharModel API since we keep a rolling activation window per layer.",
+      "implementation_notes": "5-7 layer fully-connected stack (or causal 1-D conv) operating on a rolling K=16-32 char one-hot window. Each layer's loss: log(1 + exp(theta - sum(a^2))) for positives and the dual for negatives. Negatives generated from the model's own previous-step predictions or simple uniform/unigram sampling. At eval: feed all 256 candidate next-char hypotheses through the stack, take softmax over goodness sums. Pitfalls: forward-forward in published NLP work (Gandhi & Gala 2023 IMDb sentiment, etc.) has not been benchmarked at char-LM scale; producing 256 hypothesis forward passes per char at eval can be slow without batching tricks.",
+      "fit_to_budget": "Training is fast (single forward per layer per step, no backprop graph), so 300 s budget is comfortable. Energy will be moderate — many forward passes but no backward. Honest long-shot for the 0.70 floor: no public FF result has demonstrated competitive char-LM performance, and the goodness objective is a much weaker learning signal than cross-entropy. Realistic guess is 0.45-0.60; including for family coverage as the canonical 'local learning' representative."
+    }
+  ]
+}

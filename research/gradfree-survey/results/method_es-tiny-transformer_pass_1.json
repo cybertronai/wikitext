@@ -1,0 +1,18 @@
+{
+  "method_id": "es-tiny-transformer",
+  "pass": 1,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "val_accuracy_below_floor",
+  "met_success_criterion": false,
+  "val_char_acc": 0.18996666666666667,
+  "training_energy_J": 1938.4464541000007,
+  "training_duration_s": 62.126290917999995,
+  "modal_runs_attempted": 1,
+  "notes": "Antithetic OpenAI-ES with rank-normalised updates on a 232k-param char-transformer (L=4, d=64, ctx=64). Completed 150 ES iters in 60.8s (spec-capped, well under the 270s budget); val char-acc 0.1900 narrowly missed the spec's honest target of 0.20 and the 0.70 DQ floor. Mean per-iter NLL fell from ~5.56 to ~3.6 over training.",
+  "artifacts": {
+    "submission": "runs/method_es-tiny-transformer_pass_1/submission.py",
+    "raw_result": "runs/method_es-tiny-transformer_pass_1/result.seed0.json",
+    "log": "runs/method_es-tiny-transformer_pass_1/run.seed0.log"
+  }
+}

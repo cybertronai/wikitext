@@ -1,0 +1,18 @@
+{
+  "method_id": "forward-forward-causal",
+  "pass": 2,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "val_accuracy_below_floor",
+  "met_success_criterion": false,
+  "val_char_acc": 0.27915,
+  "training_energy_J": 3845.3228876499998,
+  "training_duration_s": 105.650782247,
+  "modal_runs_attempted": 1,
+  "notes": "FF backbone (5x384, layer 1 frozen, K=24, theta=2.0, per-layer Adam lr=3e-4, B=256) trained to completion: 14000/14000 round-robin steps in ~102s with periodic hard-negative ridge refits every 500 steps (50% top-K=5 hard / 50% unigram). Closed-form ridge readout fit on N_fit=80000 features of dim 1536 (concat LN(a_2..a_5)) with lambda=1.0; train-subset acc 0.2951 on 20K samples. Eval at ~920 char/s (one forward + matvec per char vs 256 forwards in pass 1) finished in 65s. Val char-acc 0.2792 -- a 19% relative lift over pass-1's 0.2351 but below the spec's honest target of 0.35; still well below the 0.70 DQ floor. Random-projection-ridge diagnostic was NOT run (not needed: FF features did beat pass-1 goodness, so the FF representation adds non-trivial value, just not enough for >=0.35).",
+  "artifacts": {
+    "submission": "runs/method_forward-forward-causal_pass_2/submission.py",
+    "raw_result": "runs/method_forward-forward-causal_pass_2/result.seed0.json",
+    "log": "runs/method_forward-forward-causal_pass_2/run.seed0.log"
+  }
+}
