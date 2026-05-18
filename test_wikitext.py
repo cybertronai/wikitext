@@ -1,15 +1,19 @@
-"""Tests for wikitext.py and the n-gram baseline.
+"""Tests for wikitext.py.
 
 Runs with ``python3 -m pytest test_wikitext.py`` or ``python3 test_wikitext.py``
 (falls back to a hand-rolled runner when pytest is not installed).
 """
 from __future__ import annotations
 
-from pathlib import Path
 import time
 
-from wikitext import BudgetExceededError, CharModel, EnergyMeter, evaluate, load_wikitext103
-from baseline_ngram import NGramModel
+from wikitext import (
+    CharModel,
+    EnergyMeter,
+    TrainingTimeoutError,
+    evaluate,
+    wall_clock_guard,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -77,9 +81,6 @@ def test_evaluate_streaming_order() -> None:
             self.n_obs += 1
 
     evaluate(_Recorder(), "abcd")
-    # At each predict, n_pred == n_obs (we haven't yet observed the
-    # char we're about to predict). Future-peeking would manifest as
-    # n_obs > n_pred at some point.
     for n_pred, n_obs in seen_at_predict:
         assert n_pred == n_obs
 
@@ -101,116 +102,53 @@ def test_energy_meter_fallback_when_no_nvml() -> None:
     assert m.duration_s >= 0
 
 
-class _FakeNvml:
-    """Fake pynvml that synthesizes a monotonic mJ counter at a fixed power."""
+# ---------------------------------------------------------------------------
+# Wall-clock guard (README rule 4)
+# ---------------------------------------------------------------------------
 
-    def __init__(self, watts: float):
-        self._t0 = time.monotonic()
-        self._watts = watts
+def test_wall_clock_guard_fires_on_overrun() -> None:
+    """A sleep past the budget must raise TrainingTimeoutError."""
+    raised = False
+    t0 = time.monotonic()
+    try:
+        with wall_clock_guard(0.1):
+            time.sleep(2.0)
+    except TrainingTimeoutError:
+        raised = True
+    elapsed = time.monotonic() - t0
+    assert raised, "wall_clock_guard should have raised TrainingTimeoutError"
+    # Should fire well before the 2 s sleep would naturally end.
+    assert elapsed < 1.0
 
-    def nvmlDeviceGetTotalEnergyConsumption(self, handle):  # noqa: ARG002
-        elapsed_s = time.monotonic() - self._t0
-        return int(elapsed_s * self._watts * 1000.0)  # mJ
+
+def test_wall_clock_guard_within_budget_does_not_fire() -> None:
+    """A short block under budget must complete cleanly."""
+    with wall_clock_guard(1.0):
+        time.sleep(0.05)
+    # No exception expected.
 
 
-def _patch_meter_with_fake_nvml(meter: EnergyMeter, watts: float) -> None:
-    meter._pynvml = _FakeNvml(watts)
-    meter._handle = object()
-    meter.available = True
+def test_wall_clock_guard_none_is_no_op() -> None:
+    """Passing None disables the guard entirely."""
+    with wall_clock_guard(None):
+        time.sleep(0.05)
 
 
-def test_energy_budget_killswitch_fires() -> None:
-    """Watchdog must raise BudgetExceededError once net energy > e_max."""
-    # 200 W, idle 0 W, budget 5 J → fires ~25 ms in (plus one poll).
-    meter = EnergyMeter(e_max_joules=5.0, poll_interval_s=0.02, idle_watts=0.0)
-    _patch_meter_with_fake_nvml(meter, watts=200.0)
-
+def test_wall_clock_guard_captures_partial_measurement() -> None:
+    """When the guard fires inside meter.measure(), the meter must still
+    record a duration so the DQ row can report 'killed at N seconds'."""
+    meter = EnergyMeter()  # available may be False on CPU; duration always set
     raised = False
     m = None
     try:
-        with meter.measure() as m:
-            time.sleep(2.0)  # plenty of time for the watchdog to fire
-    except BudgetExceededError:
+        with meter.measure() as m, wall_clock_guard(0.1):
+            time.sleep(2.0)
+    except TrainingTimeoutError:
         raised = True
-
-    assert raised, "watchdog should have raised BudgetExceededError"
+    assert raised
     assert m is not None
-    assert m.budget_exceeded
-    assert m.energy_joules is not None and m.energy_joules >= 5.0
-    # Should fire well before the 2 s sleep would naturally end.
-    assert m.duration_s < 1.0
-
-
-def test_energy_budget_within_limit_does_not_fire() -> None:
-    """A short, low-energy block under budget must complete cleanly."""
-    meter = EnergyMeter(e_max_joules=1000.0, poll_interval_s=0.02, idle_watts=0.0)
-    _patch_meter_with_fake_nvml(meter, watts=100.0)
-
-    with meter.measure() as m:
-        time.sleep(0.1)  # 100 W * 0.1 s = 10 J, well under 1000 J
-
-    assert not m.budget_exceeded
-    assert m.energy_joules is not None
-    assert m.energy_joules < 1000.0
-
-
-def test_energy_budget_no_op_without_nvml() -> None:
-    """e_max_joules on a host without NVML is a no-op; nothing crashes."""
-    meter = EnergyMeter(e_max_joules=1.0, poll_interval_s=0.02)
-    if meter.available:
-        return  # only meaningful when NVML is absent
-    with meter.measure() as m:
-        time.sleep(0.05)
-    assert not m.budget_exceeded
-    assert m.energy_joules is None
-
-
-# ---------------------------------------------------------------------------
-# n-gram baseline
-# ---------------------------------------------------------------------------
-
-def test_ngram_trains_and_predicts() -> None:
-    m = NGramModel(n=3)
-    m.train("abcabcabcabc")
-    m.reset()
-    # After observing 'a', argmax of P(. | 'a') in 'abcabc...' should be 'b'.
-    m.observe("a")
-    dist = m.predict()
-    assert max(dist, key=lambda c: dist[c]) == "b"
-
-
-def test_ngram_accuracy_on_repeating_pattern() -> None:
-    """A 3-cycle pattern is perfectly predictable from a 3-gram after warmup."""
-    m = NGramModel(n=3)
-    train = "abc" * 200
-    test = "abc" * 50
-    m.train(train)
-    r = evaluate(m, test)
-    # The first few chars (before context fills) may miss; the rest hit.
-    assert r.accuracy > 0.9
-
-
-def test_ngram_backoff_to_unigram() -> None:
-    """Predicting on an out-of-distribution starting char falls back."""
-    m = NGramModel(n=3)
-    m.train("aaaa")
-    m.reset()
-    # No context yet — should return the unigram distribution.
-    dist = m.predict()
-    assert "a" in dist
-    assert dist["a"] == 1.0
-
-
-def test_tiny_fixture_ngram_smoke() -> None:
-    """The committed fixture exercises the local evaluator path."""
-    data_dir = Path(__file__).parent / "fixtures" / "tiny"
-    train = load_wikitext103(data_dir, "train")
-    test = load_wikitext103(data_dir, "test")
-    m = NGramModel(n=3)
-    m.train(train)
-    r = evaluate(m, test)
-    assert r.n_chars == len(test)
-    assert r.accuracy > 0.65
+    assert m.duration_s > 0
+    assert m.duration_s < 1.0  # fired before the sleep finished
 
 
 # ---------------------------------------------------------------------------

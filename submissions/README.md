@@ -8,7 +8,7 @@ submissions/
 └── <name>/
     ├── submission.py     # train(train_text, valid_text=None) -> CharModel
     ├── result.json       # canonical (training_energy_J, training_duration_s,
-    │                     #   test_char_accuracy, gpu_name, _nvml, …) tuple
+    │                     #   val_char_accuracy, gpu_name, _nvml, …) tuple
     ├── nvml.json         # NVML probe summary from the same Modal host
     │                     #   (same data as result.json["_nvml"], split out
     │                     #   as a standalone evidence file)
