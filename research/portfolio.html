@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Energy-efficient char-LM research — portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --fg: #1a1a1a;
+    --muted: #6a6a6a;
+    --bg: #fbfaf7;
+    --card: #ffffff;
+    --card-shadow: rgba(0,0,0,0.04);
+    --border: #e4e2dc;
+    --accent: #2a4d8f;
+    --good: #1f7a3a;
+    --bad: #a4302a;
+    --warn: #8a6800;
+    --code-bg: #f4f3ef;
+    --tier-a: #2a4d8f;
+    --tier-b: #6a6a6a;
+    --tier-c: #b0b0b0;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    max-width: 980px;
+    margin: 2rem auto;
+    padding: 0 1.5rem 4rem;
+    line-height: 1.55;
+    font-size: 15.5px;
+  }
+  h1 { font-size: 2rem; margin: 0 0 0.25rem; letter-spacing: -0.015em; }
+  h2 { font-size: 1.4rem; margin: 2.5rem 0 0.75rem; letter-spacing: -0.01em; border-bottom: 1px solid var(--border); padding-bottom: 0.35rem; }
+  h3 { font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+  h4 { font-size: 0.95rem; margin: 1rem 0 0.4rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+  .subtitle { color: var(--muted); margin: 0 0 0.5rem; font-size: 1rem; }
+  .meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 2rem; }
+  .thesis { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent); padding: 1rem 1.25rem; border-radius: 4px; margin: 1rem 0 2rem; }
+  .thesis p { margin: 0.5rem 0; }
+  .thesis p:first-child { margin-top: 0; }
+  .thesis p:last-child { margin-bottom: 0; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin: 1.5rem 0; }
+  .kpi { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 0.75rem 1rem; }
+  .kpi-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 0.25rem; }
+  .kpi-value { font-size: 1.35rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .kpi-detail { font-size: 0.8rem; color: var(--muted); margin-top: 0.15rem; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.9rem; margin: 0.5rem 0 1rem; }
+  th, td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid var(--border); }
+  th { font-weight: 600; color: var(--muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  th.num { text-align: right; }
+  .badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; vertical-align: middle; }
+  .badge-active { background: #d6e4f5; color: var(--accent); }
+  .badge-closed-discard { background: #f1d7d4; color: var(--bad); }
+  .badge-survey { background: #f5ecd0; color: var(--warn); }
+  .badge-baseline { background: #d2e8d6; color: var(--good); }
+  .dq { color: var(--bad); }
+  .ok { color: var(--good); }
+  .investigation { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1.25rem 1.5rem; margin: 1.25rem 0; box-shadow: 0 1px 2px var(--card-shadow); }
+  .investigation.tier-a { border-left: 4px solid var(--tier-a); }
+  .investigation.tier-b { border-left: 4px solid var(--tier-b); }
+  .investigation.tier-c { border-left: 4px solid var(--tier-c); padding: 0.75rem 1.25rem; }
+  .investigation h3 { margin-top: 0; display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.6rem; }
+  .investigation h3 .slug { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; color: var(--muted); font-weight: 400; }
+  .invest-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; }
+  .invest-grid > div h4:first-child { margin-top: 0; }
+  .quote { color: var(--muted); font-style: italic; border-left: 2px solid var(--border); padding-left: 0.75rem; margin: 0.5rem 0; }
+  code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.88em; background: var(--code-bg); padding: 0.05rem 0.3rem; border-radius: 3px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 1rem; margin: 0.5rem 0 1.25rem; font-size: 0.82rem; color: var(--muted); }
+  .legend-item { display: flex; align-items: center; gap: 0.35rem; cursor: pointer; padding: 2px 6px; border-radius: 3px; transition: background 0.1s; }
+  .legend-item:hover { background: #eeece6; }
+  .legend-item.active { background: #d6e4f5; color: var(--accent); }
+  .legend-swatch { width: 12px; height: 12px; border-radius: 50%; }
+  .scatter-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; margin: 1rem 0; }
+  .scatter-wrap svg { display: block; max-width: 100%; height: auto; }
+  .scatter-wrap .point { cursor: pointer; transition: r 0.12s ease, stroke-width 0.12s ease; }
+  .scatter-wrap .point:hover { stroke-width: 3.2; }
+  .scatter-wrap .point.dimmed { opacity: 0.18; }
+  .scatter-wrap .point-label { pointer-events: none; transition: opacity 0.12s ease; }
+  .scatter-wrap .point-label.dimmed { opacity: 0.2; }
+  .hint { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.5rem; }
+  .detail-panel { background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 6px; padding: 1.25rem 1.5rem; margin: 1rem 0; box-shadow: 0 2px 6px var(--card-shadow); display: none; }
+  .detail-panel.open { display: block; }
+  .detail-panel header { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .detail-panel h3 { margin: 0; font-size: 1.25rem; }
+  .detail-panel .close-btn { background: none; border: 1px solid var(--border); color: var(--muted); cursor: pointer; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; }
+  .detail-panel .close-btn:hover { background: var(--code-bg); color: var(--fg); }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start; }
+  .detail-grid h4 { margin-top: 0.25rem; }
+  .detail-grid p { margin: 0.4rem 0; }
+  .explainer-svg { background: #fbfaf6; border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; }
+  .explainer-svg svg { display: block; width: 100%; height: auto; }
+  .runs-table th, .runs-table td { font-size: 0.85rem; padding: 0.35rem 0.5rem; }
+  .status-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.6rem; margin: 0.75rem 0 2rem; }
+  .status-card { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+  .status-card .status-title { font-weight: 600; margin-bottom: 0.2rem; }
+  .status-card .status-meta { color: var(--muted); font-size: 0.78rem; }
+  .footnote { font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 760px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .invest-grid { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .detail-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Energy-efficient character-language-model research</h1>
+<p class="subtitle">A portfolio of investigations into training next-character predictors at minimum energy on WikiText-103.</p>
+<p class="meta">Working tree of <code>cybertronai/wikitext</code> on branch <code>gradfree-methods</code>, snapshot 2026-05-18.</p>
+
+<div class="thesis">
+  <p><strong>The research question.</strong> Can a learning algorithm reach a respectable accuracy threshold on a non-toy language task while spending materially less energy than a modern gradient-descent-trained transformer?</p>
+  <p><strong>The benchmark.</strong> WikiText-103, character-level prediction. Submissions must reach at least <strong>0.70 character-prediction accuracy</strong> on the validation set, training in under <strong>300 seconds</strong> on a single NVIDIA A100-80GB. They are ranked by training <strong>energy in joules</strong>, measured directly via NVML and idle-subtracted.</p>
+  <p><strong>How to read this document.</strong> The scatter below plots every fully-evaluated submission; runs that exhausted wall-clock without producing a final accuracy appear in the table only. Each point and legend item is clickable: a click opens a method explainer with a visual diagram, a mechanism description, and all of that method's runs. The text after the scatter walks through each investigation: what the method is, what was found, and what is still open.</p>
+</div>
+
+<h2>The board at a glance <span style="font-size: 0.7em; font-weight: 400; color: var(--muted)">— click any point to explore</span></h2>
+
+<p>Three submissions clear the 0.70 floor: the modded-nanogpt transformer baseline (0.7374 / 51,704 J) and two LWTA drop-ins (0.7146 and 0.7238) at ~46 kJ — a 10–11&percnt; energy reduction at a small accuracy cost. The strongest sub-floor approach is a Pointer-Sentinel mixture LM at 0.6712 / 20 kJ (gap to the floor: 0.029, at ~40&percnt; of the baseline's energy). The lowest-energy non-trivial submission is PPM-C at 0.6525 / 735 J — a count-based context-tree algorithm running 70× cheaper than the baseline but 0.05 below the floor. Everything else is below 0.40 accuracy; the gap to the floor for a fundamentally different learning algorithm remains open.</p>
+
+<p class="hint">Hover any point for run details. Click to open a method explainer (visualization, mechanism, all runs for that method). Click legend items to filter by family.</p>
+
+<div class="scatter-wrap">
+  <div class="legend" id="legend">
+    <div class="legend-item" data-family="baseline"><span class="legend-swatch" style="background:#1f7a3a"></span> Transformer baseline</div>
+    <div class="legend-item" data-family="lwta"><span class="legend-swatch" style="background:#0f8bb5"></span> LWTA drop-in</div>
+    <div class="legend-item" data-family="pointer"><span class="legend-swatch" style="background:#cc4e8a"></span> Pointer-Sentinel</div>
+    <div class="legend-item" data-family="ppm"><span class="legend-swatch" style="background:#2a4d8f"></span> Count-based (PPM)</div>
+    <div class="legend-item" data-family="chunker"><span class="legend-swatch" style="background:#2a9d8f"></span> Surprise-gated (Chunker)</div>
+    <div class="legend-item" data-family="ssm"><span class="legend-swatch" style="background:#6d4c41"></span> SSM / long-conv (Mamba / Hyena)</div>
+    <div class="legend-item" data-family="ff"><span class="legend-swatch" style="background:#7a4ea0"></span> Forward-Forward</div>
+    <div class="legend-item" data-family="esn"><span class="legend-swatch" style="background:#c97a1a"></span> Reservoir (ESN)</div>
+    <div class="legend-item" data-family="hebbian"><span class="legend-swatch" style="background:#a4302a"></span> Hebbian (SoftHebb)</div>
+    <div class="legend-item" data-family="es"><span class="legend-swatch" style="background:#666"></span> Evolutionary (ES)</div>
+    <div class="legend-item" data-family="" style="cursor:default"><span style="display:inline-block; width:12px; height:12px; border-radius:50%; border:1.5px solid #888; background:transparent"></span> Disqualified (acc &lt; 0.70 or train &gt; 300 s)</div>
+  </div>
+
+  <svg id="scatter" viewBox="0 0 880 460" role="img" aria-label="Energy vs. validation character accuracy scatter">
+    <rect x="0" y="0" width="880" height="460" fill="#ffffff"/>
+
+    <!-- gridlines: y at 0..0.8 step 0.1 (0:400, 0.1:355, 0.2:310, 0.3:265, 0.4:220, 0.5:175, 0.6:130, 0.7:85, 0.8:40) -->
+    <g stroke="#eeece6" stroke-width="1">
+      <line x1="70" y1="40" x2="850" y2="40"/>
+      <line x1="70" y1="85" x2="850" y2="85"/>
+      <line x1="70" y1="130" x2="850" y2="130"/>
+      <line x1="70" y1="175" x2="850" y2="175"/>
+      <line x1="70" y1="220" x2="850" y2="220"/>
+      <line x1="70" y1="265" x2="850" y2="265"/>
+      <line x1="70" y1="310" x2="850" y2="310"/>
+      <line x1="70" y1="355" x2="850" y2="355"/>
+      <line x1="70" y1="400" x2="850" y2="400"/>
+      <line x1="70" y1="40" x2="70" y2="400"/>
+      <line x1="226" y1="40" x2="226" y2="400"/>
+      <line x1="382" y1="40" x2="382" y2="400"/>
+      <line x1="538" y1="40" x2="538" y2="400"/>
+      <line x1="694" y1="40" x2="694" y2="400"/>
+      <line x1="850" y1="40" x2="850" y2="400"/>
+    </g>
+
+    <!-- unigram / bigram reference dashes -->
+    <line x1="70" y1="314" x2="850" y2="314" stroke="#b0b0b0" stroke-width="0.8" stroke-dasharray="2 3"/>
+    <text x="846" y="311" font-size="9.5" fill="#6a6a6a" text-anchor="end">unigram floor (0.19, always-predict-space)</text>
+    <line x1="70" y1="270" x2="850" y2="270" stroke="#b0b0b0" stroke-width="0.8" stroke-dasharray="2 3"/>
+    <text x="846" y="267" font-size="9.5" fill="#6a6a6a" text-anchor="end">bigram ceiling (0.29, optimal 1-byte context)</text>
+
+    <!-- 0.70 floor line -->
+    <line x1="70" y1="85" x2="850" y2="85" stroke="#a4302a" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <text x="846" y="80" font-size="10.5" fill="#a4302a" text-anchor="end" font-weight="600">0.70 competition floor (DQ below)</text>
+
+    <!-- axes -->
+    <g stroke="#1a1a1a" stroke-width="1.2" fill="none">
+      <line x1="70" y1="400" x2="850" y2="400"/>
+      <line x1="70" y1="40" x2="70" y2="400"/>
+    </g>
+
+    <!-- y labels -->
+    <g font-size="11" fill="#1a1a1a">
+      <text x="62" y="404" text-anchor="end">0.0</text>
+      <text x="62" y="359" text-anchor="end">0.1</text>
+      <text x="62" y="314" text-anchor="end">0.2</text>
+      <text x="62" y="269" text-anchor="end">0.3</text>
+      <text x="62" y="224" text-anchor="end">0.4</text>
+      <text x="62" y="179" text-anchor="end">0.5</text>
+      <text x="62" y="134" text-anchor="end">0.6</text>
+      <text x="62" y="89" text-anchor="end">0.7</text>
+      <text x="62" y="44" text-anchor="end">0.8</text>
+    </g>
+    <text x="20" y="220" font-size="12" fill="#1a1a1a" transform="rotate(-90 20 220)" text-anchor="middle">val char-acc</text>
+
+    <!-- x labels -->
+    <g font-size="11" fill="#1a1a1a">
+      <text x="70" y="418" text-anchor="middle">10</text>
+      <text x="226" y="418" text-anchor="middle">100</text>
+      <text x="382" y="418" text-anchor="middle">1,000</text>
+      <text x="538" y="418" text-anchor="middle">10,000</text>
+      <text x="694" y="418" text-anchor="middle">100,000</text>
+      <text x="850" y="418" text-anchor="middle">1,000,000</text>
+    </g>
+    <text x="460" y="442" font-size="12" fill="#1a1a1a" text-anchor="middle">training energy (joules, log scale)</text>
+
+    <defs>
+      <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 z" fill="#2a4d8f"/>
+      </marker>
+      <marker id="arr-pink" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 z" fill="#cc4e8a"/>
+      </marker>
+    </defs>
+
+    <!-- Points group; filled in by JS at load to keep markup short and ensure consistency with the JS dataset -->
+    <g id="points-group"></g>
+    <g id="labels-group"></g>
+  </svg>
+  <p class="footnote">Filled marker = passes the 0.70 floor (baseline + both LWTA variants). Hollow markers = disqualified on accuracy. Runs that exhausted wall-clock before producing a final accuracy are listed in the table below but not plotted.</p>
+</div>
+
+<!-- Detail panel — populated by JS on click -->
+<div class="detail-panel" id="detail-panel" aria-live="polite">
+  <header>
+    <h3 id="detail-title">&nbsp;</h3>
+    <button class="close-btn" id="detail-close" aria-label="Close detail panel">close ✕</button>
+  </header>
+  <div class="detail-grid">
+    <div>
+      <h4>How it works</h4>
+      <div id="detail-description"></div>
+      <h4>Runs of this method on the benchmark</h4>
+      <div id="detail-runs"></div>
+    </div>
+    <div>
+      <h4>Visual explainer</h4>
+      <div class="explainer-svg" id="detail-explainer"></div>
+      <h4>Headline number</h4>
+      <div id="detail-headline" style="font-size: 0.92rem;"></div>
+    </div>
+  </div>
+</div>
+
+<table class="runs-table" style="margin-top: 0.75rem;">
+  <thead>
+    <tr><th>Run</th><th>Method family</th><th class="num">Energy (J)</th><th class="num">val char-acc</th><th class="num">train time (s)</th><th>Status</th></tr>
+  </thead>
+  <tbody id="runs-table-body">
+    <!-- Filled by JS -->
+  </tbody>
+</table>
+
+<p class="footnote">Two categories of disqualification appear in the table: training-time DQs (PPM Python p2, ESN p2, SoftHebb p2 — the trainer exceeded 300 s, no model produced) and eval-time DQs (Mamba, Hyena, full Chunker — training fit the budget but byte-by-byte evaluation through pure-PyTorch decode was too slow to complete 60,000 characters in the remaining harness wall-clock). Energy was burned in both cases; only the eval-time DQs have a partial-accuracy reading. All NVML measurements are idle-subtracted. Runs use A100-80GB PCIe except where the harness assigned SXM4 (noted in per-run logs).</p>
+
+<h2>Where each investigation stands</h2>
+
+<div class="status-strip">
+  <div class="status-card"><div class="status-title">LWTA drop-in</div><div class="status-meta"><span class="badge badge-active">Active</span><br>k=2 and k=4 both pass the floor at ~46 kJ. Open: fused Triton kernel and k=8 sweep.</div></div>
+  <div class="status-card"><div class="status-title">Pointer-Sentinel</div><div class="status-meta"><span class="badge badge-active">Active</span><br>0.6712 / 20 kJ — strongest sub-floor. 0.029 from the floor; wider backbone or longer buffer is the open question.</div></div>
+  <div class="status-card"><div class="status-title">PPM C-extension</div><div class="status-meta"><span class="badge badge-active">Active</span><br>0.6525 / 735 J on full corpus. Algorithmic ceiling at ~0.65; open is the spec-7 hybrid with a neural residual.</div></div>
+  <div class="status-card"><div class="status-title">Mamba (selective SSM)</div><div class="status-meta"><span class="badge badge-active">Active</span><br>Trained at 72 kJ. Partial-eval 0.57; DQ on eval wall-clock with pure-PyTorch decode. Custom CUDA scan kernel is the open question.</div></div>
+  <div class="status-card"><div class="status-title">Hyena / full Chunker</div><div class="status-meta"><span class="badge badge-closed-discard">DQ — eval-time</span><br>Both trained inside budget; pure-PyTorch decode too slow for byte-by-byte eval. Awaiting cached-decode rewrite.</div></div>
+  <div class="status-card"><div class="status-title">Forward-Forward (deep)</div><div class="status-meta"><span class="badge badge-active">Active &mdash; Phase 2 of 8</span><br>Best 0.3995 with bigram input encoding. Input encoding is the binding constraint, not the rule.</div></div>
+  <div class="status-card"><div class="status-title">Gradient-free survey</div><div class="status-meta"><span class="badge badge-closed-discard">Closed</span><br>5 methods &times; 2 passes. PPM the standout; others not viable as drop-ins.</div></div>
+  <div class="status-card"><div class="status-title">Manning bibliography</div><div class="status-meta"><span class="badge badge-survey">Survey-only</span><br>Word-level n-gram + character emission flagged as the highest-prior unexplored direction.</div></div>
+  <div class="status-card"><div class="status-title">NBB diagnostic</div><div class="status-meta"><span class="badge badge-closed-discard">Discarded</span><br>Structural failure on stochastic targets; analytical result documented.</div></div>
+</div>
+
+<h2>Active investigations</h2>
+
+<div class="investigation tier-a">
+  <h3>Pointer-Sentinel mixture LM
+    <span class="badge badge-active">Active</span>
+    <span class="slug">submissions/pointer_sentinel/</span>
+  </h3>
+  <div class="invest-grid">
+    <div>
+      <h4>What it is, in plain terms</h4>
+      <p>A char-level adaptation of the Merity et al. (2017) Pointer-Sentinel Mixture LM. A small transformer backbone (d=256, L=4) produces a query at each position. That query is dotted against the embeddings of the last W=1,024 buffered characters plus one learnable <em>sentinel</em> key. A softmax over the (W+1) scores yields a mixture gate <code>g</code> &mdash; the softmax mass on the sentinel &mdash; and a copy distribution <code>P_ptr</code> over the buffer. The final next-byte distribution is <code>g&middot;P_vocab + (1&minus;g)&middot;P_ptr</code>.</p>
+      <h4>Why it has traction here</h4>
+      <p>Long-form text is full of repeated character substrings &mdash; named entities, repeated phrases, citations, source-code identifiers. A literal copy from the recent buffer covers those at the cost of one attention dot product over a small window; the parametric backbone only has to model the truly novel positions. The mechanism is structurally orthogonal to LWTA's "make the transformer cheaper" approach: it shrinks the parametric model by offloading work onto a non-parametric copy distribution.</p>
+      <h4>Result</h4>
+      <p><strong>0.6712 val char-acc at 20,348 J in 158 s.</strong> Below the 0.70 floor by 0.029, but at ~40&percnt; of the baseline's energy. This is the highest accuracy any sub-floor submission reaches, and the highest energy efficiency of any non-trivial neural method on the board.</p>
+    </div>
+    <div>
+      <h4>Open</h4>
+      <p>Widening the backbone, lengthening the buffer past 1,024, or both. 0.029 is a small gap on a configuration that ran first-try; the simplest scale-up dispatch is the obvious next experiment, and is the cheapest plausible non-LWTA pass on the board.</p>
+      <h4>Headline numbers</h4>
+      <table>
+        <tr><td>val acc / energy</td><td class="num">0.6712 / 20,348 J</td></tr>
+        <tr><td>vs. baseline energy</td><td class="num">&minus;60.6%</td></tr>
+        <tr><td>Gap to 0.70 floor</td><td class="num">0.029</td></tr>
+        <tr><td>Strongest sub-floor result on board</td><td>&mdash;</td></tr>
+      </table>
+      <h4>If you remember one thing</h4>
+      <p class="quote">Pointer-Sentinel reaches 0.6712 at less than half the baseline's energy on its first submission. The gap to the floor is 0.029 &mdash; closer than any other non-passing method.</p>
+    </div>
+  </div>
+</div>
+
+<div class="investigation tier-a">
+  <h3>LWTA (Local Winner-Take-All) drop-in
+    <span class="badge badge-active">Active</span>
+    <span class="slug">submissions/lwta_k4/, lwta_k2/</span>
+  </h3>
+  <div class="invest-grid">
+    <div>
+      <h4>What it is, in plain terms</h4>
+      <p>LWTA is a 2013 idea from Srivastava, Masci, Kazerounian, Gomez and Schmidhuber ("Compete to Compute"). Inside each MLP block of a transformer, you partition the hidden units into small groups of <code>k</code>. For each group, only the unit with the highest pre-activation passes its value forward &mdash; the rest are zeroed. Structurally, only <code>1/k</code> of the MLP forward signal propagates, and per token only <code>1/k</code> of the MLP rows receive a gradient.</p>
+      <h4>Energy story</h4>
+      <p>The original paper framed LWTA as a regularizer, not an efficiency play. The potential energy reduction has two compounding parts, only one of which the current submissions realize:</p>
+      <ul>
+        <li><strong>Realized:</strong> backward through the LWTA mask zeroes gradients on losers, so the dense matmuls in the backward pass operate on sparse inputs/outputs. Combined with a cheaper activation (argmax + scatter vs GELU's erf), the LWTA blocks run ~10&percnt; faster per step than the baseline at identical n_steps.</li>
+        <li><strong>Unrealized:</strong> the post-activation matmul is structurally sparse &mdash; a fused Triton kernel that skips the zero columns would extract another ~k&times; on that one operation, projected to compound to ~30&percnt; total energy reduction at k=4.</li>
+      </ul>
+      <p>The reduction is <em>not</em> from reduced optimizer-state traffic: Muon iterates every parameter with a non-None gradient, and after a dense-mask backward every weight tensor has one. Across a training batch all rows of <code>fc</code> see some token's gradient.</p>
+      <h4>Result</h4>
+      <p>k=4 beats k=2 by 0.009 accuracy at the same energy: the higher-sparsity variant performs slightly <em>better</em>, consistent with LWTA's classical regularization story. Neither submission shows winner-collapse (no single unit dominating its group), which was the failure mode flagged in the spec.</p>
+    </div>
+    <div>
+      <h4>Open</h4>
+      <p>(a) A fused Triton kernel for the LWTA + W&#x2082; matmul step, to realize the unrealized half of the energy story. (b) A k=8 datapoint to see whether the regularization-vs-capacity trade keeps favouring sparsity.</p>
+      <h4>Headline numbers</h4>
+      <table>
+        <tr><td>LWTA k=4 acc / energy</td><td class="num">0.7238 / 46,222 J</td></tr>
+        <tr><td>LWTA k=2 acc / energy</td><td class="num">0.7146 / 46,131 J</td></tr>
+        <tr><td>Baseline reference</td><td class="num">0.7374 / 51,704 J</td></tr>
+        <tr><td>vs. baseline energy</td><td class="num">&minus;10.6% (k=4), &minus;10.8% (k=2)</td></tr>
+        <tr><td>vs. baseline accuracy</td><td class="num">&minus;0.014 (k=4), &minus;0.023 (k=2)</td></tr>
+      </table>
+      <h4>If you remember one thing</h4>
+      <p class="quote">A two-line activation change to the transformer baseline beat it on energy without an unacceptable accuracy hit &mdash; and the FLOP win is still on the table once the kernel is written.</p>
+    </div>
+  </div>
+</div>
+
+<div class="investigation tier-a">
+  <h3>PPM (Prediction by Partial Matching) &mdash; C extension follow-up
+    <span class="badge badge-active">Active</span>
+    <span class="slug">research/ppm-c-extension/, submissions/ppm_c/</span>
+  </h3>
+
+  <div class="invest-grid">
+    <div>
+      <h4>What it is, in plain terms</h4>
+      <p>PPM is the simplest learning algorithm on this board: it counts. For every short character sequence it has seen, it remembers what came next and how often. To predict, it looks at the last few characters and picks the most frequent continuation. There is no gradient descent, no neural network, no GPU required &mdash; just a tree of counters that grows as text streams in. It is a 1984 algorithm that the data compression community has used for decades.</p>
+      <h4>The two PPM submissions</h4>
+      <p>A pure-Python implementation reached 0.6300 / 633 J having seen only ~2&percnt; of the training data in the 300 s budget &mdash; throughput-limited. A C-extension reimplementation (<code>ppm_core.c</code>) ingests all 541 M training bytes in 108 s, building a depth-6 context tree with 10.2 M nodes and 103 M context-symbol entries, and reaches <strong>0.6525 / 735 J</strong>. A 50&times; increase in training data moved accuracy by only +0.022 &mdash; PPM's character-level learning curve flattens past the first few percent of WikiText.</p>
+      <h4>What that means</h4>
+      <p>The algorithmic ceiling, not implementation throughput, is the binding constraint. Scaling up PPM further is not the path forward. The structural next move is spec-7: PPM plus a small neural residual head over its predictions, which only needs to add 0.05 char-acc to clear the floor &mdash; a much easier ask than what residual learning faced over the pure-Python PPM.</p>
+      <h4>As a reference point</h4>
+      <p>At 735 J, PPM-C is by some margin the lowest-energy submission that produces non-trivial accuracy (the next non-PPM run, ES p1, is 1,938 J / 0.19; the only lower-energy run is a 3-second random projection at 70 J / 0.22). PPM-C does not pass the floor, but it serves as a tight count-based anchor for any future hybrid that uses count-based features as input.</p>
+    </div>
+    <div>
+      <h4>Open</h4>
+      <p>The spec-7 hybrid: a small neural residual head that takes PPM-C's predicted distribution as input and learns the residual. Energy budget for the residual head is what's left of the 51 kJ baseline after PPM-C's 735 J.</p>
+      <h4>Headline numbers</h4>
+      <table>
+        <tr><td>Pure-Python PPM (p1)</td><td class="num">0.6300 / 633 J</td></tr>
+        <tr><td>C extension (full data)</td><td class="num">0.6525 / 735 J</td></tr>
+        <tr><td>vs. baseline</td><td class="num">70&times; cheaper, &minus;0.085 acc</td></tr>
+        <tr><td>Gap to 0.70 floor</td><td class="num">0.05</td></tr>
+      </table>
+      <h4>If you remember one thing</h4>
+      <p class="quote">A 50&times; data increase moved PPM by 0.022 accuracy. PPM alone will not reach 0.70; PPM + a small residual head plausibly will.</p>
+    </div>
+  </div>
+</div>
+
+<div class="investigation tier-a">
+  <h3>Forward-Forward &mdash; exhaustive investigation
+    <span class="badge badge-active">Active &mdash; Phase 2 of 8</span>
+    <span class="slug">research/forward-forward-deep/</span>
+  </h3>
+
+  <div class="invest-grid">
+    <div>
+      <h4>What it is, in plain terms</h4>
+      <p>Forward-Forward is a 2022 proposal by Geoffrey Hinton: train a neural network without ever computing gradients backward through layers. Each layer learns to make its own activation pattern "energetic" for real data and "inert" for synthetic negative data &mdash; a per-layer contrastive rule. The promise is a learning algorithm that fits the way biological neurons work, with constant memory per layer and no backward sweep.</p>
+      <h4>Why investigate it deeply</h4>
+      <p>The 2022 paper benchmarked Forward-Forward on small image classification tasks and reported accuracies a few points below backpropagation. The literature since has produced roughly 20 named variants. <strong>Almost none have been tested on language data.</strong> If a Forward-Forward variant can clear the 0.70 floor here, it would be the first credible large-scale demonstration of layer-local learning on a real text task.</p>
+      <h4>What the Phase-2 sweep found</h4>
+      <p>Five Phase-2 runs answered "what is the rate-limiter?":</p>
+      <ul>
+        <li><strong>Bigram-aware input encoding lifted accuracy by 0.12</strong> (from 0.28 to 0.40) &mdash; the biggest single improvement of any variant tested. The input encoding, not the learning rule, is the binding constraint.</li>
+        <li>Widening from 384 to 1024 units gave another 0.06 lift.</li>
+        <li>Pure random projection (no learning at all) hit 0.22 &mdash; the FF rule itself adds only ~0.06 over the random baseline.</li>
+        <li>Longer context (K=24 &rarr; K=64) <em>hurt</em> accuracy by 0.07 &mdash; the network cannot use distant context with this depth and encoding.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Open</h4>
+      <p>Phase 3 (six contrastive-rule variants screened in parallel) and Phases 4&ndash;7 (encoder, depth, target, and goodness-function sweeps). The investigation will produce one of two outcomes: a Forward-Forward variant clears 0.70, or a structured discard. Both are valuable given how little of the post-2022 FF literature has been tested on language.</p>
+      <h4>Phase-2 numbers</h4>
+      <table>
+        <tr><td>Best Phase-2 result</td><td class="num">0.3995</td></tr>
+        <tr><td>Energy at that result</td><td class="num">4,284 J</td></tr>
+        <tr><td>Random-projection floor</td><td class="num">0.2190</td></tr>
+        <tr><td>Gap to 0.70 floor</td><td class="num">0.30</td></tr>
+      </table>
+      <h4>Honest read</h4>
+      <p>Closing a 0.30 accuracy gap with a learning rule that adds only ~0.06 over no learning at all is hard. The Phase-2 takeaway &mdash; that the rule's headroom is small but the encoding/width axes have plenty of slack &mdash; is the working hypothesis driving the remaining phases.</p>
+    </div>
+  </div>
+</div>
+
+<div class="investigation tier-a">
+  <h3>Alternative architectures &mdash; Mamba, Hyena, Schmidhuber chunker
+    <span class="badge badge-active">Active</span>
+    <span class="slug">submissions/mamba/, hyena/, chunker/; research/catalog/new_directions/chunker_d1/</span>
+  </h3>
+  <div class="invest-grid">
+    <div>
+      <h4>What this group is</h4>
+      <p>Three architectures that swap or augment standard self-attention with sub-quadratic mixers, all submitted as drop-in replacements for the baseline backbone:</p>
+      <ul>
+        <li><strong>Mamba</strong> (Gu &amp; Dao, 2023) &mdash; a selective state-space model with input-dependent recurrent transitions and a 1-D conv ring buffer. Training uses a parallel scan; inference is O(d_state) per byte.</li>
+        <li><strong>Hyena</strong> (Poli et al., 2023) &mdash; element-wise gates around implicit long convolutions (filters parameterised by a small MLP from position &rarr; tap weight), computed causally via FFT.</li>
+        <li><strong>Schmidhuber chunker</strong> (Schmidhuber 1992) &mdash; a small <em>automatizer</em> network L predicts every byte; bytes with L-confidence below threshold &tau; are flagged "surprises" and routed to a larger <em>chunker</em> network H, which only runs on the surprise stream.</li>
+      </ul>
+      <h4>What the runs show</h4>
+      <p>All three <em>train</em> inside the 300 s budget. None complete the 60,000-character byte-by-byte evaluation in the remaining harness wall-clock:</p>
+      <ul>
+        <li><strong>Mamba</strong>: training 72 kJ in 285 s; eval ran at 108 char/s through pure-PyTorch parallel scan, reaching 0.5654 at 52&percnt; through the validation split before being killed. The partial trajectory is essentially flat in the 0.56&ndash;0.58 band, suggesting the architecture is viable here and only the inference substrate is in the way.</li>
+        <li><strong>Hyena</strong>: training 55 kJ in 281 s; eval ran at ~60 char/s and reached 0.2027 partial. The decode path re-runs an FFT over the entire prefix at each byte, so eval cost grows linearly with position.</li>
+        <li><strong>Chunker</strong>: a Phase-0 diagnostic (<code>chunker_d1</code>) trained the L network alone and measured the surprise-rate distribution &mdash; p_s(&tau;=0.1) = 0.27, which clears the spec's go criterion. The full L+H run trained at 12.6 kJ in 222 s, eval reached 0.3001 at 80&percnt; before being killed.</li>
+      </ul>
+      <h4>Why these are grouped</h4>
+      <p>They share a failure mode that is structurally distinct from the algorithmic DQs elsewhere on the board. Training works; inference substrate is what disqualifies. Anything whose pure-PyTorch decode is slower than ~200 char/s trips the harness wall before scoring 60,000 characters.</p>
+    </div>
+    <div>
+      <h4>Open</h4>
+      <p>For Mamba: the upstream <code>mamba-ssm</code> CUDA scan kernel, or a windowed-eval mode that does decode in fixed-size chunks instead of byte-by-byte. Either resolves the eval wall directly; Mamba's partial trajectory makes it the most likely of the three to produce a competitive final number.</p>
+      <p>For Hyena: a streaming-FFT or causal-conv-cache decode path. Higher effort than Mamba; lower-priority given the lower partial accuracy.</p>
+      <p>For the chunker: a KV-cache decoding path on both L and H. The D1 diagnostic confirms the surprise rate is in-spec, so the architecture is worth a second attempt once the cached decode is in.</p>
+      <h4>Headline numbers</h4>
+      <table>
+        <tr><td>Mamba partial-eval / training energy</td><td class="num">0.5654 / 72.0 kJ</td></tr>
+        <tr><td>Hyena partial-eval / training energy</td><td class="num">0.2027 / 54.7 kJ</td></tr>
+        <tr><td>Chunker partial-eval / training energy</td><td class="num">0.3001 / 12.6 kJ</td></tr>
+        <tr><td>Chunker D1 surprise rate at &tau;=0.1</td><td class="num">0.267</td></tr>
+      </table>
+      <h4>If you remember one thing</h4>
+      <p class="quote">Three architectures train inside the budget and DQ on the inference path. The harness rewards methods whose decode substrate is as efficient as their training substrate &mdash; not just the asymptotic complexity in a paper.</p>
+    </div>
+  </div>
+</div>
+
+<h2>Survey-only investigations</h2>
+
+<div class="investigation tier-b">
+  <h3>Manning bibliography survey
+    <span class="badge badge-survey">Survey-only</span>
+    <span class="slug">research/manning-bibliography/</span>
+  </h3>
+  <div class="invest-grid">
+    <div>
+      <h4>What this is</h4>
+      <p>A read-through of roughly 210 publications from Christopher Manning's Stanford bibliography (1991&ndash;2025), filtering for methods that could plausibly be ported to the WikiText energy benchmark.</p>
+      <h4>Top finding</h4>
+      <p>Word-level prediction with character emission is the highest-prior unexplored direction. A 5-gram modified Kneser-Ney model over WikiText words emits the characters of its predicted word deterministically, paying full prediction cost only at word boundaries. This collapses 60,000 character predictions into ~12,000 word predictions; a moderately heavy word model comes in well under the baseline's 51 kJ.</p>
+      <h4>Why this is "survey-only" rather than active</h4>
+      <p>No experiments have been run from this list yet. The Kneser-Ney word model is the recommended first pick &mdash; lowest engineering cost, highest probability of clearing 0.70.</p>
+    </div>
+    <div>
+      <h4>Status</h4>
+      <p>Markdown report only. Next action is to pick one candidate and promote it to an active investigation.</p>
+    </div>
+  </div>
+</div>
+
+<h2>Closed investigations &mdash; what we learned and why we stopped</h2>
+
+<div class="investigation tier-b">
+  <h3>Gradient-free methods survey
+    <span class="badge badge-closed-discard">Closed-discard</span>
+    <span class="slug">research/gradfree-survey/</span>
+  </h3>
+
+  <p>A 10-experiment survey of five candidate learning algorithms, run on Modal A100 with two design iterations per method. None cleared 0.70; PPM came closest. The other four methods documented specific structural failure modes that are now load-bearing for what we don't try next.</p>
+
+  <table>
+    <thead><tr><th>Method</th><th>Family</th><th class="num">Best acc</th><th class="num">Best energy</th><th>Why it didn't work</th></tr></thead>
+    <tbody>
+      <tr><td><strong>PPM context tree</strong></td><td>Count-based</td><td class="num">0.6300</td><td class="num">633 J</td><td>Throughput-bound at 0.63 (~2&percnt; data). The C-extension follow-up reaches 0.6525 on 100&percnt; of data &mdash; the algorithmic ceiling lives near 0.65, see the active PPM card.</td></tr>
+      <tr><td>Forward-Forward causal LM</td><td>Layer-local</td><td class="num">0.2792</td><td class="num">3,845 J</td><td>The rule learns, but its ceiling on this benchmark is well below 0.70. Promoted to active deep-dive.</td></tr>
+      <tr><td>ESN with ridge readout</td><td>Reservoir</td><td class="num">0.3467</td><td class="num">29,762 J</td><td>Information-starved: a fixed random reservoir on one-hot byte input could not produce features informative enough for a linear readout to reach 0.70.</td></tr>
+      <tr><td>SoftHebb conv stack</td><td>Hebbian Soft-WTA</td><td class="num">0.1189</td><td class="num">21,179 J</td><td>Per-channel entropy stayed at maximum throughout training, at two widths. The image-domain inductive bias does not transfer.</td></tr>
+      <tr><td>ES on tiny transformer</td><td>Evolutionary</td><td class="num">0.1900</td><td class="num">1,938 J</td><td>Identical accuracy at two scales separated by 4&times; iterations and 7&times; parameters. Sample-efficiency wall.</td></tr>
+    </tbody>
+  </table>
+
+  <h4>The cross-cutting finding</h4>
+  <p>Of the five methods, only two produced any learning signal worth following up: PPM (count-based, runs into substrate constraints not algorithmic ones) and Forward-Forward (learns slowly but the rule does work). The other three failed in ways that suggest the underlying mechanism does not transfer to byte-level text.</p>
+</div>
+
+<div class="investigation tier-c">
+  <h3>Neural Bucket Brigade (NBB) diagnostic
+    <span class="badge badge-closed-discard">Closed-discard &mdash; with novel finding</span>
+    <span class="slug">research/nbb-bigram-diagnostic/</span>
+  </h3>
+  <p>NBB (Schmidhuber 1989) is a fully gradient-free local learning rule that propagates "substance" through a network like a reward signal. Tested as a bigram next-byte predictor, no configuration could reach even the unigram floor. <strong>The cause is structural, not implementational</strong>: an analytical derivation shows that NBB's multiplicative-update dynamics cannot have a stable equilibrium when output probabilities vary by token &mdash; either rare-token connections dissipate to zero or common-token connections blow up. This appears to be a novel finding (no published paper documents it). Implication: any other multiplicative-update local rule deserves the same sanity check before investing engineering.</p>
+</div>
+
+<h2>Open directions</h2>
+
+<p>Hypothesis-driven specifications for follow-up experiments, ordered by expected cost-to-pass. The first three target the 0.70 floor directly; the rest extend coverage of the method-family map.</p>
+
+<table>
+  <thead><tr><th>#</th><th>Spec</th><th>Why</th><th>Effort</th></tr></thead>
+  <tbody>
+    <tr><td>15a</td><td>Pointer-Sentinel scale-up (wider backbone, longer buffer)</td><td>The d=256 / W=1024 configuration lands 0.029 from the floor at ~40&percnt; of baseline energy &mdash; the cheapest plausible next-pass candidate on the board.</td><td>1&ndash;2 days</td></tr>
+    <tr><td>14a</td><td>Mamba with CUDA scan (or windowed eval mode)</td><td>Partial-eval 0.57 suggests the architecture is viable; only inference substrate is in the way.</td><td>2&ndash;3 days</td></tr>
+    <tr><td>9a</td><td>LWTA Triton kernel + k=8 sweep</td><td>Realize the unrealized FLOP win on the LWTA passes. k=8 datapoint to extend the regularization-vs-capacity curve.</td><td>2&ndash;3 days</td></tr>
+    <tr><td>7</td><td>PPM + tiny neural residual</td><td>Anchored on PPM-C at 0.6525 / 735 J. Residual head only needs to add 0.05 to clear the floor.</td><td>2&ndash;4 days</td></tr>
+    <tr><td>Manning</td><td>Kneser-Ney word model with character emission</td><td>Structurally orthogonal to everything else on the board.</td><td>2&ndash;3 days</td></tr>
+    <tr><td>8</td><td>Fast-weight programmer with delta rule</td><td>Constant per-token compute, no key-value cache.</td><td>2&ndash;3 days</td></tr>
+    <tr><td>10</td><td>Forward-Forward Phases 3&ndash;7</td><td>Covered by the active FF investigation.</td><td>Ongoing</td></tr>
+  </tbody>
+</table>
+
+<h2>Method-family taxonomy</h2>
+
+<table>
+  <thead><tr><th>Family</th><th>Mechanism in one line</th><th>Energy story</th><th>Representative methods</th></tr></thead>
+  <tbody>
+    <tr><td>Count-based</td><td>Streaming counters over short context windows.</td><td>Closed-form &mdash; no gradients, no GPU strictly required.</td><td>PPM (active), modified Kneser-Ney (Manning catalog)</td></tr>
+    <tr><td>Sparse activation</td><td>Only 1/k of units fire per token.</td><td>1/k of MLP rows see gradient per token; fused kernels can skip 1/k of post-activation FLOPs.</td><td>Local Winner-Take-All (active)</td></tr>
+    <tr><td>Layer-local</td><td>Each layer optimizes its own activations contrastively, no backward sweep.</td><td>Constant memory per layer; layers can train in parallel.</td><td>Forward-Forward (active)</td></tr>
+    <tr><td>Hebbian / fast-weight</td><td>Outer-product write to a fast-weight matrix per token.</td><td>O(d&sup2;) per token regardless of sequence length; no KV cache.</td><td>Fast-weight programmer (spec 8)</td></tr>
+    <tr><td>Surprise-gated hierarchy</td><td>Higher levels only see "surprises" the lower level couldn't predict.</td><td>Skip compute on predictable bytes.</td><td>Schmidhuber chunker (active)</td></tr>
+    <tr><td>Sub-quadratic mixer</td><td>Replace attention with a recurrent state (SSM) or implicit long convolution.</td><td>O(N) or O(N log N) training; inference is O(1) per byte if the substrate is fast enough.</td><td>Mamba, Hyena (active &mdash; eval-time wall)</td></tr>
+    <tr><td>Mixture with pointer</td><td>Mix a small parametric LM with a copy distribution over a recent buffer.</td><td>Smaller parametric model offsets attention over a windowed buffer.</td><td>Pointer-Sentinel (active)</td></tr>
+    <tr><td>Evolutionary / search</td><td>Population of weight perturbations, ranked by fitness.</td><td>Forward-only; embarrassingly parallel.</td><td>OpenAI-ES (closed-discard), CMA-ES</td></tr>
+  </tbody>
+</table>
+
+<h2>Reproducibility &amp; methodology</h2>
+
+<div class="grid-2">
+  <div>
+    <h4>Hardware</h4>
+    <p>All training and energy measurements on Modal-provisioned NVIDIA A100-80GB (PCIe for baseline, LWTA, PPM-C and modded-nanogpt; SXM4 for the Forward-Forward Phase-2 batch). Idle power differs by ~30%; energy measurements are idle-subtracted.</p>
+    <h4>Energy measurement</h4>
+    <p>Direct NVML readings from the device's on-chip energy counter, sampled at the start and end of training, then idle-subtracted. Energy includes only the GPU portion of training.</p>
+  </div>
+  <div>
+    <h4>Evaluation harness</h4>
+    <p>The runner calls the submission's <code>predict()</code> method strictly before its <code>observe()</code> method for each position, so future-peeking is structurally impossible. Validation accuracy is computed on the first 60,000 characters of the official WikiText-103 validation split via greedy argmax.</p>
+    <h4>Code &amp; data</h4>
+    <p>All submission code is in <code>submissions/</code> and <code>research/&lt;investigation&gt;/runs/</code>. Per-run NVML logs, Modal stdout, and harness results are committed alongside each submission.</p>
+  </div>
+</div>
+
+<h2>Summary</h2>
+
+<p>Three submissions out of 24 clear the 0.70 floor: the modded-nanogpt transformer baseline, and two LWTA drop-ins that replace GELU with group-wise winner-take-all. The LWTA win is a real but modest 10&ndash;11&percnt; energy reduction at slightly lower accuracy &mdash; mechanically, an MLP-activation change rather than a different learning algorithm.</p>
+<p>Below the floor, the most efficient submission is PPM-C (0.6525 / 735 J) &mdash; a count-based context-tree algorithm running 70&times; cheaper than the baseline. The strongest sub-floor accuracy is Pointer-Sentinel (0.6712 / 20 kJ) at ~40&percnt; of the baseline's energy, with a 0.029 gap to the floor. Three sub-quadratic architectures (Mamba, Hyena, the full Schmidhuber chunker) train inside the budget but fail to complete byte-by-byte evaluation in pure PyTorch &mdash; the harness disqualifies on total wall-clock, so the inference substrate matters as much as the training substrate.</p>
+<p>The headline research question &mdash; can a fundamentally different learning algorithm beat backprop on this task &mdash; is still open. PPM has hit its character-level ceiling at ~0.65. Forward-Forward's rule adds only ~0.06 over no learning at all. Pointer-Sentinel and Mamba are the two architectures closest to passing on the current evidence, and both look like they want one more iteration of the substrate (wider backbone or longer buffer for the former; CUDA scan kernel or windowed eval for the latter) before they can clear the floor.</p>
+
+<p class="footnote">This portfolio is generated from <code>submissions/*/result.json</code>, <code>research/*/result.json</code>, <code>research/*/REPORT.md</code> and the catalog files at <code>research/catalog/</code>. Click any data point or method label to open its explainer.</p>
+
+<script>
+// ============================================================================
+// Dataset — every plotted run
+// ============================================================================
+const RUNS = [
+  // Baseline
+  { id:"baseline", run:"modded-nanogpt (baseline)", family:"baseline", energy:51704, acc:0.7374, time:247, status:"pass" },
+  // LWTA
+  { id:"lwta_k4", run:"LWTA k=4", family:"lwta", energy:46222, acc:0.7238, time:237, status:"pass" },
+  { id:"lwta_k2", run:"LWTA k=2", family:"lwta", energy:46131, acc:0.7146, time:222, status:"pass" },
+  // Pointer-sentinel — NEW
+  { id:"pointer_sentinel", run:"Pointer-Sentinel mixture", family:"pointer", energy:20348, acc:0.6712, time:158, status:"dq-acc" },
+  // PPM family
+  { id:"ppm_c", run:"PPM-C (full data, K=6)", family:"ppm", energy:735, acc:0.6525, time:109, status:"dq-acc" },
+  { id:"ppm_p1", run:"PPM Python p1", family:"ppm", energy:633, acc:0.6300, time:44, status:"dq-acc" },
+  // ESN
+  { id:"esn_p1", run:"ESN ridge readout p1", family:"esn", energy:29762, acc:0.3467, time:285, status:"dq-acc" },
+  // Chunker — NEW
+  { id:"chunker_d1", run:"Chunker D1 (Phase-0 diagnostic)", family:"chunker", energy:3612, acc:0.1900, time:64, status:"dq-acc" },
+  // SoftHebb
+  { id:"softhebb_p1", run:"SoftHebb stacked p1", family:"hebbian", energy:21179, acc:0.1189, time:89, status:"dq-acc" },
+  // ES
+  { id:"es_p1", run:"ES tiny transformer p1", family:"es", energy:1938, acc:0.1900, time:62, status:"dq-acc" },
+  { id:"es_p2", run:"ES tiny transformer p2", family:"es", energy:8719, acc:0.1900, time:262, status:"dq-acc" },
+  // FF Phase 1 (closed survey)
+  { id:"ff_causal_p1", run:"FF causal LM p1", family:"ff", energy:2737, acc:0.2351, time:96, status:"dq-acc" },
+  { id:"ff_causal_p2", run:"FF causal LM p2", family:"ff", energy:3845, acc:0.2792, time:106, status:"dq-acc" },
+  // FF Phase 2 (deep dive)
+  { id:"ff_p2a", run:"FF Phase-2 P2-A (random proj.)", family:"ff", energy:70, acc:0.2190, time:3, status:"dq-acc" },
+  { id:"ff_p2b", run:"FF Phase-2 P2-B (layerwise probe)", family:"ff", energy:3898, acc:0.2658, time:107, status:"dq-acc" },
+  { id:"ff_p2c", run:"FF Phase-2 P2-C (width 1024)", family:"ff", energy:3787, acc:0.3342, time:44, status:"dq-acc" },
+  { id:"ff_p2d", run:"FF Phase-2 P2-D (K=64)", family:"ff", energy:4957, acc:0.2073, time:77, status:"dq-acc" },
+  { id:"ff_p2e", run:"FF Phase-2 P2-E (bigram input)", family:"ff", energy:4284, acc:0.3995, time:148, status:"dq-acc" },
+];
+
+// Runs that ran out of wall-clock — listed in the table but not plotted (no
+// final val accuracy). The three "partial-eval" rows below are NEW: training
+// finished within the budget but byte-by-byte evaluation exceeded the harness
+// time on slow architectures, so result.json was never written. Partial-eval
+// accuracy at the cut-off is recorded for context only.
+const UNPLOTTED = [
+  { run:"PPM Python p2", family:"ppm", energy:980, acc:null, time:300, status:"dq-time", note:"trainer exceeded 300 s" },
+  { run:"ESN ridge readout p2", family:"esn", energy:71567, acc:null, time:301, status:"dq-time", note:"trainer exceeded 300 s" },
+  { run:"SoftHebb single layer p2", family:"hebbian", energy:93197, acc:null, time:300, status:"dq-time", note:"trainer exceeded 300 s" },
+  { run:"Mamba (selective SSM)", family:"ssm", energy:72005, acc:null, time:285, status:"dq-time", note:"trained at 0.57 partial-eval (52 %); eval-time wall" },
+  { run:"Hyena (order-2 long conv)", family:"ssm", energy:54685, acc:null, time:281, status:"dq-time", note:"partial-eval 0.19 (28 %); eval-time wall" },
+  { run:"Chunker (full L+H)", family:"chunker", energy:12613, acc:null, time:222, status:"dq-time", note:"partial-eval 0.30 (80 %); eval-time wall" },
+];
+
+// ============================================================================
+// Family metadata — colour, label, description, visual explainer
+// ============================================================================
+const FAMILIES = {
+  baseline: {
+    label: "Transformer baseline (modded-nanogpt)",
+    color: "#1f7a3a",
+    description: `
+      <p>A modern character-level decoder transformer trained with the Muon + AdamW optimizer combination popularised by Karpathy's <code>modded-nanogpt</code>. Standard architecture: token embeddings &rarr; rotary self-attention &rarr; MLP &rarr; residual, repeated for L layers, then a tied output head. Gradient descent through all weights every step.</p>
+      <p>This is the only thing on the board that comes from "do mainstream deep learning, well." Everything else on the scatter plot is some attempt to beat it on energy.</p>`,
+    headline: `<strong>0.7374 acc</strong> at <strong>51,704 J</strong> in 247 s &mdash; the reference point everything else is compared against.`,
+  },
+  lwta: {
+    label: "LWTA drop-in",
+    color: "#0f8bb5",
+    description: `
+      <p>Take the modded-nanogpt baseline. Inside each MLP block, partition the hidden units into groups of <code>k</code>. Replace the activation function with <em>Local Winner-Take-All</em>: in each group, only the unit with the highest pre-activation passes its value forward; the others output zero. The backward pass routes gradient only to the winner.</p>
+      <p>Two compounding effects on energy: (a) only 1/k of MLP hidden units fire, so a fused kernel can skip 1/k of the post-activation matmul; (b) the dense-mask backward operates on sparse activations and the activation function itself is cheaper than GELU, which together account for the ~10&percnt; per-step speedup the current dense-mask submissions realize. The kernel-level FLOP skip (a) is still ahead.</p>
+      <p>Originally proposed by Srivastava, Masci, Kazerounian, Gomez and Schmidhuber (NeurIPS 2013) as a regularization mechanism. On this benchmark it works as both: a small regularization-induced accuracy hit at k=2/k=4, and a ~10&percnt; energy reduction even without the kernel.</p>`,
+    headline: `<strong>k=4:</strong> 0.7238 acc / 46,222 J. <strong>k=2:</strong> 0.7146 acc / 46,131 J. Both <strong>pass the 0.70 floor</strong> at roughly 11% less energy than the baseline.`,
+  },
+  ppm: {
+    label: "Prediction-by-Partial-Matching (count-based)",
+    color: "#2a4d8f",
+    description: `
+      <p>PPM is the simplest learning algorithm on this board: it counts. For every short suffix of seen text (length 0 up to <code>K</code>), it stores how many times each next byte followed it. At prediction time, it looks at the trailing <code>K</code> bytes of the stream and picks the most frequent continuation, falling back to a shorter context if the long one was never seen.</p>
+      <p>No gradients, no neural network, no GPU strictly required. The model is a trie of counters. The 1984 algorithm has been a standard tool for the lossless-compression community for decades; this is its first benchmark on the WikiText energy task.</p>`,
+    headline: `<strong>PPM Python:</strong> 0.6300 / 633 J on ~2&percnt; of training data. <strong>PPM-C:</strong> 0.6525 / 735 J on the full 541 M-byte corpus. A 50&times; data increase moved accuracy by only +0.022 &mdash; the binding constraint is algorithmic, not throughput.`,
+  },
+  ff: {
+    label: "Forward-Forward",
+    color: "#7a4ea0",
+    description: `
+      <p>Geoffrey Hinton's 2022 proposal: train a deep network without ever computing gradients backward across layers. For each layer, you run two forward passes &mdash; one on real ("positive") data, one on synthetic ("negative") data &mdash; and update the layer's weights to make the activation pattern's <em>goodness</em> (typically the sum of squared activations) high for positives and low for negatives.</p>
+      <p>Each layer trains itself locally, in parallel with the others if you want. There is no backward sweep, no need to store activations across layers, and the memory cost stays constant in depth. The promise is a learning algorithm that fits the constraints of biological neurons and very-large models.</p>
+      <p>About 20 named variants exist in the post-2022 literature, mostly tested on small image-classification tasks. The deep-dive investigation in this repository is the first systematic study of FF on byte-level language modeling.</p>`,
+    headline: `<strong>Phase-2 peak:</strong> 0.3995 / 4,284 J (bigram input encoding). Phase 2 showed input encoding is the binding constraint, not the learning rule. Gap to floor: 0.30.`,
+  },
+  esn: {
+    label: "Echo State Network (reservoir)",
+    color: "#c97a1a",
+    description: `
+      <p>An ESN is a recurrent network where <em>only the readout is trained</em>. A large recurrent matrix is initialized randomly, scaled to have spectral radius just under 1 (the "edge of chaos"), and never updated. The input stream drives the reservoir, which produces a high-dimensional time-varying state. A separate linear layer is fit (in closed form, via ridge regression) to map that state to the next-byte distribution.</p>
+      <p>No backpropagation through time, no recurrent gradient at all. The trade-off: the random reservoir has to be informative enough that a linear readout can solve the task. On byte-level text, that turned out to be the rub.</p>`,
+    headline: `<strong>Best:</strong> 0.3467 / 29,762 J. Closed: a fixed random reservoir on one-hot bytes does not produce features informative enough for a linear readout to clear 0.70.`,
+  },
+  hebbian: {
+    label: "SoftHebb (Hebbian / Soft-WTA)",
+    color: "#a4302a",
+    description: `
+      <p>A modern Hebbian learning rule: each layer trains via local outer-product updates &mdash; <code>&Delta;w &propto; (post-activation) &times; (pre-activation)</code> &mdash; combined with a soft winner-take-all step that decorrelates neighbouring units. No gradient ever crosses a layer boundary. Each unit's update depends only on its own input and output.</p>
+      <p>Has been shown to match backpropagation accuracy on CIFAR-class image tasks. Tested here on byte streams, the soft-WTA failed to differentiate channels: per-channel entropy stayed at maximum across training, meaning every channel responded equally to every byte. Strong evidence the image-domain inductive bias does not transfer.</p>`,
+    headline: `<strong>Best:</strong> 0.1189 / 21,179 J. Closed-discard: structural channel-symmetry failure on byte streams.`,
+  },
+  es: {
+    label: "Evolutionary Strategies (OpenAI-ES)",
+    color: "#666",
+    description: `
+      <p>Train without computing any gradient. At each step, perturb the network's weights with N independent Gaussian noise vectors, run the resulting N networks forward, score each by a fitness (here: validation accuracy or log-likelihood), then take a weighted average of the perturbations to step in the direction of higher fitness. Embarrassingly parallel; no backward pass at all.</p>
+      <p>Salimans et al. (OpenAI, 2017) showed this scales surprisingly well on RL tasks. On supervised language modeling at the parameter count needed for non-trivial accuracy, however, the sample complexity wall arrives fast.</p>`,
+    headline: `<strong>Best:</strong> 0.1900 / 1,938 J. Identical accuracy at two scales separated by 4&times; iterations and 7&times; parameters. Closed-discard: sample-efficiency wall.`,
+  },
+  pointer: {
+    label: "Pointer-Sentinel mixture LM",
+    color: "#cc4e8a",
+    description: `
+      <p>A char-level adaptation of Merity, Xiong, Bradbury &amp; Socher (2017). A small parametric transformer backbone (d=256, L=4) produces a query at each position. That query is dotted against the embeddings of the W=1024 most recent characters in a rolling buffer, plus one learnable <em>sentinel</em> key. A softmax over (W+1) scores gives a gating weight <code>g</code> &mdash; the sentinel's softmax mass &mdash; and a copy distribution <code>P_ptr</code> over the buffer. The final next-byte distribution mixes the parametric model with a literal copy of recent text: <code>P = g &middot; P_vocab + (1-g) &middot; P_ptr</code>.</p>
+      <p>Intuition: a lot of next-character predictions in long-form text are "the previous occurrence of this word, plus one character" &mdash; named entities, repeated phrases, citations. A pointer to the recent buffer gets those for free, leaving the parametric backbone to focus on the harder cases.</p>`,
+    headline: `<strong>0.6712 acc / 20,348 J.</strong> Below the 0.70 floor by 0.029, but at 39&percnt; of the baseline's energy &mdash; the strongest DQ result on the board and the highest non-passing energy efficiency for a neural method.`,
+  },
+  chunker: {
+    label: "Schmidhuber hierarchical chunker",
+    color: "#2a9d8f",
+    description: `
+      <p>Schmidhuber's 1992 "Neural Sequence Chunker" idea, instantiated for byte-level text: a small <em>automatizer</em> network <strong>L</strong> predicts every byte; whenever L's confidence drops below threshold <code>&tau;</code>, the position is flagged as a "surprise" and a second, larger <em>chunker</em> network <strong>H</strong> is consulted. H consumes <em>only the surprise stream</em> (positions L could not predict) and predicts the next surprise byte.</p>
+      <p>The energy story is conditional skipping: in English text, most positions are predictable from a tiny window, so L handles them cheaply and H only runs on the ~5&ndash;30&percnt; of positions that carry actual information. If both networks learn well, total compute is bounded by H's cost &times; surprise rate, not by H &times; sequence length.</p>`,
+    headline: `<strong>D1 (Phase-0):</strong> 3,612 J / 64 s. L trained alone; p_s(&tau;=0.1)=0.267 (passes spec). Submission returns a dummy predictor (acc 0.1900) by design &mdash; this run only measures surprise rate. <strong>Full L+H:</strong> trained at 12.6 kJ in 222 s; eval reached 0.3001 at 80&percnt; before the eval-time wall. A cached-decode rewrite is the open path.`,
+  },
+  ssm: {
+    label: "State-space / long-conv (Mamba, Hyena)",
+    color: "#6d4c41",
+    description: `
+      <p>Two architectures that swap quadratic attention for sub-quadratic mixers:</p>
+      <ul>
+        <li><strong>Mamba</strong> (Gu &amp; Dao, 2023) &mdash; a <em>selective state-space model</em>. Each layer maintains a small recurrent state (d_state per channel) and a 1-D conv ring buffer. The recurrent transition matrices are <em>input-dependent</em> (selective), so the model can choose to retain or forget information at each step. Training uses a parallel scan; inference is O(d_state) per byte.</li>
+        <li><strong>Hyena</strong> (Poli et al., 2023) &mdash; an <em>implicit long convolution</em>. The attention mixer is replaced with a chain of element-wise gates and globally-supported FIR filters, where each filter is parameterised by a small MLP mapping position &rarr; tap weight. Computed via causal FFT, O(N log N) per layer.</li>
+      </ul>
+      <p>Both promise linear or log-linear sequence cost vs attention's quadratic. The training step fits inside the 300 s budget for both. The benchmark wall is on the <em>inference</em> side: byte-by-byte evaluation through pure-PyTorch Mamba runs at ~108 char/s and Hyena at ~60 char/s, so neither completes the 60,000-character eval before the harness time wall.</p>`,
+    headline: `<strong>Mamba:</strong> partial-eval 0.57 (52&percnt; through) at 72 kJ. <strong>Hyena:</strong> partial-eval 0.19 (28&percnt;) at 55 kJ. Both DQ on eval-time. Mamba's partial trajectory is encouraging; a custom CUDA scan kernel (or shorter eval window) is the natural next experiment.`,
+  },
+};
+
+// ============================================================================
+// SVG explainer — one per family
+// ============================================================================
+const EXPLAINERS = {
+  baseline: `
+    <svg viewBox="0 0 360 230">
+      <defs><marker id="ax" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#1f7a3a"/></marker></defs>
+      <!-- input stream -->
+      <text x="180" y="18" font-size="11" text-anchor="middle" fill="#1a1a1a">"... the cat sa"</text>
+      <line x1="180" y1="22" x2="180" y2="40" stroke="#1f7a3a" stroke-width="1.2" marker-end="url(#ax)"/>
+      <!-- embedding -->
+      <rect x="120" y="42" width="120" height="20" fill="#e8f0e9" stroke="#1f7a3a" stroke-width="1"/>
+      <text x="180" y="56" font-size="10" text-anchor="middle">char embeddings</text>
+      <line x1="180" y1="62" x2="180" y2="76" stroke="#1f7a3a" stroke-width="1.2" marker-end="url(#ax)"/>
+      <!-- block 1 -->
+      <rect x="80" y="78" width="200" height="44" fill="#fff" stroke="#1f7a3a" stroke-width="1.2" rx="3"/>
+      <rect x="90" y="84" width="85" height="14" fill="#d2e8d6" stroke="#1f7a3a" stroke-width="0.8"/>
+      <text x="132.5" y="94" font-size="9" text-anchor="middle">self-attention</text>
+      <rect x="185" y="84" width="85" height="14" fill="#d2e8d6" stroke="#1f7a3a" stroke-width="0.8"/>
+      <text x="227.5" y="94" font-size="9" text-anchor="middle">MLP (GELU)</text>
+      <text x="180" y="115" font-size="9" text-anchor="middle" fill="#6a6a6a">residual + RMSNorm</text>
+      <line x1="180" y1="122" x2="180" y2="140" stroke="#1f7a3a" stroke-width="1.2" stroke-dasharray="3 2"/>
+      <text x="195" y="135" font-size="9" fill="#6a6a6a">&times; L blocks</text>
+      <!-- output head -->
+      <rect x="120" y="142" width="120" height="20" fill="#e8f0e9" stroke="#1f7a3a" stroke-width="1"/>
+      <text x="180" y="156" font-size="10" text-anchor="middle">linear head &rarr; softmax</text>
+      <line x1="180" y1="162" x2="180" y2="180" stroke="#1f7a3a" stroke-width="1.2" marker-end="url(#ax)"/>
+      <!-- prediction -->
+      <text x="180" y="195" font-size="11" text-anchor="middle" fill="#1a1a1a">P(next = "t" | context)</text>
+      <text x="180" y="218" font-size="9.5" text-anchor="middle" fill="#6a6a6a">Backprop through every layer every step.</text>
+    </svg>`,
+  lwta: `
+    <svg viewBox="0 0 360 240">
+      <!-- input vector -->
+      <text x="20" y="20" font-size="10" fill="#6a6a6a">pre-activation h&#8321; = W&#8321;&middot;x</text>
+      <!-- 4 groups of k=4 with one winner each -->
+      <g font-size="10" text-anchor="middle">
+        <text x="180" y="40" fill="#1a1a1a">group of k=4 (×4 shown)</text>
+        <!-- group 1 -->
+        <g transform="translate(20,60)">
+          <rect x="0"  y="0" width="38" height="22" fill="#ffe9c4" stroke="#0f8bb5"/>
+          <text x="19" y="15">2.1</text>
+          <rect x="42" y="0" width="38" height="22" fill="#0f8bb5" stroke="#0a6f8f"/>
+          <text x="61" y="15" fill="#fff" font-weight="bold">4.8</text>
+          <rect x="84" y="0" width="38" height="22" fill="#ffe9c4" stroke="#0f8bb5"/>
+          <text x="103" y="15">0.4</text>
+          <rect x="126" y="0" width="38" height="22" fill="#ffe9c4" stroke="#0f8bb5"/>
+          <text x="145" y="15">-1.2</text>
+          <text x="82" y="38" font-size="9" fill="#6a6a6a">argmax wins, the rest &rarr; 0</text>
+        </g>
+        <!-- arrow down -->
+        <line x1="180" y1="105" x2="180" y2="120" stroke="#0f8bb5" stroke-width="1.4"/>
+        <!-- after LWTA -->
+        <g transform="translate(20,124)">
+          <rect x="0"   y="0" width="38" height="22" fill="#f4f3ef" stroke="#aaa"/><text x="19" y="15" fill="#aaa">0</text>
+          <rect x="42"  y="0" width="38" height="22" fill="#0f8bb5" stroke="#0a6f8f"/><text x="61" y="15" fill="#fff" font-weight="bold">4.8</text>
+          <rect x="84"  y="0" width="38" height="22" fill="#f4f3ef" stroke="#aaa"/><text x="103" y="15" fill="#aaa">0</text>
+          <rect x="126" y="0" width="38" height="22" fill="#f4f3ef" stroke="#aaa"/><text x="145" y="15" fill="#aaa">0</text>
+          <text x="82" y="38" font-size="9" fill="#6a6a6a">structurally sparse (1/k non-zero)</text>
+        </g>
+        <line x1="180" y1="170" x2="180" y2="185" stroke="#0f8bb5" stroke-width="1.4"/>
+        <!-- output -->
+        <g transform="translate(40,188)">
+          <rect x="0" y="0" width="280" height="22" fill="#e7f3f7" stroke="#0f8bb5"/>
+          <text x="140" y="15" fill="#0a6f8f">W&#8322; &middot; sparse-h&#8321;  &mdash; fused kernel skips the zero columns</text>
+        </g>
+      </g>
+      <text x="180" y="232" font-size="9.5" text-anchor="middle" fill="#6a6a6a">backward routes gradient only to the winner &rArr; 1/k of W&#8321; updates per step</text>
+    </svg>`,
+  ppm: `
+    <svg viewBox="0 0 360 230">
+      <text x="180" y="18" font-size="10" text-anchor="middle" fill="#1a1a1a">trailing context: "...the c<tspan font-weight="bold">a</tspan>t<tspan font-weight="bold">_</tspan>s<tspan font-weight="bold">a</tspan>"</text>
+      <text x="180" y="34" font-size="9" text-anchor="middle" fill="#6a6a6a">walk the trie of seen contexts, oldest-first</text>
+      <!-- trie of contexts -->
+      <g font-size="10" text-anchor="middle">
+        <!-- root -->
+        <rect x="155" y="46" width="50" height="20" fill="#d6e4f5" stroke="#2a4d8f"/>
+        <text x="180" y="60">"" (root)</text>
+        <!-- order 1 -->
+        <line x1="180" y1="66" x2="100" y2="84" stroke="#2a4d8f" stroke-width="0.8"/>
+        <line x1="180" y1="66" x2="180" y2="84" stroke="#2a4d8f" stroke-width="0.8"/>
+        <line x1="180" y1="66" x2="260" y2="84" stroke="#2a4d8f" stroke-width="0.8"/>
+        <rect x="75"  y="86" width="50" height="20" fill="#e8eef9" stroke="#2a4d8f"/><text x="100" y="100">"a"</text>
+        <rect x="155" y="86" width="50" height="20" fill="#e8eef9" stroke="#2a4d8f"/><text x="180" y="100">"s"</text>
+        <rect x="235" y="86" width="50" height="20" fill="#e8eef9" stroke="#2a4d8f"/><text x="260" y="100">"_"</text>
+        <!-- order 2 — focus on "sa" -->
+        <line x1="180" y1="106" x2="180" y2="124" stroke="#2a4d8f" stroke-width="0.8"/>
+        <rect x="155" y="126" width="50" height="20" fill="#2a4d8f"/>
+        <text x="180" y="140" fill="#fff" font-weight="bold">"sa"</text>
+        <!-- counts at "sa" -->
+        <g transform="translate(40,158)">
+          <text x="20" y="0" font-size="9" fill="#6a6a6a">counts of next byte after "sa":</text>
+          <rect x="0"   y="6" width="44" height="14" fill="#2a4d8f"/><text x="22" y="17" font-size="9" fill="#fff" text-anchor="middle">t: 18</text>
+          <rect x="48"  y="6" width="30" height="14" fill="#5a76a5"/><text x="63" y="17" font-size="9" fill="#fff" text-anchor="middle">i: 9</text>
+          <rect x="82"  y="6" width="24" height="14" fill="#8aa1c0"/><text x="94" y="17" font-size="9" fill="#fff" text-anchor="middle">y: 5</text>
+          <rect x="110" y="6" width="18" height="14" fill="#b8c5d8"/><text x="119" y="17" font-size="9" fill="#1a1a1a" text-anchor="middle">w:3</text>
+          <text x="250" y="17" font-size="9" fill="#6a6a6a">&rarr; predict "t"</text>
+        </g>
+      </g>
+      <text x="180" y="208" font-size="9.5" text-anchor="middle" fill="#6a6a6a">If "sa<i>X</i>" was never seen, fall back to order-1 ("a") then order-0 (global counts).</text>
+      <text x="180" y="223" font-size="9" text-anchor="middle" fill="#6a6a6a">No gradient, no GPU strictly required. State is a trie of integers.</text>
+    </svg>`,
+  ff: `
+    <svg viewBox="0 0 360 250">
+      <!-- two streams: positive and negative -->
+      <g font-size="10">
+        <text x="65"  y="18" text-anchor="middle" fill="#1f7a3a">"+" stream</text>
+        <text x="295" y="18" text-anchor="middle" fill="#a4302a">"−" stream</text>
+        <text x="65"  y="32" text-anchor="middle" fill="#6a6a6a">real next char</text>
+        <text x="295" y="32" text-anchor="middle" fill="#6a6a6a">corrupted next char</text>
+      </g>
+      <!-- layer stack -->
+      <g>
+        <!-- Layer 1 -->
+        <rect x="20"  y="46" width="90" height="28" fill="#e8f0e9" stroke="#7a4ea0"/>
+        <text x="65"  y="64" font-size="10" text-anchor="middle">Layer 1</text>
+        <rect x="250" y="46" width="90" height="28" fill="#f7e3e1" stroke="#7a4ea0"/>
+        <text x="295" y="64" font-size="10" text-anchor="middle">Layer 1 (same W)</text>
+        <text x="180" y="56" font-size="10" text-anchor="middle" fill="#7a4ea0">&larr; local update: maximize G(+) − G(−) &rarr;</text>
+        <text x="180" y="68" font-size="9" text-anchor="middle" fill="#6a6a6a">no gradient leaves this layer</text>
+
+        <line x1="65"  y1="74" x2="65"  y2="92" stroke="#7a4ea0" stroke-width="1"/>
+        <line x1="295" y1="74" x2="295" y2="92" stroke="#7a4ea0" stroke-width="1"/>
+
+        <rect x="20"  y="94" width="90" height="28" fill="#e8f0e9" stroke="#7a4ea0"/>
+        <text x="65"  y="112" font-size="10" text-anchor="middle">Layer 2</text>
+        <rect x="250" y="94" width="90" height="28" fill="#f7e3e1" stroke="#7a4ea0"/>
+        <text x="295" y="112" font-size="10" text-anchor="middle">Layer 2 (same W)</text>
+        <text x="180" y="116" font-size="9" text-anchor="middle" fill="#6a6a6a">independent of layer 1's update</text>
+
+        <line x1="65"  y1="122" x2="65"  y2="140" stroke="#7a4ea0" stroke-width="1"/>
+        <line x1="295" y1="122" x2="295" y2="140" stroke="#7a4ea0" stroke-width="1"/>
+
+        <rect x="20"  y="142" width="90" height="28" fill="#e8f0e9" stroke="#7a4ea0"/>
+        <text x="65"  y="160" font-size="10" text-anchor="middle">Layer L</text>
+        <rect x="250" y="142" width="90" height="28" fill="#f7e3e1" stroke="#7a4ea0"/>
+        <text x="295" y="160" font-size="10" text-anchor="middle">Layer L</text>
+      </g>
+      <!-- readout -->
+      <line x1="65"  y1="170" x2="180" y2="190" stroke="#7a4ea0" stroke-width="1"/>
+      <line x1="295" y1="170" x2="180" y2="190" stroke="#7a4ea0" stroke-width="1"/>
+      <rect x="100" y="190" width="160" height="22" fill="#efe4f5" stroke="#7a4ea0"/>
+      <text x="180" y="205" font-size="10" text-anchor="middle">linear readout &rarr; next-char distribution</text>
+      <text x="180" y="231" font-size="9.5" text-anchor="middle" fill="#6a6a6a">G(x) = &Sigma; activation² &mdash; each layer trains itself, no backward sweep through depth.</text>
+      <text x="180" y="245" font-size="9" text-anchor="middle" fill="#6a6a6a">Constant memory per layer; layers can train in parallel.</text>
+    </svg>`,
+  esn: `
+    <svg viewBox="0 0 360 220">
+      <text x="180" y="18" font-size="10" text-anchor="middle" fill="#1a1a1a">input byte x&#x209C;</text>
+      <line x1="180" y1="22" x2="180" y2="40" stroke="#c97a1a" stroke-width="1.4"/>
+      <!-- input weights (fixed) -->
+      <rect x="120" y="42" width="120" height="18" fill="#fff" stroke="#c97a1a"/>
+      <text x="180" y="55" font-size="10" text-anchor="middle">W_in (random, fixed)</text>
+      <line x1="180" y1="60" x2="180" y2="78" stroke="#c97a1a" stroke-width="1.4"/>
+      <!-- reservoir -->
+      <ellipse cx="180" cy="120" rx="120" ry="42" fill="#fbeada" stroke="#c97a1a" stroke-width="1.6"/>
+      <g font-size="10" text-anchor="middle">
+        <text x="180" y="105">reservoir (random recurrent)</text>
+        <text x="180" y="120" fill="#6a6a6a">spectral radius &lt; 1, fixed weights</text>
+        <!-- decorative neurons + edges -->
+        <circle cx="125" cy="138" r="3.5" fill="#c97a1a"/>
+        <circle cx="155" cy="142" r="3.5" fill="#c97a1a"/>
+        <circle cx="180" cy="146" r="3.5" fill="#c97a1a"/>
+        <circle cx="205" cy="142" r="3.5" fill="#c97a1a"/>
+        <circle cx="235" cy="138" r="3.5" fill="#c97a1a"/>
+        <line x1="125" y1="138" x2="180" y2="146" stroke="#c97a1a" stroke-width="0.4"/>
+        <line x1="155" y1="142" x2="235" y2="138" stroke="#c97a1a" stroke-width="0.4"/>
+        <line x1="180" y1="146" x2="205" y2="142" stroke="#c97a1a" stroke-width="0.4"/>
+      </g>
+      <!-- recurrent self-loop -->
+      <path d="M298 120 Q330 130 298 145" fill="none" stroke="#c97a1a" stroke-width="1.2"/>
+      <text x="338" y="135" font-size="9" fill="#c97a1a">h&#x209C;&#x208B;&#x2081; &rarr; h&#x209C;</text>
+      <!-- output: trainable readout -->
+      <line x1="180" y1="162" x2="180" y2="178" stroke="#c97a1a" stroke-width="1.4"/>
+      <rect x="80" y="180" width="200" height="20" fill="#e6f1d2" stroke="#1f7a3a"/>
+      <text x="180" y="194" font-size="10" text-anchor="middle">W_out &mdash; <strong>only trained weights</strong> (ridge regression)</text>
+      <text x="180" y="215" font-size="9" text-anchor="middle" fill="#6a6a6a">No backprop through time. Closed-form fit on reservoir states.</text>
+    </svg>`,
+  hebbian: `
+    <svg viewBox="0 0 360 220">
+      <text x="180" y="18" font-size="10" text-anchor="middle" fill="#1a1a1a">input x (a byte)</text>
+      <line x1="180" y1="22" x2="180" y2="40" stroke="#a4302a" stroke-width="1.2"/>
+      <!-- many units competing -->
+      <g font-size="10" text-anchor="middle">
+        <text x="180" y="56">layer of competing units (soft WTA)</text>
+        <g transform="translate(40,66)">
+          <circle cx="20"  cy="20" r="14" fill="#fadcd6" stroke="#a4302a"/>
+          <circle cx="70"  cy="20" r="14" fill="#fadcd6" stroke="#a4302a"/>
+          <circle cx="120" cy="20" r="14" fill="#a4302a" stroke="#7a2520"/>
+          <circle cx="170" cy="20" r="14" fill="#fadcd6" stroke="#a4302a"/>
+          <circle cx="220" cy="20" r="14" fill="#fadcd6" stroke="#a4302a"/>
+          <circle cx="270" cy="20" r="14" fill="#fadcd6" stroke="#a4302a"/>
+          <text x="120" y="24" font-size="9" fill="#fff" font-weight="bold">winner</text>
+        </g>
+      </g>
+      <!-- local update rule -->
+      <line x1="180" y1="118" x2="180" y2="138" stroke="#a4302a" stroke-width="1.2"/>
+      <rect x="60" y="140" width="240" height="26" fill="#fdf2ef" stroke="#a4302a"/>
+      <text x="180" y="157" font-size="11" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">&Delta;w&#x1d62; = &eta; &middot; soft_y&#x1d62; &middot; (x − w&#x1d62;)</text>
+      <text x="180" y="178" font-size="9.5" text-anchor="middle" fill="#6a6a6a">each unit pulls its weights toward the input it just won &mdash;</text>
+      <text x="180" y="190" font-size="9.5" text-anchor="middle" fill="#6a6a6a">strictly local: depends only on this unit's input and output</text>
+      <text x="180" y="212" font-size="9" text-anchor="middle" fill="#6a6a6a">No gradients, no backward pass, no cross-layer signal.</text>
+    </svg>`,
+  pointer: `
+    <svg viewBox="0 0 360 240">
+      <!-- recent buffer of chars -->
+      <text x="180" y="14" font-size="10" text-anchor="middle" fill="#1a1a1a">rolling buffer of last W chars</text>
+      <g font-size="10" text-anchor="middle">
+        <rect x="20"  y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="31"  y="35">t</text>
+        <rect x="44"  y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="55"  y="35">h</text>
+        <rect x="68"  y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="79"  y="35">e</text>
+        <rect x="92"  y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="103" y="35">_</text>
+        <rect x="116" y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="127" y="35">c</text>
+        <rect x="140" y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="151" y="35">a</text>
+        <rect x="164" y="20" width="22" height="22" fill="#cc4e8a" stroke="#7a2a4d"/><text x="175" y="35" fill="#fff" font-weight="bold">t</text>
+        <rect x="188" y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="199" y="35">_</text>
+        <rect x="212" y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="223" y="35">s</text>
+        <rect x="236" y="20" width="22" height="22" fill="#fde0ee" stroke="#cc4e8a"/><text x="247" y="35">a</text>
+        <text x="272" y="35" fill="#6a6a6a" font-size="9">...&plus;W&minus;10</text>
+        <!-- sentinel slot -->
+        <rect x="316" y="20" width="22" height="22" fill="#fff" stroke="#cc4e8a" stroke-dasharray="2 2"/><text x="327" y="35" font-size="9" fill="#cc4e8a">S</text>
+      </g>
+      <text x="335" y="56" font-size="8.5" fill="#cc4e8a" text-anchor="end">+1 sentinel key (learnable)</text>
+      <!-- query from backbone -->
+      <rect x="80" y="64" width="200" height="22" fill="#e0f1f5" stroke="#0f8bb5"/>
+      <text x="180" y="79" font-size="10" text-anchor="middle">query q = backbone(context)</text>
+      <line x1="180" y1="86" x2="180" y2="104" stroke="#cc4e8a" stroke-width="1.4"/>
+      <!-- attention scoring -->
+      <rect x="40" y="106" width="280" height="22" fill="#fff" stroke="#cc4e8a"/>
+      <text x="180" y="120" font-size="10" text-anchor="middle">softmax( q &middot; [buffer-keys, sentinel-key] )</text>
+      <!-- two branches -->
+      <line x1="100" y1="128" x2="80"  y2="148" stroke="#cc4e8a" stroke-width="1.2"/>
+      <line x1="260" y1="128" x2="280" y2="148" stroke="#cc4e8a" stroke-width="1.2"/>
+      <rect x="20"  y="150" width="120" height="40" fill="#fdf2f7" stroke="#cc4e8a"/>
+      <text x="80"  y="167" font-size="10" text-anchor="middle">copy distribution P_ptr</text>
+      <text x="80"  y="182" font-size="9" text-anchor="middle" fill="#6a6a6a">scatter-add into 256 bytes</text>
+      <rect x="220" y="150" width="120" height="40" fill="#e0f1f5" stroke="#0f8bb5"/>
+      <text x="280" y="167" font-size="10" text-anchor="middle">vocab head P_vocab</text>
+      <text x="280" y="182" font-size="9" text-anchor="middle" fill="#6a6a6a">linear over 256 bytes</text>
+      <!-- mixture -->
+      <line x1="80"  y1="190" x2="180" y2="208" stroke="#cc4e8a" stroke-width="1.2"/>
+      <line x1="280" y1="190" x2="180" y2="208" stroke="#0f8bb5" stroke-width="1.2"/>
+      <rect x="60" y="210" width="240" height="22" fill="#fff" stroke="#1a1a1a"/>
+      <text x="180" y="225" font-size="10.5" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">P = g&middot;P_vocab + (1&minus;g)&middot;P_ptr</text>
+    </svg>`,
+  chunker: `
+    <svg viewBox="0 0 360 250">
+      <!-- byte stream with surprise markers -->
+      <text x="180" y="14" font-size="10" text-anchor="middle" fill="#1a1a1a">byte stream</text>
+      <g font-size="10" text-anchor="middle">
+        <rect x="20"  y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="31"  y="35">t</text>
+        <rect x="44"  y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="55"  y="35">h</text>
+        <rect x="68"  y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="79"  y="35">e</text>
+        <rect x="92"  y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="103" y="35">_</text>
+        <rect x="116" y="20" width="22" height="22" fill="#2a9d8f" stroke="#1a6c64"/><text x="127" y="35" fill="#fff" font-weight="bold">Q</text>
+        <rect x="140" y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="151" y="35">u</text>
+        <rect x="164" y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="175" y="35">i</text>
+        <rect x="188" y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="199" y="35">c</text>
+        <rect x="212" y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="223" y="35">k</text>
+        <rect x="236" y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="247" y="35">_</text>
+        <rect x="260" y="20" width="22" height="22" fill="#2a9d8f" stroke="#1a6c64"/><text x="271" y="35" fill="#fff" font-weight="bold">b</text>
+        <rect x="284" y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="295" y="35">r</text>
+        <rect x="308" y="20" width="22" height="22" fill="#e1f2ef" stroke="#2a9d8f"/><text x="319" y="35">o</text>
+      </g>
+      <text x="180" y="58" font-size="9" text-anchor="middle" fill="#6a6a6a">surprise bytes (P_L below threshold &tau;) shaded dark</text>
+      <!-- L automatizer -->
+      <rect x="20" y="70" width="320" height="36" fill="#fff" stroke="#2a9d8f" stroke-width="1.4"/>
+      <text x="180" y="86" font-size="10.5" text-anchor="middle" font-weight="600">Automatizer L  (small transformer, every byte)</text>
+      <text x="180" y="100" font-size="9.5" text-anchor="middle" fill="#6a6a6a">outputs P_L; cheap, predicts most positions correctly</text>
+      <!-- branch on surprise -->
+      <line x1="180" y1="106" x2="180" y2="120" stroke="#2a9d8f" stroke-width="1.2"/>
+      <polygon points="180,124 192,134 180,144 168,134" fill="#fff" stroke="#2a9d8f"/>
+      <text x="180" y="139" font-size="9.5" text-anchor="middle">P_L &lt; &tau; ?</text>
+      <text x="106" y="156" font-size="9.5" fill="#6a6a6a">no &rarr; output argmax(P_L)</text>
+      <text x="254" y="156" font-size="9.5" fill="#2a9d8f">yes &rarr; ask H</text>
+      <!-- H chunker -->
+      <rect x="40" y="166" width="280" height="48" fill="#e7f5f1" stroke="#2a9d8f" stroke-width="1.4"/>
+      <text x="180" y="182" font-size="10.5" text-anchor="middle" font-weight="600">Chunker H  (larger transformer, surprises only)</text>
+      <text x="180" y="196" font-size="9.5" text-anchor="middle" fill="#6a6a6a">input = surprise-byte stream  (positions Q, b, ...)</text>
+      <text x="180" y="210" font-size="9.5" text-anchor="middle" fill="#6a6a6a">output = next surprise byte</text>
+      <text x="180" y="236" font-size="9.5" text-anchor="middle" fill="#6a6a6a">Energy story: H runs only on the ~5&ndash;30&percnt; of positions L can't handle.</text>
+    </svg>`,
+  ssm: `
+    <svg viewBox="0 0 360 250">
+      <!-- streaming bytes -->
+      <text x="20" y="20" font-size="9" fill="#6a6a6a">byte stream</text>
+      <g font-size="9.5" text-anchor="middle">
+        <rect x="20"  y="26" width="22" height="20" fill="#efe8e3" stroke="#6d4c41"/><text x="31"  y="40">x&#x209C;&#x208B;&#x2083;</text>
+        <rect x="44"  y="26" width="22" height="20" fill="#efe8e3" stroke="#6d4c41"/><text x="55"  y="40">x&#x209C;&#x208B;&#x2082;</text>
+        <rect x="68"  y="26" width="22" height="20" fill="#efe8e3" stroke="#6d4c41"/><text x="79"  y="40">x&#x209C;&#x208B;&#x2081;</text>
+        <rect x="92"  y="26" width="22" height="20" fill="#6d4c41" stroke="#3e2820"/><text x="103" y="40" fill="#fff">x&#x209C;</text>
+      </g>
+      <!-- Mamba branch -->
+      <text x="222" y="64" font-size="10" font-weight="600" fill="#6d4c41" text-anchor="middle">Mamba</text>
+      <text x="222" y="78" font-size="9" fill="#6a6a6a" text-anchor="middle">selective state-space</text>
+      <line x1="103" y1="48" x2="103" y2="70" stroke="#6d4c41"/>
+      <line x1="103" y1="70" x2="170" y2="86" stroke="#6d4c41"/>
+      <rect x="135" y="88" width="180" height="64" fill="#f4ece6" stroke="#6d4c41"/>
+      <text x="225" y="105" font-size="10" text-anchor="middle">h&#x209C; = A(x&#x209C;) &middot; h&#x209C;&#x208B;&#x2081; + B(x&#x209C;) &middot; x&#x209C;</text>
+      <text x="225" y="120" font-size="10" text-anchor="middle">y&#x209C; = C(x&#x209C;) &middot; h&#x209C;</text>
+      <text x="225" y="138" font-size="9" text-anchor="middle" fill="#6a6a6a">A, B, C input-dependent</text>
+      <text x="225" y="148" font-size="9" text-anchor="middle" fill="#6a6a6a">O(d_state) per byte, recurrent</text>
+      <!-- Hyena branch -->
+      <text x="80" y="170" font-size="10" font-weight="600" fill="#6d4c41" text-anchor="middle">Hyena</text>
+      <text x="80" y="184" font-size="9" fill="#6a6a6a" text-anchor="middle">implicit long convolution</text>
+      <line x1="103" y1="48" x2="103" y2="190" stroke="#6d4c41" stroke-dasharray="2 3"/>
+      <rect x="20"  y="194" width="320" height="44" fill="#f4ece6" stroke="#6d4c41"/>
+      <text x="180" y="210" font-size="10" text-anchor="middle">y = h&#8322; &lowast; ( x&#8320; &middot; ( h&#8321; &lowast; (x&#8320; &middot; x&#8321;) ) ) &middot; x&#8322;</text>
+      <text x="180" y="226" font-size="9" text-anchor="middle" fill="#6a6a6a">h_i parameterised by small MLP (position &rarr; tap); causal FFT, O(N log N)</text>
+    </svg>`,
+  es: `
+    <svg viewBox="0 0 360 230">
+      <text x="180" y="18" font-size="10" text-anchor="middle" fill="#1a1a1a">current weights &theta;</text>
+      <circle cx="180" cy="40" r="9" fill="#666" stroke="#1a1a1a"/>
+      <text x="180" y="44" font-size="9" fill="#fff" text-anchor="middle">&theta;</text>
+      <!-- perturbations -->
+      <g font-size="10" text-anchor="middle" fill="#1a1a1a">
+        <text x="180" y="66">perturb N times: &theta; + &sigma;&epsilon;&#x1d62;</text>
+        <g transform="translate(0,72)">
+          <circle cx="50"  cy="20" r="9" fill="#bababa" stroke="#666"/><text x="50"  y="24" font-size="8">&theta;₁</text>
+          <circle cx="110" cy="20" r="9" fill="#bababa" stroke="#666"/><text x="110" y="24" font-size="8">&theta;₂</text>
+          <circle cx="170" cy="20" r="9" fill="#bababa" stroke="#666"/><text x="170" y="24" font-size="8">&theta;₃</text>
+          <circle cx="230" cy="20" r="9" fill="#bababa" stroke="#666"/><text x="230" y="24" font-size="8">&theta;₄</text>
+          <circle cx="290" cy="20" r="9" fill="#bababa" stroke="#666"/><text x="290" y="24" font-size="8">&theta;_N</text>
+        </g>
+      </g>
+      <!-- fitness scores -->
+      <g font-size="9" text-anchor="middle">
+        <text x="50"  y="120" fill="#a4302a">f=0.18</text>
+        <text x="110" y="120" fill="#1f7a3a">f=0.31</text>
+        <text x="170" y="120" fill="#1f7a3a">f=0.27</text>
+        <text x="230" y="120" fill="#a4302a">f=0.15</text>
+        <text x="290" y="120" fill="#1f7a3a">f=0.34</text>
+      </g>
+      <!-- weighted average -->
+      <line x1="50"  y1="124" x2="180" y2="142" stroke="#666" stroke-width="0.6"/>
+      <line x1="110" y1="124" x2="180" y2="142" stroke="#666" stroke-width="0.6"/>
+      <line x1="170" y1="124" x2="180" y2="142" stroke="#666" stroke-width="0.6"/>
+      <line x1="230" y1="124" x2="180" y2="142" stroke="#666" stroke-width="0.6"/>
+      <line x1="290" y1="124" x2="180" y2="142" stroke="#666" stroke-width="0.6"/>
+      <rect x="60" y="144" width="240" height="26" fill="#efeeea" stroke="#666"/>
+      <text x="180" y="161" font-size="11" text-anchor="middle" font-family="ui-monospace, Menlo, monospace">&theta; &larr; &theta; + &alpha; &middot; &Sigma;&#x1d62; f&#x1d62; &middot; &epsilon;&#x1d62;</text>
+      <text x="180" y="190" font-size="9.5" text-anchor="middle" fill="#6a6a6a">step in the noise-weighted-by-fitness direction.</text>
+      <text x="180" y="204" font-size="9.5" text-anchor="middle" fill="#6a6a6a">N forward passes, zero backward. Embarrassingly parallel.</text>
+      <text x="180" y="222" font-size="9" text-anchor="middle" fill="#6a6a6a">Sample cost scales poorly with #parameters.</text>
+    </svg>`,
+};
+
+// ============================================================================
+// Scatter rendering
+// ============================================================================
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+// log-J axis: 10..1,000,000 J  &rarr;  x 70..850
+function xOf(j) { return 70 + (Math.log10(j) - 1) * 156; }
+// acc axis: 0..0.8  &rarr;  y 400..40
+function yOf(a) { return 400 - a * 450; }
+
+function buildPoints() {
+  const pg = document.getElementById("points-group");
+  const lg = document.getElementById("labels-group");
+  pg.innerHTML = "";
+  lg.innerHTML = "";
+
+  // sort so passing/highlight points end on top
+  const sorted = [...RUNS].sort((a,b) => (a.status === "pass") - (b.status === "pass"));
+
+  for (const r of sorted) {
+    const fam = FAMILIES[r.family];
+    const cx = xOf(r.energy);
+    const cy = yOf(r.acc);
+    const passes = r.status === "pass";
+    const c = document.createElementNS(SVG_NS, "circle");
+    c.setAttribute("cx", cx);
+    c.setAttribute("cy", cy);
+    c.setAttribute("r", passes ? 6.5 : 5);
+    c.setAttribute("fill", passes ? fam.color : "none");
+    c.setAttribute("stroke", fam.color);
+    c.setAttribute("stroke-width", passes ? 1.4 : 2);
+    c.setAttribute("class", "point");
+    c.dataset.family = r.family;
+    c.dataset.id = r.id;
+    const title = document.createElementNS(SVG_NS, "title");
+    title.textContent = `${r.run}: ${r.energy.toLocaleString()} J, val ${r.acc.toFixed(4)}, ${r.time} s` + (passes ? " — PASSES floor" : " — DQ");
+    c.appendChild(title);
+    c.addEventListener("click", (e) => { e.stopPropagation(); openDetail(r.family, r.id); });
+    pg.appendChild(c);
+
+    // Inline labels for headline points
+    if (r.id === "baseline") {
+      addLabel(lg, cx + 11, cy - 4, fam.color, "baseline (transformer)");
+    } else if (r.id === "lwta_k4") {
+      addLabel(lg, cx + 11, cy - 4, fam.color, "LWTA k=4  ← best non-baseline pass");
+    } else if (r.id === "lwta_k2") {
+      addLabel(lg, cx + 11, cy + 12, fam.color, "LWTA k=2");
+    } else if (r.id === "pointer_sentinel") {
+      addLabel(lg, cx + 11, cy - 4, fam.color, "Pointer-Sentinel ← strongest DQ result");
+    } else if (r.id === "ppm_c") {
+      addLabel(lg, cx + 11, cy - 4, fam.color, "PPM-C (full data, K=6)");
+    } else if (r.id === "ppm_p1") {
+      addLabel(lg, cx + 11, cy + 12, fam.color, "PPM Python p1");
+    } else if (r.id === "ff_p2e") {
+      addLabel(lg, cx + 11, cy - 4, fam.color, "FF P2-E (best FF)", 9.5);
+    } else if (r.id === "chunker_d1") {
+      addLabel(lg, cx + 11, cy + 4, fam.color, "Chunker D1", 9.5);
+    }
+  }
+
+  // Gap-to-floor arrow for Pointer-Sentinel (the strongest sub-floor result)
+  const ps = RUNS.find(r => r.id === "pointer_sentinel");
+  const ax = xOf(ps.energy), ay = yOf(ps.acc);
+  addLine(pg, ax, ay - 12, ax, 88, "#cc4e8a", "url(#arr-pink)");
+  addLabel(lg, ax + 4, ay - 8, "#cc4e8a", "gap = 0.029", 9);
+}
+
+function addLabel(parent, x, y, color, text, fontSize=10.5) {
+  const t = document.createElementNS(SVG_NS, "text");
+  t.setAttribute("x", x); t.setAttribute("y", y);
+  t.setAttribute("font-size", fontSize); t.setAttribute("fill", color); t.setAttribute("font-weight", "600");
+  t.setAttribute("class", "point-label");
+  t.textContent = text;
+  parent.appendChild(t);
+}
+function addLine(parent, x1, y1, x2, y2, color, markerEnd) {
+  const l = document.createElementNS(SVG_NS, "line");
+  l.setAttribute("x1", x1); l.setAttribute("y1", y1);
+  l.setAttribute("x2", x2); l.setAttribute("y2", y2);
+  l.setAttribute("stroke", color); l.setAttribute("stroke-width", "1");
+  if (markerEnd) l.setAttribute("marker-end", markerEnd);
+  parent.appendChild(l);
+}
+
+// ============================================================================
+// Table rendering
+// ============================================================================
+function statusCell(s) {
+  if (s === "pass")    return `<span class="badge badge-baseline">Passes 0.70</span>`;
+  if (s === "dq-acc")  return `<span class="dq">DQ &mdash; below floor</span>`;
+  if (s === "dq-time") return `<span class="dq">DQ &mdash; train time exceeded</span>`;
+  return s;
+}
+function buildTable() {
+  const tbody = document.getElementById("runs-table-body");
+  const all = [
+    ...RUNS.map(r => ({...r, accStr: r.acc.toFixed(4)})),
+    ...UNPLOTTED.map(r => ({...r, accStr: "—"})),
+  ];
+  all.sort((a,b) => {
+    if (a.status === "pass" && b.status !== "pass") return -1;
+    if (b.status === "pass" && a.status !== "pass") return 1;
+    return (b.acc || 0) - (a.acc || 0);
+  });
+  tbody.innerHTML = all.map(r => {
+    const fam = FAMILIES[r.family]?.label ?? r.family;
+    const idAttr = r.id ? ` data-id="${r.id}"` : "";
+    const cursor = r.id ? "cursor:pointer;" : "";
+    return `<tr style="${cursor}" data-family="${r.family}"${idAttr}>
+      <td><strong>${r.run}</strong></td>
+      <td>${fam}</td>
+      <td class="num">${r.energy.toLocaleString()}</td>
+      <td class="num">${r.accStr}</td>
+      <td class="num">${r.time}</td>
+      <td>${statusCell(r.status)}</td>
+    </tr>`;
+  }).join("");
+  // wire click
+  tbody.querySelectorAll("tr[data-id]").forEach(row => {
+    row.addEventListener("click", () => openDetail(row.dataset.family, row.dataset.id));
+  });
+}
+
+// ============================================================================
+// Detail panel
+// ============================================================================
+function openDetail(family, focusId=null) {
+  const panel = document.getElementById("detail-panel");
+  const fam = FAMILIES[family];
+  if (!fam) return;
+  document.getElementById("detail-title").innerHTML =
+    `<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${fam.color}; margin-right:8px; vertical-align:middle;"></span>${fam.label}`;
+  document.getElementById("detail-description").innerHTML = fam.description;
+  document.getElementById("detail-explainer").innerHTML = EXPLAINERS[family] ?? "<em>(no explainer)</em>";
+  document.getElementById("detail-headline").innerHTML = fam.headline;
+
+  // Runs for this family
+  const runsForFamily = [
+    ...RUNS.filter(r => r.family === family),
+    ...UNPLOTTED.filter(r => r.family === family),
+  ];
+  const rows = runsForFamily.map(r => {
+    const isFocus = r.id === focusId;
+    const accStr = r.acc == null ? "&mdash;" : r.acc.toFixed(4);
+    return `<tr ${isFocus ? 'style="background:#fff8ec;"' : ""}>
+      <td>${r.run}</td>
+      <td class="num">${r.energy.toLocaleString()} J</td>
+      <td class="num">${accStr}</td>
+      <td class="num">${r.time} s</td>
+      <td>${statusCell(r.status)}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("detail-runs").innerHTML = `
+    <table class="runs-table"><thead><tr><th>Run</th><th class="num">Energy</th><th class="num">val acc</th><th class="num">Time</th><th>Status</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+  panel.classList.add("open");
+  // scroll into view smoothly
+  panel.scrollIntoView({ behavior: "smooth", block: "start" });
+  // dim other families on the scatter
+  filterFamily(family);
+}
+
+function closeDetail() {
+  document.getElementById("detail-panel").classList.remove("open");
+  filterFamily(null);
+}
+
+// ============================================================================
+// Family filter (legend click + auto on detail open)
+// ============================================================================
+function filterFamily(active) {
+  document.querySelectorAll("#points-group .point").forEach(p => {
+    if (!active || p.dataset.family === active) p.classList.remove("dimmed");
+    else p.classList.add("dimmed");
+  });
+  document.querySelectorAll("#legend .legend-item").forEach(li => {
+    li.classList.toggle("active", li.dataset.family === active);
+  });
+}
+
+function wireLegend() {
+  document.querySelectorAll("#legend .legend-item").forEach(li => {
+    if (!li.dataset.family) return;
+    li.addEventListener("click", () => {
+      const fam = li.dataset.family;
+      if (li.classList.contains("active")) {
+        closeDetail();
+      } else {
+        openDetail(fam);
+      }
+    });
+  });
+}
+
+document.getElementById("detail-close").addEventListener("click", closeDetail);
+
+// ============================================================================
+// Init
+// ============================================================================
+buildPoints();
+buildTable();
+wireLegend();
+</script>
+
+</body>
+</html>

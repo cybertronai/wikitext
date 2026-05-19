@@ -160,9 +160,21 @@ Tested with `code/nbb_kgram.py` (multi-slot one-hot input — `1 + 256·k` input
 
 **Empirical answer: longer context does not rescue NBB.** The failure mode trades, it doesn't cross. Low k stays dissipation-limited; high k becomes repetition-limited because the input space is now ~86 K (k=4) or ~930 K (k=8) distinct contexts.
 
-To match XOR's convergence regime (~791 presentations per pattern) at k=4's 86 K contexts, NBB would need ~68 M presentations — about 2.9 hours of CPU at 6,500 pres/sec. The 300 s leaderboard budget gives 0.005 % of that. W_ih barely moves from init (max 1.001 in all k>1 runs); the WTA hidden-winner for each new context is fixed by random init noise and never differentiates.
+To match XOR's convergence regime (~791 presentations per pattern) at k=4's 86 K contexts, NBB would need ~68 M presentations — about 2.9 hours of CPU at 6,500 pres/sec. The 300 s budget at that rate fits only ~1.95 M presentations, ~2.9 % of what's needed (about 23 presentations per context, vs. the 791 XOR required). W_ih barely moves from init (max 1.001 in all k>1 runs); the WTA hidden-winner for each new context is fixed by random init noise and never differentiates.
 
 The granularity question is well-posed; the answer rules out the most charitable interpretation of NBB's potential on this task. The structural verdict holds.
+
+## Follow-up: does coarser output tokenization (BPE / word) rescue NBB?
+
+Distinct question from context length: would predicting BPE tokens (or words, or n-byte chunks) instead of single characters help, with char-level emission as a deterministic post-step? Not tested empirically; the analytical case is unambiguous:
+
+1. **Output WTA grows.** Char: 256 outputs. BPE: ~30K. Word: ~100K. NBB's XOR demo had 2 outputs; the 256-output bigram test was already 128× past the original. Moving to 30K outputs amplifies the per-presentation WTA-stabilisation problem.
+2. **Per-prediction stochasticity does not shrink.** English entropy is ~1.3 bits/char ≈ 5.2 bits per ~4-char BPE token; per-prediction conditional entropy is *higher* in absolute terms at BPE level, and higher even as a fraction of capacity (5.2 / log₂(30K) ≈ 0.35 vs. 1.3 / log₂(256) ≈ 0.16). What drives NBB's failure is not the absolute entropy but the *spread* of `p_modal` across contexts — no single η balances both rare-modal and strong-modal connections — and that spread spans ~0 to ~1 at any granularity. Some BPE contexts are near-deterministic (continuation of a long unambiguous prefix); sentence-initial tokens remain highly uncertain. The `p_b·η − λ` balance condition fails for the same reason.
+3. **Per-byte-of-training presentations drop.** One BPE prediction per ~4 bytes → 4× fewer presentations per training byte. Compounds the repetition-starvation failure observed at k=4 context.
+
+The deeper principle: **total entropy per byte is conserved under tokenization** (information-theoretic equivalence). Methods whose failure mode is driven by per-prediction stochasticity — like NBB's dissipative-substance dynamics — cannot be rescued by tokenization changes. Coarser tokens make it worse on output-WTA size and repetition density; finer tokens (sub-character) trivially cannot predict characters.
+
+If you want to test NBB at its natural habitat — small-vocab deterministic classification — the experiment is e.g. 2-way "next byte > 128?". NBB would likely succeed at that, but stacked binary NBBs cannot compose into a 256-way character predictor that hits 0.70 acc without re-introducing all the stochasticity at each level. The verdict is granularity-invariant.
 
 ## Recommendation for the survey
 
