@@ -57,3 +57,5 @@ For an internal-BPE submission, `predict()` returns `P(next_char | observed_char
 [^1]: More energy efficient
 [^2]: As of writing this
 | 2026-05-12 |     51,704 | 0.7374 | modded_nanogpt | [dir](submissions/modded_nanogpt) | @ab-10 |
+| 2026-05-18 |     46,132 | 0.7146 | lwta_k2 | [dir](submissions/lwta_k2) | @ab-10 |
+| 2026-05-18 |     46,222 | 0.7238 | lwta_k4 | [dir](submissions/lwta_k4) | @ab-10 |
