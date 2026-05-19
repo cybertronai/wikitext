@@ -42,6 +42,17 @@ Greedy-argmax char-accuracy is computed on the first 60,000 chars of each split;
 4. Finish training in **< 300 s wall-clock** on the pinned Modal A100-80GB PCIe, measured from the first call into `train()` to its return. (Eval is not charged against this budget.)
 5. Attain **val char-acc ≥ 0.70** on the first 60,000 chars of the val split.
 
+### Internal representations
+
+The char-level scoring contract (rules 2 + 3) constrains the **eval-facing interface**, not the model's internal representation. Submissions should pick whichever internal unit (bytes, BPE, WordPiece, words, ...) best optimises their architecture's energy-to-accuracy ratio, and translate to per-char probabilities at the `CharModel` boundary.
+
+- **Allowed.** Internal BPE / WordPiece / word vocabulary; subword-aware decoders; char-level marginalisation over partial-token continuations; hybrid architectures that mix per-char and per-token computation.
+- **Encouraged** where it helps. Sub-quadratic mixers (Hyena, Mamba, etc.) benefit from shorter sequences; BPE typically gives 4–5× shorter context vs bytes, which can lift the per-step budget enough for those architectures to actually converge inside 300 s.
+- **Tokeniser merge tables (GPT-2 BPE, SentencePiece, etc.) are not "pretrained weights".** They are deterministic algorithms over byte/codepoint streams, allowed under rule 1.
+- **Pretrained tokeniser *model weights* are not allowed** — e.g., shipping a SentencePiece model that was trained on external data — same rationale as rule 1.
+
+For an internal-BPE submission, `predict()` returns `P(next_char | observed_chars)` by marginalising over BPE tokens consistent with the current byte buffer: for an active partial buffer `p` and candidate next char `c`, `P(c) = Σ_t P(t | committed_context) · 1[bytes(t) starts with p+c]`, normalised over the candidate set whose tokens start with `p`.
+
 
 [^1]: More energy efficient
 [^2]: As of writing this

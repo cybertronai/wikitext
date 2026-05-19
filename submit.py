@@ -104,6 +104,11 @@ WIKITEXT_IMAGE_REF = "ghcr.io/ab-10/wikitext-bench:latest"
 image = (
     modal.Image.from_registry(WIKITEXT_IMAGE_REF)
     .workdir("/workspace")
+    # tiktoken is the only sub-word tokeniser dep submissions need; it's
+    # small (~5 MB), pure-Rust at runtime, and ships GPT-2 BPE merge
+    # tables (used as a deterministic algorithm, not a "pretrained
+    # weight" — see README "Internal representations").
+    .pip_install("tiktoken==0.7.0")
     # Modal re-imports submit.py inside the container to resolve the
     # remote function. submit.py does a top-level `import task`, so
     # /workspace (where task.py lands via add_local_file) must be on
