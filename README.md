@@ -39,7 +39,7 @@ Greedy-argmax char-accuracy is computed on the first 60,000 chars of each split;
 2. Use the standard WikiText-103 train/valid/test split. (You can change batch size, sequence length, attention structure, etc.; just don't change the underlying streams of characters.)
 3. Expose a streaming next-character distribution via the `CharModel` API. (The runner calls `predict()` for position `i` strictly before `observe()` commits the ground-truth at position `i` — within-document future-peeking is structurally impossible.)
     a. Implementing `CharModel` ABC from `wikitext.py` is the most straightforward way to do this.
-4. Finish training in **< 300 s wall-clock** on the pinned Modal A100-40GB SXM4, measured from the first call into `train()` to its return. (Eval is not charged against this budget.)
+4. Finish training in **< 300 s wall-clock** on the pinned Modal A100-80GB PCIe, measured from the first call into `train()` to its return. (Eval is not charged against this budget.)
 5. Attain **val char-acc ≥ 0.70** on the first 60,000 chars of the val split.
 
 

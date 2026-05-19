@@ -13,8 +13,8 @@ from __future__ import annotations
 
 # Hardware platform. Energy numbers are only comparable across submissions
 # when measured on the same SKU; the README pins this. Modal exposes the
-# A100-40GB as `gpu="A100-40GB"` (SXM4 form factor).
-INSTANCE_TYPE: str = "modal:A100-40GB"
+# A100-80GB as `gpu="A100-80GB"` (PCIe form factor).
+INSTANCE_TYPE: str = "modal:A100-80GB"
 
 # Test-stream length scored by the runner. 60K is the v0 standard:
 # ~2 min eval on A100, ±0.4–1.3pp 95% CI on accuracy.

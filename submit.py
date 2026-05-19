@@ -7,7 +7,7 @@ What it does:
      the submission's heavy deps installed in the local env).
   2. Defines a Modal App that pulls a prebuilt public image from ghcr.io
      containing PyTorch + nvidia-ml-py + pyarrow and the WikiText-103 raw
-     splits already baked into /data, and a single A100-40GB function.
+     splits already baked into /data, and a single A100-80GB function.
   3. The remote function verifies NVML, writes the user's submission to
      disk, runs run_eval, and returns the result dict.
   4. Saves result.json + nvml.json + run.log into the submission directory
@@ -41,14 +41,14 @@ import task  # task-pinned constants — single source of truth
 
 HERE = Path(__file__).resolve().parent
 
-# Modal A100-40GB list price as of 2026-05: $2.10/hr.
+# Modal A100-80GB list price as of 2026-05: $2.50/hr.
 # A typical run is ~15 min (image cold-start + verify_nvml + ~5 min
 # training capped by task.MAX_TRAIN_SECONDS + ~2 min eval over val+test).
 # The image is the prebuilt public ghcr.io artifact with torch +
 # WikiText-103 already baked in, so cold start is just the registry
 # pull (~85s); no GCS download or pip install at run time.
 EST_RUNTIME_MIN = 15
-EST_RATE_USD_PER_HR = 2.10
+EST_RATE_USD_PER_HR = 2.50
 EST_COST_USD = round(EST_RUNTIME_MIN * EST_RATE_USD_PER_HR / 60, 2)
 
 # task.INSTANCE_TYPE is the leaderboard-pinned hardware string. The
@@ -60,7 +60,7 @@ _provider, _, MODAL_GPU = task.INSTANCE_TYPE.partition(":")
 if _provider != "modal" or not MODAL_GPU:
     sys.exit(
         f"task.INSTANCE_TYPE = {task.INSTANCE_TYPE!r} not understood by "
-        f"submit.py — expected 'modal:<gpu>' (e.g. 'modal:A100-40GB')."
+        f"submit.py — expected 'modal:<gpu>' (e.g. 'modal:A100-80GB')."
     )
 
 
