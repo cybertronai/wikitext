@@ -45,3 +45,4 @@ Greedy-argmax char-accuracy is computed on the first 60,000 chars of each split;
 
 [^1]: More energy efficient
 [^2]: As of writing this
+| 2026-05-12 |     51,704 | 0.7374 | modded_nanogpt | [dir](submissions/modded_nanogpt) | @ab-10 |

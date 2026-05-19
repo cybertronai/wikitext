@@ -1,0 +1,143 @@
+# wikitext submit.py log — modded_nanogpt — 2026-05-12T21:57:26+00:00Z
+[modal] launching A100-40GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-E9Q8eIo1sjKa6HsN23nCdR
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/cybertronai-wikitext/submit.py
+├── 🔨 Created mount /home/seneca/cybertronai-wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/cybertronai-wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/cybertronai-wikitext/task.py
+├── 🔨 Created mount /home/seneca/cybertronai-wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 55.6 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.6 s
+  energy delta:   8,741.8 J
+  avg power:      232.3 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 55.60349152542373, "stress_watts_avg": 232.33601101968227, "stress_energy_joules": 8741.791, "stress_duration_s": 37.625639527999994, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/modded_nanogpt.py ...
+[modded] 10.84M params  cfg=TrainConfig(d=384 L=6 H=6 bs=32 T=1024 steps=2150)
+[modded] step     0/2150  loss 5.5452  elapsed 1s
+[modded] step   100/2150  loss 1.6180  elapsed 13s
+[modded] step   200/2150  loss 1.4124  elapsed 24s
+[modded] step   300/2150  loss 1.3156  elapsed 35s
+[modded] step   400/2150  loss 1.2198  elapsed 46s
+[modded] step   500/2150  loss 1.1874  elapsed 58s
+[modded] step   600/2150  loss 1.1899  elapsed 69s
+[modded] step   700/2150  loss 1.1334  elapsed 80s
+[modded] step   800/2150  loss 1.1112  elapsed 91s
+[modded] step   900/2150  loss 1.1067  elapsed 103s
+[modded] step  1000/2150  loss 1.0968  elapsed 114s
+[modded] step  1100/2150  loss 1.0989  elapsed 125s
+[modded] step  1200/2150  loss 1.0336  elapsed 136s
+[modded] step  1300/2150  loss 1.0725  elapsed 148s
+[modded] step  1400/2150  loss 1.0814  elapsed 159s
+[modded] step  1500/2150  loss 1.0162  elapsed 170s
+[modded] step  1600/2150  loss 1.0225  elapsed 181s
+[modded] step  1700/2150  loss 1.0033  elapsed 193s
+[modded] step  1800/2150  loss 0.9861  elapsed 204s
+[modded] step  1900/2150  loss 0.9606  elapsed 215s
+[modded] step  2000/2150  loss 0.9690  elapsed 227s
+[modded] step  2100/2150  loss 0.9526  elapsed 238s
+[modded] step  2149/2150  loss 0.9696  elapsed 243s
+training: 51,704.3 J   duration=246.6s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7342      129 char/s  eta=   456s
+  eval      2,400/60,000 (  4.0%)  acc=0.7212      128 char/s  eta=   449s
+  eval      3,600/60,000 (  6.0%)  acc=0.7258      127 char/s  eta=   444s
+  eval      4,800/60,000 (  8.0%)  acc=0.7342      126 char/s  eta=   436s
+  eval      6,000/60,000 ( 10.0%)  acc=0.7257      127 char/s  eta=   427s
+  eval      7,200/60,000 ( 12.0%)  acc=0.7228      126 char/s  eta=   418s
+  eval      8,400/60,000 ( 14.0%)  acc=0.7201      127 char/s  eta=   408s
+  eval      9,600/60,000 ( 16.0%)  acc=0.7257      127 char/s  eta=   398s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7277      126 char/s  eta=   389s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7286      126 char/s  eta=   381s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7323      126 char/s  eta=   371s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7330      126 char/s  eta=   362s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7355      126 char/s  eta=   353s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7379      126 char/s  eta=   343s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7356      126 char/s  eta=   334s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7364      126 char/s  eta=   325s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7376      126 char/s  eta=   315s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7368      126 char/s  eta=   306s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7375      126 char/s  eta=   296s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7378      125 char/s  eta=   287s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7390      125 char/s  eta=   277s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7399      125 char/s  eta=   268s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7412      125 char/s  eta=   258s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7410      125 char/s  eta=   249s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7398      125 char/s  eta=   239s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7378      125 char/s  eta=   230s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7373      125 char/s  eta=   220s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7355      125 char/s  eta=   211s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7342      125 char/s  eta=   201s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7335      125 char/s  eta=   192s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7335      125 char/s  eta=   182s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7339      125 char/s  eta=   173s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7336      125 char/s  eta=   163s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7331      125 char/s  eta=   153s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7328      125 char/s  eta=   144s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7331      125 char/s  eta=   134s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7331      125 char/s  eta=   125s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7330      125 char/s  eta=   115s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7326      125 char/s  eta=   105s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7331      125 char/s  eta=    96s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7335      125 char/s  eta=    86s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7350      125 char/s  eta=    77s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7355      125 char/s  eta=    67s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7363      125 char/s  eta=    58s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7367      125 char/s  eta=    48s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7360      125 char/s  eta=    38s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7365      126 char/s  eta=    29s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7368      126 char/s  eta=    19s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7374      126 char/s  eta=    10s
+  eval     60,000/60,000 (100.0%)  acc=0.7374      126 char/s  eta=     0s
+chars=60,000  acc=0.7374  eval_duration=475.8s
+---
+submission         : modded_nanogpt
+training energy (J): 51,704.3
+training duration  : 246.6s
+val  char-accuracy : 0.7374
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-E9Q8eIo1sjKa6HsN23nCdR
+
+# final result
+{
+  "submission": "modded_nanogpt",
+  "training_energy_J": 51704.306257950004,
+  "training_duration_s": 246.648394841,
+  "val_char_accuracy": 0.7373666666666666,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-12T22:10:25Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 55.60349152542373,
+    "stress_watts_avg": 232.33601101968227,
+    "stress_energy_joules": 8741.791,
+    "stress_duration_s": 37.625639527999994,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}
