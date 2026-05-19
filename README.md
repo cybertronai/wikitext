@@ -25,14 +25,14 @@ python submit.py submissions/modded_nanogpt
 
 | Date | Energy (J) | Val char-acc | GPU | Config | Submission | Contributor |
 |------|-----------:|-------------:|-----|--------|------------|-------------|
-| 2026-05-12 |     51,704 | 0.7374    | A100 PCIe | modded_nanogpt | [dir](submissions/modded_nanogpt) | @KellerJordan |
-| 2026-05-18 |     46,222 | 0.7238    | A100 PCIe | lwta_k4        | [dir](submissions/lwta_k4)        | @ab-10 |
-| 2026-05-18 |     46,132 | 0.7146    | A100 PCIe | lwta_k2        | [dir](submissions/lwta_k2)        | @ab-10 |
-| 2026-05-18 |     55,459 |       DQ | A100 SXM4 | hyena            | [dir](research/catalog/new_directions/hyena)            | @ab-10 |
-| 2026-05-18 |     20,348 |       DQ | A100 SXM4 | pointer_sentinel | [dir](research/catalog/new_directions/pointer_sentinel) | @ab-10 |
-| 2026-05-18 |      3,612 |       DQ | A100 PCIe | chunker_d1       | [dir](research/catalog/new_directions/chunker_d1)       | @ab-10 |
-| 2026-05-18 |        735 |       DQ | A100 PCIe | ppm_c            | [dir](research/catalog/new_directions/ppm_c)            | @ab-10 |
-| 2026-05-17 |         70 |       DQ | A100 SXM4 | P2-A_random_projection | [dir](research/forward-forward-deep/runs/phase2/P2-A_random_projection) | @ab-10 |
+| 2026-05-12 |     51,704 | 0.7374    | A100 80GB PCIe | modded_nanogpt | [dir](submissions/modded_nanogpt) | @KellerJordan |
+| 2026-05-18 |     46,222 | 0.7238    | A100 80GB PCIe | lwta_k4        | [dir](submissions/lwta_k4)        | @ab-10 |
+| 2026-05-18 |     46,132 | 0.7146    | A100 80GB PCIe | lwta_k2        | [dir](submissions/lwta_k2)        | @ab-10 |
+| 2026-05-18 |     55,459 |       DQ | A100 80GB SXM4 | hyena            | [dir](research/catalog/new_directions/hyena)            | @ab-10 |
+| 2026-05-18 |     20,348 |       DQ | A100 80GB SXM4 | pointer_sentinel | [dir](research/catalog/new_directions/pointer_sentinel) | @ab-10 |
+| 2026-05-18 |      3,612 |       DQ | A100 80GB PCIe | chunker_d1       | [dir](research/catalog/new_directions/chunker_d1)       | @ab-10 |
+| 2026-05-18 |        735 |       DQ | A100 80GB PCIe | ppm_c            | [dir](research/catalog/new_directions/ppm_c)            | @ab-10 |
+| 2026-05-17 |         70 |       DQ | A100 80GB SXM4 | P2-A_random_projection | [dir](research/forward-forward-deep/runs/phase2/P2-A_random_projection) | @ab-10 |
 
 
 ## Rules
