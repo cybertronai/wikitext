@@ -1,0 +1,151 @@
+# wikitext submit.py log — P2-B_layerwise_probe — 2026-05-17T18:27:02+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-cTt8m7ci0NrrXZ78hJjmKS
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 61.7 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       38.0 s
+  energy delta:   12,153.7 J
+  avg power:      319.7 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 61.715566666666675, "stress_watts_avg": 319.72942940630804, "stress_energy_joules": 12153.685, "stress_duration_s": 38.012406373000005, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/P2-B_layerwise_probe.py ...
+[p2b] SEED=0
+[p2b] 3.05M params  layers=5 width=384 K=24  steps=14000  (per-layer ridge probes)
+[p2b] step     0/14000  loss(sum) 8.5245  elapsed 1s
+[p2b] step   500  hard-neg ridge refit (20000 samples, 0.42s)
+[p2b] step  1000  hard-neg ridge refit (20000 samples, 0.05s)
+[p2b] step  1000/14000  loss(sum) 5.5038  elapsed 9s
+[p2b] step  1500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  2000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  2000/14000  loss(sum) 5.4050  elapsed 17s
+[p2b] step  2500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  3000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  3000/14000  loss(sum) 5.5131  elapsed 24s
+[p2b] step  3500  hard-neg ridge refit (20000 samples, 0.05s)
+[p2b] step  4000  hard-neg ridge refit (20000 samples, 0.05s)
+[p2b] step  4000/14000  loss(sum) 5.3563  elapsed 32s
+[p2b] step  4500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  5000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  5000/14000  loss(sum) 5.3704  elapsed 39s
+[p2b] step  5500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  6000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  6000/14000  loss(sum) 5.3123  elapsed 46s
+[p2b] step  6500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  7000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  7000/14000  loss(sum) 5.4184  elapsed 53s
+[p2b] step  7500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  8000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  8000/14000  loss(sum) 5.3105  elapsed 60s
+[p2b] step  8500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  9000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step  9000/14000  loss(sum) 5.2534  elapsed 67s
+[p2b] step  9500  hard-neg ridge refit (20000 samples, 0.05s)
+[p2b] step 10000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step 10000/14000  loss(sum) 5.3019  elapsed 75s
+[p2b] step 10500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step 11000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step 11000/14000  loss(sum) 5.1625  elapsed 82s
+[p2b] step 11500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step 12000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step 12000/14000  loss(sum) 5.1989  elapsed 89s
+[p2b] step 12500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step 13000  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step 13000/14000  loss(sum) 5.1014  elapsed 96s
+[p2b] step 13500  hard-neg ridge refit (20000 samples, 0.04s)
+[p2b] step 13999/14000  loss(sum) 5.2378  elapsed 103s
+[ridge] per-layer fits: N_fit=80000 per_dim=384 fit_s=0.1
+[probe-train] layer 1: train_acc=0.2477
+[probe-train] layer 2: train_acc=0.2577
+[probe-train] layer 3: train_acc=0.2686
+[probe-train] layer 4: train_acc=0.2612
+[probe-train] layer 5: train_acc=0.2518
+[probe-train] best layer by train acc: layer 3 (acc=0.2686)
+training: 3,897.8 J   duration=107.1s
+evaluating on val split ...
+[probe-val] layer 1: val_acc(n=20000)=0.2377
+[probe-val] layer 2: val_acc(n=20000)=0.2465
+[probe-val] layer 3: val_acc(n=20000)=0.2573
+[probe-val] layer 4: val_acc(n=20000)=0.2506
+[probe-val] layer 5: val_acc(n=20000)=0.2422
+  eval      1,200/60,000 (  2.0%)  acc=0.2400     1138 char/s  eta=    52s
+  eval      2,400/60,000 (  4.0%)  acc=0.2525     1176 char/s  eta=    49s
+  eval      3,600/60,000 (  6.0%)  acc=0.2614     1189 char/s  eta=    47s
+  eval      4,800/60,000 (  8.0%)  acc=0.2660     1196 char/s  eta=    46s
+  eval      6,000/60,000 ( 10.0%)  acc=0.2630     1200 char/s  eta=    45s
+  eval      7,200/60,000 ( 12.0%)  acc=0.2633     1202 char/s  eta=    44s
+  eval      8,400/60,000 ( 14.0%)  acc=0.2619     1204 char/s  eta=    43s
+  eval      9,600/60,000 ( 16.0%)  acc=0.2635     1206 char/s  eta=    42s
+  eval     10,800/60,000 ( 18.0%)  acc=0.2644     1207 char/s  eta=    41s
+  eval     12,000/60,000 ( 20.0%)  acc=0.2638     1206 char/s  eta=    40s
+  eval     13,200/60,000 ( 22.0%)  acc=0.2630     1206 char/s  eta=    39s
+  eval     14,400/60,000 ( 24.0%)  acc=0.2614     1205 char/s  eta=    38s
+  eval     15,600/60,000 ( 26.0%)  acc=0.2596     1203 char/s  eta=    37s
+  eval     16,800/60,000 ( 28.0%)  acc=0.2588     1203 char/s  eta=    36s
+  eval     18,000/60,000 ( 30.0%)  acc=0.2576     1203 char/s  eta=    35s
+  eval     19,200/60,000 ( 32.0%)  acc=0.2570     1204 char/s  eta=    34s
+  eval     20,400/60,000 ( 34.0%)  acc=0.2580     1204 char/s  eta=    33s
+  eval     21,600/60,000 ( 36.0%)  acc=0.2579     1204 char/s  eta=    32s
+  eval     22,800/60,000 ( 38.0%)  acc=0.2581     1204 char/s  eta=    31s
+  eval     24,000/60,000 ( 40.0%)  acc=0.2590     1204 char/s  eta=    30s
+  eval     25,200/60,000 ( 42.0%)  acc=0.2595     1204 char/s  eta=    29s
+  eval     26,400/60,000 ( 44.0%)  acc=0.2610     1204 char/s  eta=    28s
+  eval     27,600/60,000 ( 46.0%)  acc=0.2620     1204 char/s  eta=    27s
+  eval     28,800/60,000 ( 48.0%)  acc=0.2619     1203 char/s  eta=    26s
+  eval     30,000/60,000 ( 50.0%)  acc=0.2613     1202 char/s  eta=    25s
+  eval     31,200/60,000 ( 52.0%)  acc=0.2612     1201 char/s  eta=    24s
+  eval     32,400/60,000 ( 54.0%)  acc=0.2610     1201 char/s  eta=    23s
+  eval     33,600/60,000 ( 56.0%)  acc=0.2610     1200 char/s  eta=    22s
+  eval     34,800/60,000 ( 58.0%)  acc=0.2606     1200 char/s  eta=    21s
+  eval     36,000/60,000 ( 60.0%)  acc=0.2608     1200 char/s  eta=    20s
+  eval     37,200/60,000 ( 62.0%)  acc=0.2616     1200 char/s  eta=    19s
+  eval     38,400/60,000 ( 64.0%)  acc=0.2621     1200 char/s  eta=    18s
+  eval     39,600/60,000 ( 66.0%)  acc=0.2623     1200 char/s  eta=    17s
+  eval     40,800/60,000 ( 68.0%)  acc=0.2620     1199 char/s  eta=    16s
+  eval     42,000/60,000 ( 70.0%)  acc=0.2627     1199 char/s  eta=    15s
+  eval     43,200/60,000 ( 72.0%)  acc=0.2637     1199 char/s  eta=    14s
+  eval     44,400/60,000 ( 74.0%)  acc=0.2645     1199 char/s  eta=    13s
+  eval     45,600/60,000 ( 76.0%)  acc=0.2643     1198 char/s  eta=    12s
+  eval     46,800/60,000 ( 78.0%)  acc=0.2646     1199 char/s  eta=    11s
+  eval     48,000/60,000 ( 80.0%)  acc=0.2646     1199 char/s  eta=    10s
+  eval     49,200/60,000 ( 82.0%)  acc=0.2648     1200 char/s  eta=     9s
+  eval     50,400/60,000 ( 84.0%)  acc=0.2654     1200 char/s  eta=     8s
+  eval     51,600/60,000 ( 86.0%)  acc=0.2651     1200 char/s  eta=     7s
+  eval     52,800/60,000 ( 88.0%)  acc=0.2648     1201 char/s  eta=     6s
+  eval     54,000/60,000 ( 90.0%)  acc=0.2645     1201 char/s  eta=     5s
+  eval     55,200/60,000 ( 92.0%)  acc=0.2643     1201 char/s  eta=     4s
+  eval     56,400/60,000 ( 94.0%)  acc=0.2641     1201 char/s  eta=     3s
+  eval     57,600/60,000 ( 96.0%)  acc=0.2644     1202 char/s  eta=     2s
+  eval     58,800/60,000 ( 98.0%)  acc=0.2654     1202 char/s  eta=     1s
+  eval     60,000/60,000 (100.0%)  acc=0.2658     1202 char/s  eta=     0s
+chars=60,000  acc=0.2658  eval_duration=49.9s
+---
+DISQUALIFIED: val accuracy 0.2658 below floor 0.7000
+submission         : P2-B_layerwise_probe
+training energy (J): 3,897.8
+training duration  : 107.1s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-cTt8m7ci0NrrXZ78hJjmKS

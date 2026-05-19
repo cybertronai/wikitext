@@ -1,0 +1,11 @@
+{
+  "nvml_available": true,
+  "energy_counter_supported": true,
+  "monotonic": true,
+  "idle_watts": 53.32200000000002,
+  "stress_watts_avg": 236.41514639451765,
+  "stress_energy_joules": 8644.906,
+  "stress_duration_s": 36.566633449,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "notes": []
+}

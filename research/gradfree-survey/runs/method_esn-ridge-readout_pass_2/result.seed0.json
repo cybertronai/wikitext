@@ -1,0 +1,23 @@
+{
+  "submission": "method_esn-ridge-readout_pass_2",
+  "disqualified": true,
+  "reason": "train_time_exceeded",
+  "max_train_seconds": 300.0,
+  "training_energy_J": 71567.41249650001,
+  "training_duration_s": 300.93631007,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-17T13:52:27Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 53.32200000000002,
+    "stress_watts_avg": 236.41514639451765,
+    "stress_energy_joules": 8644.906,
+    "stress_duration_s": 36.566633449,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "seed": 0,
+  "contributor": "@survey-esn-p2"
+}

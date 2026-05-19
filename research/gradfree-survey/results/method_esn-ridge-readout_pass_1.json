@@ -1,0 +1,18 @@
+{
+  "method_id": "esn-ridge-readout",
+  "pass": 1,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "val_accuracy_below_floor",
+  "met_success_criterion": false,
+  "val_char_acc": 0.34673333333333334,
+  "training_energy_J": 29762.3592535,
+  "training_duration_s": 285.31265493,
+  "modal_runs_attempted": 1,
+  "notes": "ESN N=8192, density=0.05, rho=0.95, leak=0.3, ridge solve over 2M streamed states completed in 285.3s (within 300s cap). Val char-acc 0.3467 fell well below both the spec's honest target (0.62) and the harness floor (0.70), so the run was DQ'd. Energy 29.8 kJ is under the 40 kJ stretch goal but the accuracy bar dominates.",
+  "artifacts": {
+    "submission": "runs/method_esn-ridge-readout_pass_1/submission.py",
+    "raw_result": "runs/method_esn-ridge-readout_pass_1/result.seed0.json",
+    "log": "runs/method_esn-ridge-readout_pass_1/run.seed0.log"
+  }
+}

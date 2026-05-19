@@ -1,0 +1,122 @@
+# wikitext submit.py log — chunker — 2026-05-18T19:16:27+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-7B9se8sl396hXWJKBpILkS
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 58.2 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.5 s
+  energy delta:   12,412.1 J
+  avg power:      330.9 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 58.18018333333337, "stress_watts_avg": 330.9323660972024, "stress_energy_joules": 12412.13, "stress_duration_s": 37.506545964000004, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/chunker.py ...
+[chunker] L params: 0.462M  H params: 10.840M  total: 11.302M  cfg=TrainConfig(tau=0.1 K=64 T=512 bs=32 steps=2150 alpha_H=1.0)
+[chunker] step     0/2150  loss_L 5.5452  loss_H 5.5452  p_s 1.000 (avg 1.000)  n_pred_H 2048  elapsed 2s
+[chunker] step    50/2150  loss_L 2.4547  loss_H 3.3936  p_s 0.455 (avg 0.608)  n_pred_H 2048  elapsed 7s
+[chunker] step   100/2150  loss_L 2.1232  loss_H 3.4728  p_s 0.414 (avg 0.530)  n_pred_H 2048  elapsed 12s
+[chunker] step   150/2150  loss_L 1.9346  loss_H 3.4088  p_s 0.373 (avg 0.483)  n_pred_H 2048  elapsed 17s
+[chunker] step   200/2150  loss_L 1.8763  loss_H 3.5032  p_s 0.350 (avg 0.451)  n_pred_H 2048  elapsed 22s
+[chunker] step   250/2150  loss_L 1.7808  loss_H 3.5387  p_s 0.332 (avg 0.427)  n_pred_H 2048  elapsed 27s
+[chunker] step   300/2150  loss_L 1.6974  loss_H 3.5014  p_s 0.314 (avg 0.409)  n_pred_H 2048  elapsed 32s
+[chunker] step   350/2150  loss_L 1.6320  loss_H 3.5369  p_s 0.297 (avg 0.395)  n_pred_H 2048  elapsed 37s
+[chunker] step   400/2150  loss_L 1.6367  loss_H 3.6010  p_s 0.292 (avg 0.383)  n_pred_H 2048  elapsed 42s
+[chunker] step   450/2150  loss_L 1.6188  loss_H 3.5344  p_s 0.294 (avg 0.373)  n_pred_H 2048  elapsed 47s
+[chunker] step   500/2150  loss_L 1.6031  loss_H 3.5066  p_s 0.291 (avg 0.365)  n_pred_H 2048  elapsed 52s
+[chunker] step   550/2150  loss_L 1.5878  loss_H 3.5750  p_s 0.287 (avg 0.358)  n_pred_H 2048  elapsed 57s
+[chunker] step   600/2150  loss_L 1.5378  loss_H 3.5436  p_s 0.276 (avg 0.352)  n_pred_H 2048  elapsed 63s
+[chunker] step   650/2150  loss_L 1.5458  loss_H 3.5616  p_s 0.279 (avg 0.347)  n_pred_H 2048  elapsed 68s
+[chunker] step   700/2150  loss_L 1.5492  loss_H 3.5760  p_s 0.284 (avg 0.342)  n_pred_H 2048  elapsed 73s
+[chunker] step   750/2150  loss_L 1.4870  loss_H 3.5343  p_s 0.264 (avg 0.338)  n_pred_H 2048  elapsed 78s
+[chunker] step   800/2150  loss_L 1.5083  loss_H 3.5556  p_s 0.269 (avg 0.334)  n_pred_H 2048  elapsed 83s
+[chunker] step   850/2150  loss_L 1.5248  loss_H 3.5672  p_s 0.279 (avg 0.331)  n_pred_H 2048  elapsed 88s
+[chunker] step   900/2150  loss_L 1.4868  loss_H 3.5227  p_s 0.269 (avg 0.328)  n_pred_H 2048  elapsed 93s
+[chunker] step   950/2150  loss_L 1.4635  loss_H 3.5768  p_s 0.263 (avg 0.325)  n_pred_H 2048  elapsed 98s
+[chunker] step  1000/2150  loss_L 1.4915  loss_H 3.5666  p_s 0.266 (avg 0.322)  n_pred_H 2048  elapsed 103s
+[chunker] step  1050/2150  loss_L 1.4961  loss_H 3.5501  p_s 0.274 (avg 0.320)  n_pred_H 2048  elapsed 108s
+[chunker] step  1100/2150  loss_L 1.4519  loss_H 3.5717  p_s 0.261 (avg 0.317)  n_pred_H 2048  elapsed 114s
+[chunker] step  1150/2150  loss_L 1.4830  loss_H 3.5928  p_s 0.272 (avg 0.315)  n_pred_H 2048  elapsed 119s
+[chunker] step  1200/2150  loss_L 1.4425  loss_H 3.6102  p_s 0.260 (avg 0.313)  n_pred_H 2048  elapsed 124s
+[chunker] step  1250/2150  loss_L 1.4222  loss_H 3.5464  p_s 0.253 (avg 0.311)  n_pred_H 2048  elapsed 129s
+[chunker] step  1300/2150  loss_L 1.5099  loss_H 3.5888  p_s 0.272 (avg 0.309)  n_pred_H 2048  elapsed 134s
+[chunker] step  1350/2150  loss_L 1.4568  loss_H 3.5090  p_s 0.265 (avg 0.308)  n_pred_H 2048  elapsed 139s
+[chunker] step  1400/2150  loss_L 1.4004  loss_H 3.5205  p_s 0.254 (avg 0.306)  n_pred_H 2048  elapsed 144s
+[chunker] step  1450/2150  loss_L 1.4262  loss_H 3.5933  p_s 0.255 (avg 0.304)  n_pred_H 2048  elapsed 149s
+[chunker] step  1500/2150  loss_L 1.4401  loss_H 3.5209  p_s 0.264 (avg 0.303)  n_pred_H 2048  elapsed 154s
+[chunker] step  1550/2150  loss_L 1.4620  loss_H 3.5191  p_s 0.267 (avg 0.302)  n_pred_H 2048  elapsed 159s
+[chunker] step  1600/2150  loss_L 1.4083  loss_H 3.5433  p_s 0.252 (avg 0.300)  n_pred_H 2048  elapsed 164s
+[chunker] step  1650/2150  loss_L 1.3770  loss_H 3.5581  p_s 0.244 (avg 0.299)  n_pred_H 2048  elapsed 169s
+[chunker] step  1700/2150  loss_L 1.4294  loss_H 3.4716  p_s 0.259 (avg 0.297)  n_pred_H 2048  elapsed 174s
+[chunker] step  1750/2150  loss_L 1.4058  loss_H 3.5293  p_s 0.252 (avg 0.296)  n_pred_H 2048  elapsed 179s
+[chunker] step  1800/2150  loss_L 1.3880  loss_H 3.6061  p_s 0.250 (avg 0.295)  n_pred_H 2048  elapsed 184s
+[chunker] step  1850/2150  loss_L 1.4105  loss_H 3.5852  p_s 0.250 (avg 0.294)  n_pred_H 2048  elapsed 189s
+[chunker] step  1900/2150  loss_L 1.3880  loss_H 3.5012  p_s 0.253 (avg 0.293)  n_pred_H 2048  elapsed 194s
+[chunker] step  1950/2150  loss_L 1.3660  loss_H 3.5778  p_s 0.246 (avg 0.292)  n_pred_H 2048  elapsed 199s
+[chunker] step  2000/2150  loss_L 1.3679  loss_H 3.5460  p_s 0.245 (avg 0.291)  n_pred_H 2048  elapsed 204s
+[chunker] step  2050/2150  loss_L 1.4448  loss_H 3.5333  p_s 0.260 (avg 0.289)  n_pred_H 2048  elapsed 209s
+[chunker] step  2100/2150  loss_L 1.3394  loss_H 3.5661  p_s 0.238 (avg 0.288)  n_pred_H 2048  elapsed 214s
+[chunker] step  2149/2150  loss_L 1.3476  loss_H 3.5705  p_s 0.241 (avg 0.287)  n_pred_H 2048  elapsed 219s
+[chunker] trained 2150 steps in 219s; final loss_L=1.3476 loss_H=3.5705; avg surprise rate 0.287
+[chunker] training complete; built ChunkerCharModel (tau=0.1, K=32). Per-mode stats will accumulate during evaluation.
+training: 12,612.9 J   duration=222.3s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.2750      137 char/s  eta=   430s
+  eval      2,400/60,000 (  4.0%)  acc=0.2737      137 char/s  eta=   420s
+  eval      3,600/60,000 (  6.0%)  acc=0.2711      137 char/s  eta=   411s
+  eval      4,800/60,000 (  8.0%)  acc=0.2821      138 char/s  eta=   399s
+  eval      6,000/60,000 ( 10.0%)  acc=0.2787      138 char/s  eta=   391s
+  eval      7,200/60,000 ( 12.0%)  acc=0.2743      137 char/s  eta=   385s
+  eval      8,400/60,000 ( 14.0%)  acc=0.2752      137 char/s  eta=   376s
+  eval      9,600/60,000 ( 16.0%)  acc=0.2798      138 char/s  eta=   366s
+  eval     10,800/60,000 ( 18.0%)  acc=0.2836      138 char/s  eta=   356s
+  eval     12,000/60,000 ( 20.0%)  acc=0.2858      138 char/s  eta=   347s
+  eval     13,200/60,000 ( 22.0%)  acc=0.2895      139 char/s  eta=   338s
+  eval     14,400/60,000 ( 24.0%)  acc=0.2924      139 char/s  eta=   328s
+  eval     15,600/60,000 ( 26.0%)  acc=0.2946      139 char/s  eta=   320s
+  eval     16,800/60,000 ( 28.0%)  acc=0.2967      139 char/s  eta=   311s
+  eval     18,000/60,000 ( 30.0%)  acc=0.2964      139 char/s  eta=   303s
+  eval     19,200/60,000 ( 32.0%)  acc=0.2982      139 char/s  eta=   294s
+  eval     20,400/60,000 ( 34.0%)  acc=0.2997      139 char/s  eta=   285s
+  eval     21,600/60,000 ( 36.0%)  acc=0.2991      139 char/s  eta=   277s
+  eval     22,800/60,000 ( 38.0%)  acc=0.2990      139 char/s  eta=   268s
+  eval     24,000/60,000 ( 40.0%)  acc=0.2997      139 char/s  eta=   259s
+  eval     25,200/60,000 ( 42.0%)  acc=0.3005      139 char/s  eta=   250s
+  eval     26,400/60,000 ( 44.0%)  acc=0.3025      139 char/s  eta=   241s
+  eval     27,600/60,000 ( 46.0%)  acc=0.3027      139 char/s  eta=   232s
+  eval     28,800/60,000 ( 48.0%)  acc=0.3026      139 char/s  eta=   224s
+  eval     30,000/60,000 ( 50.0%)  acc=0.3012      139 char/s  eta=   215s
+  eval     31,200/60,000 ( 52.0%)  acc=0.2992      139 char/s  eta=   207s
+  eval     32,400/60,000 ( 54.0%)  acc=0.2986      139 char/s  eta=   199s
+  eval     33,600/60,000 ( 56.0%)  acc=0.2971      139 char/s  eta=   190s
+  eval     34,800/60,000 ( 58.0%)  acc=0.2966      139 char/s  eta=   182s
+  eval     36,000/60,000 ( 60.0%)  acc=0.2955      139 char/s  eta=   173s
+  eval     37,200/60,000 ( 62.0%)  acc=0.2966      139 char/s  eta=   164s
+  eval     38,400/60,000 ( 64.0%)  acc=0.2969      139 char/s  eta=   156s
+  eval     39,600/60,000 ( 66.0%)  acc=0.2972      139 char/s  eta=   147s
+  eval     40,800/60,000 ( 68.0%)  acc=0.2981      139 char/s  eta=   138s
+  eval     42,000/60,000 ( 70.0%)  acc=0.2980      139 char/s  eta=   130s
+  eval     43,200/60,000 ( 72.0%)  acc=0.2987      139 char/s  eta=   121s
+  eval     44,400/60,000 ( 74.0%)  acc=0.2994      139 char/s  eta=   112s
+  eval     45,600/60,000 ( 76.0%)  acc=0.2997      139 char/s  eta=   104s
+  eval     46,800/60,000 ( 78.0%)  acc=0.2996      139 char/s  eta=    95s
+  eval     48,000/60,000 ( 80.0%)  acc=0.3001      139 char/s  eta=    86s

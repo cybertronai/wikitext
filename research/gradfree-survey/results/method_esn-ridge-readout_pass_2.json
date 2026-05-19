@@ -1,0 +1,18 @@
+{
+  "method_id": "esn-ridge-readout",
+  "pass": 2,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "train_time_exceeded",
+  "met_success_criterion": false,
+  "val_char_acc": null,
+  "training_energy_J": 71567.41249650001,
+  "training_duration_s": 300.93631007,
+  "modal_runs_attempted": 1,
+  "notes": "Pass-2 batched-streaming ESN (N=16384, B=64, K=4, density=0.02, rho=0.9, leak=0.3, lambda=1e-3, N_phi=17408) hit the 300s wall-clock cap mid-stream and was DQ'd before any ridge solve. Observed inner-step time was ~6 ms (vs spec's ~0.6 ms projection): A100 sparse-CSR @ dense (N=16384, B=64) and the per-step Uhist roll/clone dominated, yielding ~10.5 k rows/s sustained. At kill we had streamed ~3.07 M of the planned ~16 M rows (inner step 49 k / 250 k). Energy 71.6 kJ exceeds the 25 kJ spec budget and pass-1's 29.8 kJ. The spec's anticipated failure mode (sparse-batched matmul slower than projected) materialised, but per ground rules we do not retry or redesign. No val accuracy measured (training never returned a model).",
+  "artifacts": {
+    "submission": "runs/method_esn-ridge-readout_pass_2/submission.py",
+    "raw_result": "runs/method_esn-ridge-readout_pass_2/result.seed0.json",
+    "log": "runs/method_esn-ridge-readout_pass_2/run.seed0.log"
+  }
+}

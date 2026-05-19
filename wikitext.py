@@ -177,7 +177,7 @@ class EnergyMeter:
         print(m.energy_joules, "J")
 
     Idle baseline: ``idle_watts * duration_s`` is subtracted from the
-    raw NVML delta. Default 50 W is conservative for an A100 40GB SXM4
+    raw NVML delta. Default 50 W is conservative for an A100 80GB PCIe
     at rest; calibrate per host for production runs.
 
     On hosts without NVML (CPU-only laptops), ``available`` is ``False``

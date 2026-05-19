@@ -1,0 +1,224 @@
+# wikitext submit.py log — hyena — 2026-05-18T21:01:24+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-JdAYCZr5yYxP8T4C1SGOTw
+Building image im-wM1wxgYOXTJH9cipo1fjye
+
+=> Step 0: FROM base
+
+=> Step 1: RUN python -m pip install tiktoken==0.7.0
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+Collecting tiktoken==0.7.0
+  Downloading http://pypi-mirror.modal.local:5555/simple/tiktoken/tiktoken-0.7.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Collecting regex>=2022.1.18 (from tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/regex/regex-2026.5.9-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.4/40.4 kB 100.0 MB/s eta 0:00:00
+Collecting requests>=2.26.0 (from tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/requests/requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting charset_normalizer<4,>=2 (from requests>=2.26.0->tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/charset-normalizer/charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.9/40.9 kB 31.6 MB/s eta 0:00:00
+Collecting idna<4,>=2.5 (from requests>=2.26.0->tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/idna/idna-3.15-py3-none-any.whl.metadata (7.7 kB)
+Collecting urllib3<3,>=1.26 (from requests>=2.26.0->tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/urllib3/urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting certifi>=2023.5.7 (from requests>=2.26.0->tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/certifi/certifi-2026.4.22-py3-none-any.whl.metadata (2.5 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/tiktoken/tiktoken-0.7.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 26.6 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/regex/regex-2026.5.9-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (799 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 799.8/799.8 kB 177.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/requests/requests-2.34.2-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 181.1 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/certifi/certifi-2026.4.22-py3-none-any.whl (135 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 135.7/135.7 kB 92.1 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/charset-normalizer/charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (214 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 214.1/214.1 kB 33.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/idna/idna-3.15-py3-none-any.whl (72 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 72.3/72.3 kB 224.5 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/urllib3/urllib3-2.7.0-py3-none-any.whl (131 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 131.1/131.1 kB 64.9 MB/s eta 0:00:00
+Installing collected packages: urllib3, regex, idna, charset_normalizer, certifi, requests, tiktoken
+Successfully installed certifi-2026.4.22 charset_normalizer-3.4.7 idna-3.15 regex-2026.5.9 requests-2.34.2 tiktoken-0.7.0 urllib3-2.7.0
+
+[notice] A new release of pip is available: 24.0 -> 26.1.1
+[notice] To update, run: pip install --upgrade pip
+Saving image...
+Image saved, took 1.51s
+
+Built image im-wM1wxgYOXTJH9cipo1fjye in 7.59s
+
+
+Building image im-ZBvuar06qb50DRx9qhDJPA
+
+=> Step 0: FROM base
+
+=> Step 1: ENV PYTHONPATH=/workspace
+
+=> Step 2: ENV PYTHONUNBUFFERED=1
+Saving image...
+Image saved, took 3.70s
+
+Built image im-ZBvuar06qb50DRx9qhDJPA in 5.87s
+
+
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 61.5 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.3 s
+  energy delta:   12,901.2 J
+  avg power:      346.1 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 61.52013333333331, "stress_watts_avg": 346.0640416240178, "stress_energy_joules": 12901.178, "stress_duration_s": 37.279741459, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/hyena.py ...
+[hyena] loading GPT-2 BPE encoder ...
+[hyena] vocab size: 50257
+[hyena] building token-bytes table ...
+[hyena] building byte-prefix index ...
+[hyena] prefix index: 98,036 entries  (setup elapsed 3.1s)
+[hyena] BPE-encoding first 120,000,000 chars ...
+[hyena] encoded 26,343,065 tokens in 13.8s (1907K tok/s)
+[hyena] 30.27M params  cfg=TrainConfig(d=384 L=6 order=2 bs=24 T=512 steps=2000 bpe_chars=120000000)
+[hyena] setup phase used 22.0s; training budget ~248s
+[hyena] step     0/2000  loss 10.8617  elapsed 2s
+[hyena] step    50/2000  loss 8.3392  elapsed 9s
+[hyena] step   100/2000  loss 7.7418  elapsed 17s
+[hyena] step   150/2000  loss 7.3956  elapsed 24s
+[hyena] step   200/2000  loss 7.4806  elapsed 32s
+[hyena] step   250/2000  loss 7.3943  elapsed 39s
+[hyena] step   300/2000  loss 7.3135  elapsed 47s
+[hyena] step   350/2000  loss 7.3055  elapsed 54s
+[hyena] step   400/2000  loss 7.1153  elapsed 62s
+[hyena] step   450/2000  loss 7.0110  elapsed 69s
+[hyena] step   500/2000  loss 6.8613  elapsed 77s
+[hyena] step   550/2000  loss 6.6046  elapsed 84s
+[hyena] step   600/2000  loss 6.3315  elapsed 92s
+[hyena] step   650/2000  loss 6.4254  elapsed 99s
+[hyena] step   700/2000  loss 6.2331  elapsed 107s
+[hyena] step   750/2000  loss 6.0912  elapsed 115s
+[hyena] step   800/2000  loss 5.9598  elapsed 122s
+[hyena] step   850/2000  loss 5.9989  elapsed 130s
+[hyena] step   900/2000  loss 5.8772  elapsed 137s
+[hyena] step   950/2000  loss 5.8389  elapsed 145s
+[hyena] step  1000/2000  loss 5.8028  elapsed 153s
+[hyena] step  1050/2000  loss 5.8580  elapsed 160s
+[hyena] step  1100/2000  loss 5.7150  elapsed 168s
+[hyena] step  1150/2000  loss 5.4916  elapsed 175s
+[hyena] step  1200/2000  loss 5.6350  elapsed 183s
+[hyena] step  1250/2000  loss 5.5810  elapsed 190s
+[hyena] step  1300/2000  loss 5.6750  elapsed 198s
+[hyena] step  1350/2000  loss 5.5149  elapsed 205s
+[hyena] step  1400/2000  loss 5.5374  elapsed 213s
+[hyena] step  1450/2000  loss 5.2369  elapsed 220s
+[hyena] step  1500/2000  loss 5.5573  elapsed 228s
+[hyena] step  1550/2000  loss 5.2593  elapsed 235s
+[hyena] step  1600/2000  loss 5.4195  elapsed 243s
+[hyena] hit time budget at step 1638; stopping early
+training: 55,459.5 J   duration=271.1s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.5200       33 char/s  eta=  1786s
+  eval      2,400/60,000 (  4.0%)  acc=0.5279       37 char/s  eta=  1556s
+  eval      3,600/60,000 (  6.0%)  acc=0.5286       43 char/s  eta=  1302s
+  eval      4,800/60,000 (  8.0%)  acc=0.5365       48 char/s  eta=  1162s
+  eval      6,000/60,000 ( 10.0%)  acc=0.5292       50 char/s  eta=  1071s
+  eval      7,200/60,000 ( 12.0%)  acc=0.5243       52 char/s  eta=  1007s
+  eval      8,400/60,000 ( 14.0%)  acc=0.5188       54 char/s  eta=   956s
+  eval      9,600/60,000 ( 16.0%)  acc=0.5266       55 char/s  eta=   912s
+  eval     10,800/60,000 ( 18.0%)  acc=0.5317       56 char/s  eta=   874s
+  eval     12,000/60,000 ( 20.0%)  acc=0.5333       57 char/s  eta=   841s
+  eval     13,200/60,000 ( 22.0%)  acc=0.5371       58 char/s  eta=   812s
+  eval     14,400/60,000 ( 24.0%)  acc=0.5383       58 char/s  eta=   784s
+  eval     15,600/60,000 ( 26.0%)  acc=0.5402       59 char/s  eta=   755s
+  eval     16,800/60,000 ( 28.0%)  acc=0.5427       59 char/s  eta=   729s
+  eval     18,000/60,000 ( 30.0%)  acc=0.5413       60 char/s  eta=   704s
+  eval     19,200/60,000 ( 32.0%)  acc=0.5436       60 char/s  eta=   680s
+  eval     20,400/60,000 ( 34.0%)  acc=0.5459       60 char/s  eta=   656s
+  eval     21,600/60,000 ( 36.0%)  acc=0.5463       61 char/s  eta=   632s
+  eval     22,800/60,000 ( 38.0%)  acc=0.5488       61 char/s  eta=   610s
+  eval     24,000/60,000 ( 40.0%)  acc=0.5491       61 char/s  eta=   587s
+  eval     25,200/60,000 ( 42.0%)  acc=0.5496       62 char/s  eta=   566s
+  eval     26,400/60,000 ( 44.0%)  acc=0.5509       62 char/s  eta=   545s
+  eval     27,600/60,000 ( 46.0%)  acc=0.5504       62 char/s  eta=   524s
+  eval     28,800/60,000 ( 48.0%)  acc=0.5497       62 char/s  eta=   503s
+  eval     30,000/60,000 ( 50.0%)  acc=0.5480       62 char/s  eta=   482s
+  eval     31,200/60,000 ( 52.0%)  acc=0.5457       62 char/s  eta=   461s
+  eval     32,400/60,000 ( 54.0%)  acc=0.5440       63 char/s  eta=   441s
+  eval     33,600/60,000 ( 56.0%)  acc=0.5423       63 char/s  eta=   421s
+  eval     34,800/60,000 ( 58.0%)  acc=0.5414       63 char/s  eta=   401s
+  eval     36,000/60,000 ( 60.0%)  acc=0.5411       63 char/s  eta=   381s
+  eval     37,200/60,000 ( 62.0%)  acc=0.5415       63 char/s  eta=   362s
+  eval     38,400/60,000 ( 64.0%)  acc=0.5410       63 char/s  eta=   342s
+  eval     39,600/60,000 ( 66.0%)  acc=0.5408       63 char/s  eta=   323s
+  eval     40,800/60,000 ( 68.0%)  acc=0.5410       63 char/s  eta=   304s
+  eval     42,000/60,000 ( 70.0%)  acc=0.5419       63 char/s  eta=   284s
+  eval     43,200/60,000 ( 72.0%)  acc=0.5419       63 char/s  eta=   265s
+  eval     44,400/60,000 ( 74.0%)  acc=0.5431       63 char/s  eta=   246s
+  eval     45,600/60,000 ( 76.0%)  acc=0.5439       64 char/s  eta=   227s
+  eval     46,800/60,000 ( 78.0%)  acc=0.5443       64 char/s  eta=   207s
+  eval     48,000/60,000 ( 80.0%)  acc=0.5449       64 char/s  eta=   188s
+  eval     49,200/60,000 ( 82.0%)  acc=0.5447       64 char/s  eta=   169s
+  eval     50,400/60,000 ( 84.0%)  acc=0.5459       64 char/s  eta=   150s
+  eval     51,600/60,000 ( 86.0%)  acc=0.5465       64 char/s  eta=   131s
+  eval     52,800/60,000 ( 88.0%)  acc=0.5453       64 char/s  eta=   113s
+  eval     54,000/60,000 ( 90.0%)  acc=0.5448       64 char/s  eta=    94s
+  eval     55,200/60,000 ( 92.0%)  acc=0.5445       64 char/s  eta=    75s
+  eval     56,400/60,000 ( 94.0%)  acc=0.5451       64 char/s  eta=    56s
+  eval     57,600/60,000 ( 96.0%)  acc=0.5459       64 char/s  eta=    37s
+  eval     58,800/60,000 ( 98.0%)  acc=0.5466       64 char/s  eta=    19s
+  eval     60,000/60,000 (100.0%)  acc=0.5463       64 char/s  eta=     0s
+chars=60,000  acc=0.5463  eval_duration=933.6s
+---
+DISQUALIFIED: val accuracy 0.5463 below floor 0.7000
+submission         : hyena
+training energy (J): 55,459.5
+training duration  : 271.1s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-JdAYCZr5yYxP8T4C1SGOTw
+
+# final result
+{
+  "submission": "hyena",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.5462833333333333,
+  "val_chars": 60000,
+  "training_energy_J": 55459.49185325,
+  "training_duration_s": 271.101022935,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-18T21:22:37Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 61.52013333333331,
+    "stress_watts_avg": 346.0640416240178,
+    "stress_energy_joules": 12901.178,
+    "stress_duration_s": 37.279741459,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

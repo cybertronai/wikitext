@@ -1,0 +1,18 @@
+{
+  "method_id": "forward-forward-causal",
+  "pass": 1,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "val_accuracy_below_floor",
+  "met_success_criterion": false,
+  "val_char_acc": 0.23508333333333334,
+  "training_energy_J": 2737.0290567500006,
+  "training_duration_s": 95.643198865,
+  "modal_runs_attempted": 1,
+  "notes": "Hinton FF with local per-layer goodness loss trained as specified (L=6 width=512 K=24 theta=2.0 8000 steps, layer 1 frozen, per-layer Adam lr=3e-4, unigram negatives). Training finished in 96s (well under 300s budget) at 2.7 kJ; val char-acc 0.2351 just below the honest target of 0.25 (and far below the 0.70 DQ floor), confirming FF carries some LM signal but substantially weaker than cross-entropy on the same compute.",
+  "artifacts": {
+    "submission": "runs/method_forward-forward-causal_pass_1/submission.py",
+    "raw_result": "runs/method_forward-forward-causal_pass_1/result.seed0.json",
+    "log": "runs/method_forward-forward-causal_pass_1/run.seed0.log"
+  }
+}

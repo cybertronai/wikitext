@@ -1,0 +1,18 @@
+{
+  "method_id": "ppm-context-tree",
+  "pass": 2,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "train_time_exceeded",
+  "met_success_criterion": false,
+  "val_char_acc": null,
+  "training_energy_J": 979.643554549999,
+  "training_duration_s": 300.00112890900004,
+  "modal_runs_attempted": 2,
+  "notes": "K=7 probe ran at ~214 KB/s (vs 1.5 MB/s target), triggering the spec's K=6 fallback after 47 s. K=6 sustained ~247 KB/s — well below the 1.5 MB/s pass-2 target — and the SIGALRM 300 s training cap fired at 60 MB ingested. DQ for train_time_exceeded; the arena-trie rewrite did not deliver the predicted 6-8x speedup over pass 1.",
+  "artifacts": {
+    "submission": "runs/method_ppm-context-tree_pass_2/submission.py",
+    "raw_result": "runs/method_ppm-context-tree_pass_2/result.seed0.json",
+    "log": "runs/method_ppm-context-tree_pass_2/run.seed0.log"
+  }
+}

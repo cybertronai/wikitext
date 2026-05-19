@@ -1,0 +1,24 @@
+{
+  "submission": "ppm_c",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.6525166666666666,
+  "val_chars": 60000,
+  "training_energy_J": 735.4324820000011,
+  "training_duration_s": 108.65121036,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-18T17:55:18Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 56.47941666666665,
+    "stress_watts_avg": 225.36191901782811,
+    "stress_energy_joules": 8625.654,
+    "stress_duration_s": 38.274674078,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

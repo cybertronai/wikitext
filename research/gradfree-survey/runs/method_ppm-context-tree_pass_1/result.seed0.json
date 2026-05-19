@@ -1,0 +1,25 @@
+{
+  "submission": "method_ppm-context-tree_pass_1",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.63005,
+  "val_chars": 60000,
+  "training_energy_J": 632.9240476499999,
+  "training_duration_s": 44.488419047,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-17T13:32:19Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 63.395728813559366,
+    "stress_watts_avg": 342.9662064910383,
+    "stress_energy_joules": 12656.776,
+    "stress_duration_s": 36.903857466,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "seed": 0,
+  "contributor": "@survey-ppm"
+}

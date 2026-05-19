@@ -1,0 +1,194 @@
+# wikitext submit.py log — chunker_d1 — 2026-05-18T19:11:00+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-4XYVqPVlZUhFccDPVBX678
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 50.6 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.4 s
+  energy delta:   8,518.8 J
+  avg power:      227.7 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 50.57088333333335, "stress_watts_avg": 227.67711523033708, "stress_energy_joules": 8518.803, "stress_duration_s": 37.416158367, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/chunker_d1.py ...
+========================================================================
+[d1] CHUNKER PHASE-0 DIAGNOSTIC: surprise-rate measurement
+========================================================================
+[d1] this submission will DQ on accuracy (dummy CharModel).
+[d1] result of interest: the D1_REPORT_JSON block at the end.
+
+[d1] device: cuda
+[d1] train bytes: 541,096,898
+[d1] model: 2-layer transformer, d=128, heads=4, T=512, params=0.462M
+[d1] training for ~60s ...
+[d1] step 200  loss 1.8554  elapsed 6.7s
+[d1] step 400  loss 1.6899  elapsed 12.1s
+[d1] step 600  loss 1.5283  elapsed 17.4s
+[d1] step 800  loss 1.5356  elapsed 22.8s
+[d1] step 1000  loss 1.5017  elapsed 28.3s
+[d1] step 1200  loss 1.5184  elapsed 33.7s
+[d1] step 1400  loss 1.5031  elapsed 39.2s
+[d1] step 1600  loss 1.4488  elapsed 44.6s
+[d1] step 1800  loss 1.4517  elapsed 49.9s
+[d1] step 2000  loss 1.4903  elapsed 55.2s
+[d1] trained 2183 steps in 60.0s, final loss 1.4809
+[d1] measuring surprise rate on last 1,000,000 bytes ...
+[d1] diagnostic completed in 0.7s.
+[d1] surprise-rate table:
+[d1]   p_s(tau=0.01) = 0.0444
+[d1]   p_s(tau=0.05) = 0.1715
+[d1]   p_s(tau=0.1) = 0.2668
+[d1]   p_s(tau=0.3) = 0.4582
+[d1]   p_s(tau=0.5) = 0.5608
+[d1] automatizer accuracy on diagnostic region: 0.5675
+[d1] mean P_L(true): 0.4626
+[d1] verdict: PASS
+
+D1_REPORT_JSON_BEGIN
+{
+  "n_bytes_evaluated": 1000448,
+  "surprise_rates": {
+    "tau_0.01": 0.04438711330294609,
+    "tau_0.05": 0.17145918309688568,
+    "tau_0.1": 0.26677948236465454,
+    "tau_0.3": 0.45818573236465454,
+    "tau_0.5": 0.560846745967865
+  },
+  "p_true_quantiles": {
+    "q1": 0.001894641318358481,
+    "q5": 0.0114225959405303,
+    "q10": 0.02523965947329998,
+    "q25": 0.08955670148134232,
+    "q50": 0.3721497654914856,
+    "q75": 0.8818176984786987,
+    "q90": 0.9863760471343994,
+    "q95": 0.9973074197769165,
+    "q99": 0.99983149766922
+  },
+  "automatizer_accuracy_on_diag": 0.5674947500228882,
+  "mean_p_true": 0.46255695819854736,
+  "diagnostic_duration_s": 0.6886179349999964,
+  "train_seconds_used": 60.012432329000006,
+  "train_steps": 2183,
+  "final_train_loss": 1.4809446334838867,
+  "model_params": 462080,
+  "model_arch": {
+    "num_layers": 2,
+    "model_dim": 128,
+    "heads": 4,
+    "seq_len": 512,
+    "batch_size": 32
+  },
+  "verdict": "PASS"
+}
+D1_REPORT_JSON_END
+
+[d1] returning dummy CharModel; expecting accuracy DQ.
+training: 3,611.9 J   duration=63.8s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.2158  1357560 char/s  eta=     0s
+  eval      2,400/60,000 (  4.0%)  acc=0.2058  1439334 char/s  eta=     0s
+  eval      3,600/60,000 (  6.0%)  acc=0.2058  1505226 char/s  eta=     0s
+  eval      4,800/60,000 (  8.0%)  acc=0.2004  1543764 char/s  eta=     0s
+  eval      6,000/60,000 ( 10.0%)  acc=0.1973  1573269 char/s  eta=     0s
+  eval      7,200/60,000 ( 12.0%)  acc=0.1976  1590400 char/s  eta=     0s
+  eval      8,400/60,000 ( 14.0%)  acc=0.1962  1602670 char/s  eta=     0s
+  eval      9,600/60,000 ( 16.0%)  acc=0.1955  1615389 char/s  eta=     0s
+  eval     10,800/60,000 ( 18.0%)  acc=0.1961  1622983 char/s  eta=     0s
+  eval     12,000/60,000 ( 20.0%)  acc=0.1950  1627141 char/s  eta=     0s
+  eval     13,200/60,000 ( 22.0%)  acc=0.1942  1634229 char/s  eta=     0s
+  eval     14,400/60,000 ( 24.0%)  acc=0.1935  1639632 char/s  eta=     0s
+  eval     15,600/60,000 ( 26.0%)  acc=0.1922  1642784 char/s  eta=     0s
+  eval     16,800/60,000 ( 28.0%)  acc=0.1921  1644575 char/s  eta=     0s
+  eval     18,000/60,000 ( 30.0%)  acc=0.1916  1648121 char/s  eta=     0s
+  eval     19,200/60,000 ( 32.0%)  acc=0.1909  1650297 char/s  eta=     0s
+  eval     20,400/60,000 ( 34.0%)  acc=0.1905  1652051 char/s  eta=     0s
+  eval     21,600/60,000 ( 36.0%)  acc=0.1903  1654967 char/s  eta=     0s
+  eval     22,800/60,000 ( 38.0%)  acc=0.1899  1656479 char/s  eta=     0s
+  eval     24,000/60,000 ( 40.0%)  acc=0.1903  1657753 char/s  eta=     0s
+  eval     25,200/60,000 ( 42.0%)  acc=0.1905  1658683 char/s  eta=     0s
+  eval     26,400/60,000 ( 44.0%)  acc=0.1917  1660579 char/s  eta=     0s
+  eval     27,600/60,000 ( 46.0%)  acc=0.1921  1661725 char/s  eta=     0s
+  eval     28,800/60,000 ( 48.0%)  acc=0.1917  1662365 char/s  eta=     0s
+  eval     30,000/60,000 ( 50.0%)  acc=0.1915  1663738 char/s  eta=     0s
+  eval     31,200/60,000 ( 52.0%)  acc=0.1913  1664724 char/s  eta=     0s
+  eval     32,400/60,000 ( 54.0%)  acc=0.1909  1665771 char/s  eta=     0s
+  eval     33,600/60,000 ( 56.0%)  acc=0.1909  1666411 char/s  eta=     0s
+  eval     34,800/60,000 ( 58.0%)  acc=0.1906  1667518 char/s  eta=     0s
+  eval     36,000/60,000 ( 60.0%)  acc=0.1904  1668169 char/s  eta=     0s
+  eval     37,200/60,000 ( 62.0%)  acc=0.1904  1668506 char/s  eta=     0s
+  eval     38,400/60,000 ( 64.0%)  acc=0.1904  1669572 char/s  eta=     0s
+  eval     39,600/60,000 ( 66.0%)  acc=0.1907  1670114 char/s  eta=     0s
+  eval     40,800/60,000 ( 68.0%)  acc=0.1905  1670500 char/s  eta=     0s
+  eval     42,000/60,000 ( 70.0%)  acc=0.1906  1670916 char/s  eta=     0s
+  eval     43,200/60,000 ( 72.0%)  acc=0.1904  1671902 char/s  eta=     0s
+  eval     44,400/60,000 ( 74.0%)  acc=0.1902  1672090 char/s  eta=     0s
+  eval     45,600/60,000 ( 76.0%)  acc=0.1899  1672080 char/s  eta=     0s
+  eval     46,800/60,000 ( 78.0%)  acc=0.1899  1654668 char/s  eta=     0s
+  eval     48,000/60,000 ( 80.0%)  acc=0.1893  1653024 char/s  eta=     0s
+  eval     49,200/60,000 ( 82.0%)  acc=0.1888  1653182 char/s  eta=     0s
+  eval     50,400/60,000 ( 84.0%)  acc=0.1888  1653379 char/s  eta=     0s
+  eval     51,600/60,000 ( 86.0%)  acc=0.1885  1653092 char/s  eta=     0s
+  eval     52,800/60,000 ( 88.0%)  acc=0.1889  1654065 char/s  eta=     0s
+  eval     54,000/60,000 ( 90.0%)  acc=0.1888  1654896 char/s  eta=     0s
+  eval     55,200/60,000 ( 92.0%)  acc=0.1885  1655471 char/s  eta=     0s
+  eval     56,400/60,000 ( 94.0%)  acc=0.1884  1656632 char/s  eta=     0s
+  eval     57,600/60,000 ( 96.0%)  acc=0.1885  1657197 char/s  eta=     0s
+  eval     58,800/60,000 ( 98.0%)  acc=0.1892  1657468 char/s  eta=     0s
+  eval     60,000/60,000 (100.0%)  acc=0.1900  1658032 char/s  eta=     0s
+chars=60,000  acc=0.1900  eval_duration=0.0s
+---
+DISQUALIFIED: val accuracy 0.1900 below floor 0.7000
+submission         : chunker_d1
+training energy (J): 3,611.9
+training duration  : 63.8s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-4XYVqPVlZUhFccDPVBX678
+
+# final result
+{
+  "submission": "chunker_d1",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.18996666666666667,
+  "val_chars": 60000,
+  "training_energy_J": 3611.9063952,
+  "training_duration_s": 63.817532096,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-18T19:12:53Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 50.57088333333335,
+    "stress_watts_avg": 227.67711523033708,
+    "stress_energy_joules": 8518.803,
+    "stress_duration_s": 37.416158367,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

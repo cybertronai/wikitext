@@ -23,8 +23,16 @@ python submit.py submissions/modded_nanogpt
 
 ## Record History
 
-| Date | Energy (J) | Val char-acc | Config | Submission | Contributor |
-|------|-----------:|-------------:|--------|------------|-------------|
+| Date | Energy (J) | Val char-acc | GPU | Config | Submission | Contributor |
+|------|-----------:|-------------:|-----|--------|------------|-------------|
+| 2026-05-12 |     51,704 | 0.7374    | A100 80GB PCIe | modded_nanogpt | [dir](submissions/modded_nanogpt) | @KellerJordan |
+| 2026-05-18 |     46,222 | 0.7238    | A100 80GB PCIe | lwta_k4        | [dir](submissions/lwta_k4)        | @ab-10 |
+| 2026-05-18 |     46,132 | 0.7146    | A100 80GB PCIe | lwta_k2        | [dir](submissions/lwta_k2)        | @ab-10 |
+| 2026-05-18 |     55,459 |       DQ | A100 80GB SXM4 | hyena            | [dir](research/catalog/new_directions/hyena)            | @ab-10 |
+| 2026-05-18 |     20,348 |       DQ | A100 80GB SXM4 | pointer_sentinel | [dir](research/catalog/new_directions/pointer_sentinel) | @ab-10 |
+| 2026-05-18 |      3,612 |       DQ | A100 80GB PCIe | chunker_d1       | [dir](research/catalog/new_directions/chunker_d1)       | @ab-10 |
+| 2026-05-18 |        735 |       DQ | A100 80GB PCIe | ppm_c            | [dir](research/catalog/new_directions/ppm_c)            | @ab-10 |
+| 2026-05-17 |         70 |       DQ | A100 80GB SXM4 | P2-A_random_projection | [dir](research/forward-forward-deep/runs/phase2/P2-A_random_projection) | @ab-10 |
 
 
 ## Rules
@@ -39,8 +47,19 @@ Greedy-argmax char-accuracy is computed on the first 60,000 chars of each split;
 2. Use the standard WikiText-103 train/valid/test split. (You can change batch size, sequence length, attention structure, etc.; just don't change the underlying streams of characters.)
 3. Expose a streaming next-character distribution via the `CharModel` API. (The runner calls `predict()` for position `i` strictly before `observe()` commits the ground-truth at position `i` — within-document future-peeking is structurally impossible.)
     a. Implementing `CharModel` ABC from `wikitext.py` is the most straightforward way to do this.
-4. Finish training in **< 300 s wall-clock** on the pinned Modal A100-40GB SXM4, measured from the first call into `train()` to its return. (Eval is not charged against this budget.)
+4. Finish training in **< 300 s wall-clock** on the pinned Modal A100-80GB PCIe, measured from the first call into `train()` to its return. (Eval is not charged against this budget.)
 5. Attain **val char-acc ≥ 0.70** on the first 60,000 chars of the val split.
+
+### Internal representations
+
+The char-level scoring contract (rules 2 + 3) constrains the **eval-facing interface**, not the model's internal representation. Submissions should pick whichever internal unit (bytes, BPE, WordPiece, words, ...) best optimises their architecture's energy-to-accuracy ratio, and translate to per-char probabilities at the `CharModel` boundary.
+
+- **Allowed.** Internal BPE / WordPiece / word vocabulary; subword-aware decoders; char-level marginalisation over partial-token continuations; hybrid architectures that mix per-char and per-token computation.
+- **Encouraged** where it helps. Sub-quadratic mixers (Hyena, Mamba, etc.) benefit from shorter sequences; BPE typically gives 4–5× shorter context vs bytes, which can lift the per-step budget enough for those architectures to actually converge inside 300 s.
+- **Tokeniser merge tables (GPT-2 BPE, SentencePiece, etc.) are not "pretrained weights".** They are deterministic algorithms over byte/codepoint streams, allowed under rule 1.
+- **Pretrained tokeniser *model weights* are not allowed** — e.g., shipping a SentencePiece model that was trained on external data — same rationale as rule 1.
+
+For an internal-BPE submission, `predict()` returns `P(next_char | observed_chars)` by marginalising over BPE tokens consistent with the current byte buffer: for an active partial buffer `p` and candidate next char `c`, `P(c) = Σ_t P(t | committed_context) · 1[bytes(t) starts with p+c]`, normalised over the candidate set whose tokens start with `p`.
 
 
 [^1]: More energy efficient

@@ -1,0 +1,18 @@
+{
+  "method_id": "softhebb-stacked",
+  "pass": 1,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "val_accuracy_below_floor",
+  "met_success_criterion": false,
+  "val_char_acc": 0.11886666666666666,
+  "training_energy_J": 21179.0483138,
+  "training_duration_s": 88.960193724,
+  "modal_runs_attempted": 2,
+  "notes": "4-layer SoftHebb causal-conv stack [384,384,512,512] with dilations [1,2,4,8], kernel 5, tau 1.0, trained layer-wise on 100M chars/layer, then 1408-D ridge readout on layers 2-4. Per-channel mean activation stayed at max entropy across all layers indicating SoftHebb did not differentiate channels on byte streams; readout Gram was rank-deficient (Cholesky failed, fell back to lstsq) and val acc 0.119 fell far below the 0.70 floor, so the run was disqualified. Energy 21.2 kJ over 89 s of training is well within the 8 kJ stretch target only in compute time, not in joules.",
+  "artifacts": {
+    "submission": "runs/method_softhebb-stacked_pass_1/submission.py",
+    "raw_result": "runs/method_softhebb-stacked_pass_1/result.seed0.json",
+    "log": "runs/method_softhebb-stacked_pass_1/run.seed0.log"
+  }
+}

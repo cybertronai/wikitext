@@ -1,0 +1,11 @@
+{
+  "nvml_available": true,
+  "energy_counter_supported": true,
+  "monotonic": true,
+  "idle_watts": 62.83520000000005,
+  "stress_watts_avg": 336.47929273065233,
+  "stress_energy_joules": 12662.71,
+  "stress_duration_s": 37.632954757,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "notes": []
+}

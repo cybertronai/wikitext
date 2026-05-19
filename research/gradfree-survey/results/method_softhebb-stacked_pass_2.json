@@ -1,0 +1,18 @@
+{
+  "method_id": "softhebb-stacked",
+  "pass": 2,
+  "status": "ran",
+  "disqualified": true,
+  "dq_reason": "train_time_exceeded",
+  "met_success_criterion": false,
+  "val_char_acc": null,
+  "training_energy_J": 93196.86366060001,
+  "training_duration_s": 300.050226788,
+  "modal_runs_attempted": 1,
+  "notes": "Direction B: dropped the deep stack for a single Hebbian patch-bank layer (H=8192, K=16 byte one-hot patches => D_in=4096), SoftHebb-Oja soft-WTA rule with tau=0.5, eta=0.01 annealed to 0, batch 32 x SEQ_LEN 4096, stride-8 patch subsampling, 200M training chars per spec. The spec's wall-time estimate (~120 s Hebbian + ~35 s control + ~20 s ridge + ~20 s overhead = ~210 s) was optimistic on the Modal A100-SXM4-80GB: the Hebbian sweep alone took 272.5 s (1525 steps at ~178 ms/step including y@W residual plus dW = y^T @ residual matmuls at H=8192, D_in=4096, N_rows=16352). Ridge collection ran only 24 s before the 300 s SIGALRM hit; the Cholesky solve and both variants' quick_eval never executed. Per-channel mean-activation entropy stayed pinned at log(H)=9.011 throughout (max-entropy), the same pathology as pass 1: SoftHebb soft-WTA on one-hot byte patches does not break symmetry — every channel sees roughly the same input distribution and the Oja-residual update averages out. No tau bump fired (entropy did not drop below 0.3*log(H)). Disqualified for wall-clock; neither Hebbian nor random-projection control produced a val_char_acc measurement. Per /survey policy on Exit-2 outcomes, did not retry. Confirmed finding: the H=8192 Hebbian sweep is not feasible within 300 s with this matmul shape; even if it had finished, the entropy trace indicates channels would not have differentiated, so the spec's primary hypothesis (positive Hebbian-vs-random delta) is implicitly negative on byte streams.",
+  "artifacts": {
+    "submission": "runs/method_softhebb-stacked_pass_2/submission.py",
+    "raw_result": "runs/method_softhebb-stacked_pass_2/result.seed0.json",
+    "log": "runs/method_softhebb-stacked_pass_2/run.seed0.log"
+  }
+}
