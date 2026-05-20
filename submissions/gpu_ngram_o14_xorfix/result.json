@@ -1,0 +1,23 @@
+{
+  "submission": "gpu_ngram_o14_xorfix",
+  "training_energy_J": 3441.0376875,
+  "training_duration_s": 97.64232625,
+  "cpu_energy_J": 4134.604408382503,
+  "total_energy_J": 7575.642095882503,
+  "val_char_accuracy": 0.7184166666666667,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-20T07:11:46Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 53.04595000000001,
+    "stress_watts_avg": 222.8521356537582,
+    "stress_energy_joules": 8477.795,
+    "stress_duration_s": 38.042242562000006,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@subagent-xorfix-2026-05-19"
+}

@@ -1,0 +1,69 @@
+# wikitext submit.py log — mamba_byte — 2026-05-19T20:35:19+00:00Z
+[modal] launching A100-40GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/gabriel-nakajima-an/main/ap-oGKyFKlL8XlKwndrsOSYYs
+✓ Created objects.
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/submit.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/task.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/verify_nvml.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/run_eval.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 56.4 W
+running 30s stress workload ...
+  duration:       37.6 s
+  energy delta:   8,748.3 J
+  avg power:      232.6 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 56.42538333333334, "stress_watts_avg": 232.58596626932598, "stress_energy_joules": 8748.293, "stress_duration_s": 37.613159299, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+training submission /workspace/mamba_byte.py ...
+[mamba] 1.06M params  cfg=TrainConfig(d=192 L=4 d_state=16 d_conv=4 expand=2 ctx=1024 bs=16 steps=4000)
+[mamba] step     0/4000  loss 5.5409  elapsed 2s
+[mamba] step   100/4000  loss 3.0988  elapsed 57s
+[mamba] step   200/4000  loss 2.0596  elapsed 113s
+[mamba] step   300/4000  loss nan  elapsed 168s
+[mamba] step   400/4000  loss nan  elapsed 224s
+[mamba] step   500/4000  loss nan  elapsed 279s
+---
+DISQUALIFIED: training wall-clock budget exceeded (300.0 s)
+submission         : mamba_byte
+training duration  : 300.1s
+training energy (J): 60,863.8  (at kill)
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/gabriel-nakajima-an/main/ap-oGKyFKlL8XlKwndrsOSYYs
+
+# final result
+{
+  "submission": "mamba_byte",
+  "disqualified": true,
+  "reason": "train_time_exceeded",
+  "max_train_seconds": 300.0,
+  "training_energy_J": 60863.8399607,
+  "training_duration_s": 300.111980786,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-19T20:41:41Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 56.42538333333334,
+    "stress_watts_avg": 232.58596626932598,
+    "stress_energy_joules": 8748.293,
+    "stress_duration_s": 37.613159299,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@claude-mamba"
+}

@@ -1,0 +1,143 @@
+# wikitext submit.py log — chunker_phase1_v1 — 2026-05-20T01:54:03+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/gabriel-nakajima-an/main/ap-cKJi20KhEnnNVSFIPgeSmH
+✓ Created objects.
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/submit.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/task.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/verify_nvml.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/run_eval.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 62.6 W
+running 30s stress workload ...
+  duration:       37.8 s
+  energy delta:   12,495.6 J
+  avg power:      330.4 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 62.56199999999998, "stress_watts_avg": 330.37581396177535, "stress_energy_joules": 12495.641, "stress_duration_s": 37.822505377, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+training submission /workspace/chunker_phase1_v1.py ...
+[chunker] starting GPU KN build; max_order=12 D=0.5
+[chunker] top order=12 unique pairs: 157,942,722  2.6s
+[chunker] ctx_len=11 ctxs=119,285,712 17.4s
+[chunker] ctx_len=10 ctxs=84,282,364 12.4s
+[chunker] ctx_len=9 ctxs=54,720,376 7.7s
+[chunker] ctx_len=8 ctxs=31,924,091 4.6s
+[chunker] ctx_len=7 ctxs=16,284,921 2.5s
+[chunker] ctx_len=6 ctxs=7,016,442 1.2s
+[chunker] ctx_len=5 ctxs=2,438,281 0.5s
+[chunker] ctx_len=4 ctxs=637,143 0.1s
+[chunker] ctx_len=3 ctxs=122,882 0.0s
+[chunker] ctx_len=2 ctxs=12,282 0.0s
+[chunker] ctx_len=1 ctxs=204 0.0s
+[chunker] ctx_len=0 ctxs=1 0.0s
+[chunker] KN build done: 49.0s
+[chunker] computing surprise mask (tau=0.3) ...
+[chunker] surprise pass k_ctx=4 done
+[chunker] surprise computed in 2.6s: p_s = 0.4351 (235,445,737/541,096,898)
+[chunker] H model: 1.88M params, surprise positions: 235,445,737/541,096,898 (43.5%)
+[chunker] H step     0/800  loss 5.5452  elapsed 1s
+[chunker] H step   100/800  loss 2.7588  elapsed 6s
+[chunker] H step   200/800  loss 2.6080  elapsed 12s
+[chunker] H step   300/800  loss 2.4467  elapsed 17s
+[chunker] H step   400/800  loss 2.3904  elapsed 22s
+[chunker] H step   500/800  loss 2.3457  elapsed 28s
+[chunker] H step   600/800  loss 2.3157  elapsed 33s
+[chunker] H step   700/800  loss 2.2688  elapsed 38s
+[chunker] H step   799/800  loss 2.2480  elapsed 44s
+training: 5,917.8 J   duration=98.9s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.6925      159 char/s  eta=   370s
+  eval      2,400/60,000 (  4.0%)  acc=0.6767      160 char/s  eta=   361s
+  eval      3,600/60,000 (  6.0%)  acc=0.6753      160 char/s  eta=   353s
+  eval      4,800/60,000 (  8.0%)  acc=0.6887      160 char/s  eta=   345s
+  eval      6,000/60,000 ( 10.0%)  acc=0.6885      160 char/s  eta=   338s
+  eval      7,200/60,000 ( 12.0%)  acc=0.6831      160 char/s  eta=   331s
+  eval      8,400/60,000 ( 14.0%)  acc=0.6821      160 char/s  eta=   323s
+  eval      9,600/60,000 ( 16.0%)  acc=0.6892      160 char/s  eta=   316s
+  eval     10,800/60,000 ( 18.0%)  acc=0.6975      160 char/s  eta=   308s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6993      160 char/s  eta=   301s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7031      160 char/s  eta=   293s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7050      160 char/s  eta=   286s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7069      160 char/s  eta=   278s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7104      160 char/s  eta=   271s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7131      160 char/s  eta=   263s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7177      160 char/s  eta=   255s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7195      160 char/s  eta=   248s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7201      160 char/s  eta=   240s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7203      160 char/s  eta=   233s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7200      160 char/s  eta=   225s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7206      160 char/s  eta=   218s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7215      160 char/s  eta=   210s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7197      160 char/s  eta=   203s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7196      160 char/s  eta=   195s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7183      160 char/s  eta=   188s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7150      160 char/s  eta=   180s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7129      160 char/s  eta=   173s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7103      160 char/s  eta=   165s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7107      160 char/s  eta=   158s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7107      160 char/s  eta=   150s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7109      159 char/s  eta=   143s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7111      159 char/s  eta=   136s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7101      159 char/s  eta=   128s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7096      159 char/s  eta=   121s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7085      159 char/s  eta=   113s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7078      159 char/s  eta=   106s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7078      159 char/s  eta=    98s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7075      159 char/s  eta=    91s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7068      159 char/s  eta=    83s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7066      159 char/s  eta=    75s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7058      159 char/s  eta=    68s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7060      159 char/s  eta=    60s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7060      159 char/s  eta=    53s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7046      159 char/s  eta=    45s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7045      159 char/s  eta=    38s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7040      159 char/s  eta=    30s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7034      159 char/s  eta=    23s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7038      159 char/s  eta=    15s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7044      159 char/s  eta=     8s
+  eval     60,000/60,000 (100.0%)  acc=0.7057      159 char/s  eta=     0s
+chars=60,000  acc=0.7057  eval_duration=376.7s
+---
+submission         : chunker_phase1_v1
+training energy (J): 5,917.8
+training duration  : 98.9s
+val  char-accuracy : 0.7057
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/gabriel-nakajima-an/main/ap-cKJi20KhEnnNVSFIPgeSmH
+
+# final result
+{
+  "submission": "chunker_phase1_v1",
+  "training_energy_J": 5917.810853299999,
+  "training_duration_s": 98.94530293400001,
+  "val_char_accuracy": 0.7057333333333333,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-20T02:02:50Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 62.56199999999998,
+    "stress_watts_avg": 330.37581396177535,
+    "stress_energy_joules": 12495.641,
+    "stress_duration_s": 37.822505377,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@explore-chunker-2026-05-19"
+}
