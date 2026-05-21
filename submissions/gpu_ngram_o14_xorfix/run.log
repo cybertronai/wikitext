@@ -1,7 +1,7 @@
-# wikitext submit.py log — gpu_ngram_o14_xorfix — 2026-05-20T07:08:39+00:00Z
+# wikitext submit.py log — gpu_ngram_o14_xorfix — 2026-05-21T05:03:02+00:00Z
 [modal] launching A100-80GB ...
 ✓ Initialized. View run at 
-https://modal.com/apps/gabriel-nakajima-an/main/ap-i8ghm6z5tQ198XlJNnHqte
+https://modal.com/apps/gabriel-nakajima-an/main/ap-Hgn8xfV74JBawHiLMba2fr
 ✓ Created objects.
 ├── 🔨 Created mount /Users/naka/src/sutro/wikitext/submit.py
 ├── 🔨 Created mount /Users/naka/src/sutro/wikitext/task.py
@@ -12,14 +12,14 @@ https://modal.com/apps/gabriel-nakajima-an/main/ap-i8ghm6z5tQ198XlJNnHqte
 [modal] verifying NVML energy counter ...
 GPU: NVIDIA A100 80GB PCIe
 sampling idle power for 3s ...
-  idle: 53.0 W
+  idle: 55.7 W
 running 30s stress workload ...
-  duration:       38.0 s
-  energy delta:   8,477.8 J
-  avg power:      222.9 W
+  duration:       36.6 s
+  energy delta:   8,655.8 J
+  avg power:      236.7 W
   monotonic:      True
 ---
-{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 53.04595000000001, "stress_watts_avg": 222.8521356537582, "stress_energy_joules": 8477.795, "stress_duration_s": 38.042242562000006, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 55.68680000000003, "stress_watts_avg": 236.68642874335322, "stress_energy_joules": 8655.791, "stress_duration_s": 36.570711071, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
 [modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
 loading WikiText-103 from /data ...
   train chars: 540,095,682
@@ -27,112 +27,110 @@ loading WikiText-103 from /data ...
 train wall-clock cap: 300 s
 val accuracy floor : 0.7000
 training submission /workspace/gpu_ngram_o14_xorfix.py ...
-[codecarbon WARNING @ 07:09:50] Multiple instances of codecarbon are allowed to run at the same time.
+[codecarbon WARNING @ 05:03:58] Multiple instances of codecarbon are allowed to run at the same time.
 [gpu_ngram_o14_xorfix] starting build; max_order=14 D=0.5
-[gpu_ngram_o14_xorfix] encoded train: 541,096,898 bytes (0.4s)
-[gpu_ngram_o14_xorfix] top order=14 unique pairs: 238,387,519  3.5s
-[gpu_ngram_o14_xorfix] ctx_len=13 ctxs=198,300,622 rows=238,387,519  26.6s
-[gpu_ngram_o14_xorfix] ctx_len=12 ctxs=157,942,721 rows=198,300,621  20.2s
-[gpu_ngram_o14_xorfix] ctx_len=11 ctxs=119,285,711 rows=157,942,720  18.2s
-[gpu_ngram_o14_xorfix] ctx_len=10 ctxs=84,282,363 rows=119,285,710  11.0s
-[gpu_ngram_o14_xorfix] ctx_len=9 ctxs=54,720,376 rows=84,282,363  7.3s
-[gpu_ngram_o14_xorfix] ctx_len=8 ctxs=31,924,091 rows=54,720,376  4.5s
-[gpu_ngram_o14_xorfix] ctx_len=7 ctxs=16,284,921 rows=31,924,091  3.0s
-[gpu_ngram_o14_xorfix] ctx_len=6 ctxs=7,016,442 rows=16,284,921  1.4s
+[gpu_ngram_o14_xorfix] encoded train: 541,096,898 bytes (0.3s)
+[gpu_ngram_o14_xorfix] top order=14 unique pairs: 238,387,519  3.3s
+[gpu_ngram_o14_xorfix] ctx_len=13 ctxs=198,300,622 rows=238,387,519  32.0s
+[gpu_ngram_o14_xorfix] ctx_len=12 ctxs=157,942,721 rows=198,300,621  24.4s
+[gpu_ngram_o14_xorfix] ctx_len=11 ctxs=119,285,711 rows=157,942,720  18.0s
+[gpu_ngram_o14_xorfix] ctx_len=10 ctxs=84,282,363 rows=119,285,710  12.6s
+[gpu_ngram_o14_xorfix] ctx_len=9 ctxs=54,720,376 rows=84,282,363  8.4s
+[gpu_ngram_o14_xorfix] ctx_len=8 ctxs=31,924,091 rows=54,720,376  4.9s
+[gpu_ngram_o14_xorfix] ctx_len=7 ctxs=16,284,921 rows=31,924,091  2.6s
+[gpu_ngram_o14_xorfix] ctx_len=6 ctxs=7,016,442 rows=16,284,921  1.2s
 [gpu_ngram_o14_xorfix] ctx_len=5 ctxs=2,438,281 rows=7,016,442  0.5s
 [gpu_ngram_o14_xorfix] ctx_len=4 ctxs=637,143 rows=2,438,281  0.1s
 [gpu_ngram_o14_xorfix] ctx_len=3 ctxs=122,882 rows=637,143  0.0s
 [gpu_ngram_o14_xorfix] ctx_len=2 ctxs=12,282 rows=122,882  0.0s
 [gpu_ngram_o14_xorfix] ctx_len=1 ctxs=204 rows=12,282  0.0s
 [gpu_ngram_o14_xorfix] ctx_len=0 ctxs=1 rows=204  0.0s
-[gpu_ngram_o14_xorfix] total build: 96.9s
-training: 3,441.0 J   duration=97.6s
+[gpu_ngram_o14_xorfix] total build: 108.4s
+training: 3,981.1 J   duration=109.1s
 evaluating on val split ...
-  eval      1,200/60,000 (  2.0%)  acc=0.7058     3412 char/s  eta=    17s
-  eval      2,400/60,000 (  4.0%)  acc=0.6846     3685 char/s  eta=    16s
-  eval      3,600/60,000 (  6.0%)  acc=0.6842     3807 char/s  eta=    15s
-  eval      4,800/60,000 (  8.0%)  acc=0.6973     3873 char/s  eta=    14s
-  eval      6,000/60,000 ( 10.0%)  acc=0.6990     3943 char/s  eta=    14s
-  eval      7,200/60,000 ( 12.0%)  acc=0.6917     3994 char/s  eta=    13s
-  eval      8,400/60,000 ( 14.0%)  acc=0.6920     4064 char/s  eta=    13s
-  eval      9,600/60,000 ( 16.0%)  acc=0.6997     4071 char/s  eta=    12s
-  eval     10,800/60,000 ( 18.0%)  acc=0.7088     4079 char/s  eta=    12s
-  eval     12,000/60,000 ( 20.0%)  acc=0.7113     4086 char/s  eta=    12s
-  eval     13,200/60,000 ( 22.0%)  acc=0.7142     4117 char/s  eta=    11s
-  eval     14,400/60,000 ( 24.0%)  acc=0.7164     4122 char/s  eta=    11s
-  eval     15,600/60,000 ( 26.0%)  acc=0.7179     4123 char/s  eta=    11s
-  eval     16,800/60,000 ( 28.0%)  acc=0.7220     4127 char/s  eta=    10s
-  eval     18,000/60,000 ( 30.0%)  acc=0.7261     4122 char/s  eta=    10s
-  eval     19,200/60,000 ( 32.0%)  acc=0.7314     4118 char/s  eta=    10s
-  eval     20,400/60,000 ( 34.0%)  acc=0.7333     4119 char/s  eta=    10s
-  eval     21,600/60,000 ( 36.0%)  acc=0.7343     4122 char/s  eta=     9s
-  eval     22,800/60,000 ( 38.0%)  acc=0.7341     4135 char/s  eta=     9s
-  eval     24,000/60,000 ( 40.0%)  acc=0.7338     4136 char/s  eta=     9s
-  eval     25,200/60,000 ( 42.0%)  acc=0.7341     4138 char/s  eta=     8s
-  eval     26,400/60,000 ( 44.0%)  acc=0.7352     4139 char/s  eta=     8s
-  eval     27,600/60,000 ( 46.0%)  acc=0.7333     4141 char/s  eta=     8s
-  eval     28,800/60,000 ( 48.0%)  acc=0.7338     4145 char/s  eta=     8s
-  eval     30,000/60,000 ( 50.0%)  acc=0.7327     4155 char/s  eta=     7s
-  eval     31,200/60,000 ( 52.0%)  acc=0.7294     4162 char/s  eta=     7s
-  eval     32,400/60,000 ( 54.0%)  acc=0.7267     4183 char/s  eta=     7s
-  eval     33,600/60,000 ( 56.0%)  acc=0.7242     4186 char/s  eta=     6s
-  eval     34,800/60,000 ( 58.0%)  acc=0.7250     4186 char/s  eta=     6s
-  eval     36,000/60,000 ( 60.0%)  acc=0.7259     4185 char/s  eta=     6s
-  eval     37,200/60,000 ( 62.0%)  acc=0.7258     4185 char/s  eta=     5s
-  eval     38,400/60,000 ( 64.0%)  acc=0.7253     4198 char/s  eta=     5s
-  eval     39,600/60,000 ( 66.0%)  acc=0.7237     4199 char/s  eta=     5s
-  eval     40,800/60,000 ( 68.0%)  acc=0.7231     4197 char/s  eta=     5s
-  eval     42,000/60,000 ( 70.0%)  acc=0.7220     4197 char/s  eta=     4s
-  eval     43,200/60,000 ( 72.0%)  acc=0.7212     4197 char/s  eta=     4s
-  eval     44,400/60,000 ( 74.0%)  acc=0.7211     4209 char/s  eta=     4s
-  eval     45,600/60,000 ( 76.0%)  acc=0.7207     4206 char/s  eta=     3s
-  eval     46,800/60,000 ( 78.0%)  acc=0.7200     4203 char/s  eta=     3s
-  eval     48,000/60,000 ( 80.0%)  acc=0.7195     4200 char/s  eta=     3s
-  eval     49,200/60,000 ( 82.0%)  acc=0.7187     4199 char/s  eta=     3s
-  eval     50,400/60,000 ( 84.0%)  acc=0.7190     4198 char/s  eta=     2s
-  eval     51,600/60,000 ( 86.0%)  acc=0.7192     4198 char/s  eta=     2s
-  eval     52,800/60,000 ( 88.0%)  acc=0.7179     4206 char/s  eta=     2s
-  eval     54,000/60,000 ( 90.0%)  acc=0.7177     4206 char/s  eta=     1s
-  eval     55,200/60,000 ( 92.0%)  acc=0.7168     4207 char/s  eta=     1s
-  eval     56,400/60,000 ( 94.0%)  acc=0.7157     4208 char/s  eta=     1s
-  eval     57,600/60,000 ( 96.0%)  acc=0.7160     4217 char/s  eta=     1s
-  eval     58,800/60,000 ( 98.0%)  acc=0.7166     4215 char/s  eta=     0s
-  eval     60,000/60,000 (100.0%)  acc=0.7184     4213 char/s  eta=     0s
-chars=60,000  acc=0.7184  eval_duration=14.2s
+  eval      1,200/60,000 (  2.0%)  acc=0.7058     4071 char/s  eta=    14s
+  eval      2,400/60,000 (  4.0%)  acc=0.6846     4390 char/s  eta=    13s
+  eval      3,600/60,000 (  6.0%)  acc=0.6842     4530 char/s  eta=    12s
+  eval      4,800/60,000 (  8.0%)  acc=0.6973     4595 char/s  eta=    12s
+  eval      6,000/60,000 ( 10.0%)  acc=0.6990     4664 char/s  eta=    12s
+  eval      7,200/60,000 ( 12.0%)  acc=0.6917     4716 char/s  eta=    11s
+  eval      8,400/60,000 ( 14.0%)  acc=0.6920     4755 char/s  eta=    11s
+  eval      9,600/60,000 ( 16.0%)  acc=0.6997     4769 char/s  eta=    11s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7088     4778 char/s  eta=    10s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7113     4789 char/s  eta=    10s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7142     4795 char/s  eta=    10s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7164     4803 char/s  eta=     9s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7179     4807 char/s  eta=     9s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7220     4813 char/s  eta=     9s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7261     4815 char/s  eta=     9s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7314     4812 char/s  eta=     8s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7333     4815 char/s  eta=     8s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7343     4822 char/s  eta=     8s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7341     4824 char/s  eta=     8s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7338     4827 char/s  eta=     7s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7341     4826 char/s  eta=     7s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7352     4826 char/s  eta=     7s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7333     4830 char/s  eta=     7s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7338     4836 char/s  eta=     6s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7327     4841 char/s  eta=     6s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7294     4848 char/s  eta=     6s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7267     4856 char/s  eta=     6s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7242     4863 char/s  eta=     5s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7250     4864 char/s  eta=     5s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7259     4865 char/s  eta=     5s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7258     4864 char/s  eta=     5s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7253     4864 char/s  eta=     4s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7237     4868 char/s  eta=     4s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7231     4869 char/s  eta=     4s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7220     4870 char/s  eta=     4s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7212     4872 char/s  eta=     3s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7211     4870 char/s  eta=     3s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7207     4870 char/s  eta=     3s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7200     4868 char/s  eta=     3s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7195     4868 char/s  eta=     2s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7187     4868 char/s  eta=     2s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7190     4868 char/s  eta=     2s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7192     4868 char/s  eta=     2s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7179     4876 char/s  eta=     1s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7177     4876 char/s  eta=     1s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7168     4878 char/s  eta=     1s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7157     4880 char/s  eta=     1s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7160     4880 char/s  eta=     0s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7166     4879 char/s  eta=     0s
+  eval     60,000/60,000 (100.0%)  acc=0.7184     4879 char/s  eta=     0s
+chars=60,000  acc=0.7184  eval_duration=12.3s
 ---
 submission         : gpu_ngram_o14_xorfix
-training energy (J): 3,441.0
-training duration  : 97.6s
+training energy (J): 3,981.1
+training duration  : 109.1s
 val  char-accuracy : 0.7184
 val  chars         : 60,000
 wrote /tmp/result.json
 Stopping app - local entrypoint completed.
 ✓ App completed. View run at 
-https://modal.com/apps/gabriel-nakajima-an/main/ap-i8ghm6z5tQ198XlJNnHqte
+https://modal.com/apps/gabriel-nakajima-an/main/ap-Hgn8xfV74JBawHiLMba2fr
 
 # final result
 {
   "submission": "gpu_ngram_o14_xorfix",
-  "training_energy_J": 3441.0376875,
-  "training_duration_s": 97.64232625,
-  "cpu_energy_J": 4134.604408382503,
-  "total_energy_J": 7575.642095882503,
+  "training_energy_J": 3981.1039870000004,
+  "training_duration_s": 109.11744026,
+  "cpu_energy_J": 4621.207360232503,
+  "total_energy_J": 8602.311347232502,
   "val_char_accuracy": 0.7184166666666667,
   "val_chars": 60000,
   "gpu_name": "NVIDIA A100 80GB PCIe",
-  "date_utc": "2026-05-20T07:11:46Z",
+  "date_utc": "2026-05-21T05:06:04Z",
   "_nvml": {
     "nvml_available": true,
     "energy_counter_supported": true,
     "monotonic": true,
-    "idle_watts": 53.04595000000001,
-    "stress_watts_avg": 222.8521356537582,
-    "stress_energy_joules": 8477.795,
-    "stress_duration_s": 38.042242562000006,
+    "idle_watts": 55.68680000000003,
+    "stress_watts_avg": 236.68642874335322,
+    "stress_energy_joules": 8655.791,
+    "stress_duration_s": 36.570711071,
     "gpu_name": "NVIDIA A100 80GB PCIe",
     "notes": []
   },
   "contributor": "@subagent-xorfix-2026-05-19"
-}
-ix-2026-05-19"
 }

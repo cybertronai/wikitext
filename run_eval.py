@@ -128,6 +128,8 @@ def main() -> None:
                 "max_train_seconds": args.max_train_seconds,
                 "training_energy_J": m.energy_joules if m is not None else None,
                 "training_duration_s": m.duration_s if m is not None else None,
+                "cpu_energy_J": m.cpu_energy_J if m is not None else None,
+                "total_energy_J": m.total_energy_J if m is not None else None,
                 "gpu_name": _gpu_name(),
                 "date_utc": _utc_now(),
             }
@@ -165,6 +167,8 @@ def main() -> None:
                 "val_chars": val_result.n_chars,
                 "training_energy_J": m.energy_joules,
                 "training_duration_s": m.duration_s,
+                "cpu_energy_J": m.cpu_energy_J,
+                "total_energy_J": m.total_energy_J,
                 "gpu_name": _gpu_name(),
                 "date_utc": _utc_now(),
             }
@@ -187,6 +191,8 @@ def main() -> None:
             "submission": submission_name,
             "training_energy_J": m.energy_joules,
             "training_duration_s": m.duration_s,
+            "cpu_energy_J": m.cpu_energy_J,
+            "total_energy_J": m.total_energy_J,
             "val_char_accuracy": val_result.accuracy,
             "val_chars": val_result.n_chars,
             "gpu_name": _gpu_name(),

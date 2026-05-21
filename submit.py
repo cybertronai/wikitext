@@ -109,6 +109,12 @@ image = (
     # tables (used as a deterministic algorithm, not a "pretrained
     # weight" — see README "Internal representations").
     .pip_install("tiktoken==0.7.0")
+    # CodeCarbon: CPU energy estimation backend used by EnergyMeter to
+    # populate cpu_energy_J + total_energy_J in result.json. The TDP
+    # fallback path is used (no MSR access in Modal containers); accuracy
+    # is acceptable for total-system-energy reporting per the field
+    # standard (HuggingFace Trainer, Patterson et al. 2021/2022).
+    .pip_install("codecarbon~=3.2")
     # Modal re-imports submit.py inside the container to resolve the
     # remote function. submit.py does a top-level `import task`, so
     # /workspace (where task.py lands via add_local_file) must be on
@@ -317,10 +323,18 @@ def append_record(result: dict, dir_relpath: str) -> None:
     Replaces the placeholder dash row if present, otherwise appends.
     Disqualified rows render their accuracy cell as ``DQ`` so they
     don't pollute the leaderboard sort.
+
+    The energy column reports ``total_energy_J`` (GPU NVML + CodeCarbon
+    CPU estimate) when the new harness produced it, falling back to
+    ``training_energy_J`` (NVML-only) for runs predating the
+    total-system-energy change. See ``MAINTAINING.md`` for the dated
+    semantics of the column over time.
     """
     readme = HERE / "README.md"
     text = readme.read_text()
-    energy = result.get("training_energy_J")
+    energy = result.get("total_energy_J")
+    if energy is None:
+        energy = result.get("training_energy_J")
     energy_cell = f"{energy:>10,.0f}" if energy is not None else "         —"
     if result.get("disqualified"):
         acc_cell = "      DQ"

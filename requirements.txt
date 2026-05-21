@@ -7,3 +7,9 @@ modal>=0.66
 # Optional: tests run with stdlib if pytest is missing, but `pytest
 # test_wikitext.py` gives nicer output.
 pytest
+# CodeCarbon: CPU energy estimation backend for EnergyMeter's
+# total_energy_J field. EnergyMeter reads ``tracker._total_cpu_energy``
+# after stop, which is internal to CodeCarbon — pin a minor range to
+# keep that path stable. Required on the leaderboard (raises if NVML is
+# available and this isn't); optional on dev boxes without a GPU.
+codecarbon~=3.2

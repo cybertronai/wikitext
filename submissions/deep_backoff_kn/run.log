@@ -1,25 +1,25 @@
-# wikitext submit.py log — deep_backoff_kn — 2026-05-20T07:08:43+00:00Z
+# wikitext submit.py log — deep_backoff_kn — 2026-05-21T05:03:02+00:00Z
 [modal] launching A100-80GB ...
 ✓ Initialized. View run at 
-https://modal.com/apps/gabriel-nakajima-an/main/ap-45b2NtjIL0LErZ1xaqrUeX
+https://modal.com/apps/gabriel-nakajima-an/main/ap-1cZpQht7xa0YYz3oXegD83
 ✓ Created objects.
 ├── 🔨 Created mount /Users/naka/src/sutro/wikitext/submit.py
 ├── 🔨 Created mount /Users/naka/src/sutro/wikitext/task.py
-├── 🔨 Created mount /Users/naka/src/sutro/wikitext/run_eval.py
 ├── 🔨 Created mount /Users/naka/src/sutro/wikitext/verify_nvml.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/run_eval.py
 ├── 🔨 Created mount /Users/naka/src/sutro/wikitext/wikitext.py
 └── 🔨 Created function run_submission.
 [modal] verifying NVML energy counter ...
-GPU: NVIDIA A100-SXM4-80GB
+GPU: NVIDIA A100 80GB PCIe
 sampling idle power for 3s ...
-  idle: 63.1 W
+  idle: 52.3 W
 running 30s stress workload ...
-  duration:       36.8 s
-  energy delta:   12,477.2 J
-  avg power:      339.3 W
+  duration:       37.4 s
+  energy delta:   8,643.3 J
+  avg power:      231.1 W
   monotonic:      True
 ---
-{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 63.14000000000002, "stress_watts_avg": 339.34362349669493, "stress_energy_joules": 12477.219, "stress_duration_s": 36.768685592, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 52.31990000000003, "stress_watts_avg": 231.05724561444927, "stress_energy_joules": 8643.325, "stress_duration_s": 37.407721091, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
 [modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
 loading WikiText-103 from /data ...
   train chars: 540,095,682
@@ -27,129 +27,109 @@ loading WikiText-103 from /data ...
 train wall-clock cap: 300 s
 val accuracy floor : 0.7000
 training submission /workspace/deep_backoff_kn.py ...
-[codecarbon WARNING @ 07:10:00] Multiple instances of codecarbon are allowed to run at the same time.
+[codecarbon WARNING @ 05:03:59] Multiple instances of codecarbon are allowed to run at the same time.
 [deep-backoff-kn] starting build; max_ctx_len=13 D=0.5
-[deep-backoff-kn] encoded train: 541,096,898 bytes (0.7s)[[deep-backoff-kn] np.unique k=14: 238,387,519 pairs  113.0s (n_workers=auto)
-[deep-backoff-kn] order=14 ctx_len=13 ctxs=198,300,622  rows=238,387,519    18.2s
-[deep-backoff-kn] order=13 ctx_len=12 ctxs=157,942,721  rows=198,300,621   6045.7 MB    49.7s
-[deep-backoff-kn] order=12 ctx_len=11 ctxs=119,285,711  rows=157,942,720   4487.6 MB    39.6s
-[deep-backoff-kn] order=11 ctx_len=10 ctxs= 84,282,363  rows=119,285,710   3124.9 MB    29.6s
-[deep-backoff-kn] order=10 ctx_len= 9 ctxs= 54,720,376  rows= 84,282,363   2008.3 MB    21.5s
-[deep-backoff-kn] order= 9 ctx_len= 8 ctxs= 31,924,091  rows= 54,720,376   1167.5 MB    14.5s
-[deep-backoff-kn] order= 8 ctx_len= 7 ctxs= 16,284,921  rows= 31,924,091    599.3 MB     9.0s
----
-DISQUALIFIED: training wall-clock budget exceeded (300.0 s)
-submission         : deep_backoff_kn
-training duration  : 300.1s
-training energy (J): 4,789.4  (at kill)
-wrote /tmp/result.json
-Stopping app - local entrypoint completed.
-✓ App completed. View run at 
-https://modal.com/apps/gabriel-nakajima-an/main/ap-45b2NtjIL0LErZ1xaqrUeX
-
-# final result
-{
-  "submission": "deep_backoff_kn",
-  "disqualified": true,
-  "reason": "train_time_exceeded",
-  "max_train_seconds": 300.0,
-  "training_energy_J": 4789.383014900002,
-  "training_duration_s": 300.091439702,
-  "cpu_energy_J": 12692.014912755005,
-  "total_energy_J": 17481.39792765501,
-  "gpu_name": "NVIDIA A100-SXM4-80GB",
-  "date_utc": "2026-05-20T07:15:05Z",
-  "_nvml": {
-    "nvml_available": true,
-    "energy_counter_supported": true,
-    "monotonic": true,
-    "idle_watts": 63.14000000000002,
-    "stress_watts_avg": 339.34362349669493,
-    "stress_energy_joules": 12477.219,
-    "stress_duration_s": 36.768685592,
-    "gpu_name": "NVIDIA A100-SXM4-80GB",
-    "notes": []
-  },
-  "contributor": "@nakajimagabriel"
-}
-0.6973     4389 char/s  eta=    13s
-  eval      6,000/60,000 ( 10.0%)  acc=0.6990     4443 char/s  eta=    12s
-  eval      7,200/60,000 ( 12.0%)  acc=0.6917     4487 char/s  eta=    12s
-  eval      8,400/60,000 ( 14.0%)  acc=0.6920     4521 char/s  eta=    11s
-  eval      9,600/60,000 ( 16.0%)  acc=0.6997     4527 char/s  eta=    11s
-  eval     10,800/60,000 ( 18.0%)  acc=0.7088     4532 char/s  eta=    11s
-  eval     12,000/60,000 ( 20.0%)  acc=0.7113     4538 char/s  eta=    11s
-  eval     13,200/60,000 ( 22.0%)  acc=0.7142     4539 char/s  eta=    10s
-  eval     14,400/60,000 ( 24.0%)  acc=0.7164     4545 char/s  eta=    10s
-  eval     15,600/60,000 ( 26.0%)  acc=0.7179     4548 char/s  eta=    10s
-  eval     16,800/60,000 ( 28.0%)  acc=0.7220     4552 char/s  eta=     9s
-  eval     18,000/60,000 ( 30.0%)  acc=0.7261     4554 char/s  eta=     9s
-  eval     19,200/60,000 ( 32.0%)  acc=0.7314     4551 char/s  eta=     9s
-  eval     20,400/60,000 ( 34.0%)  acc=0.7333     4554 char/s  eta=     9s
-  eval     21,600/60,000 ( 36.0%)  acc=0.7343     4561 char/s  eta=     8s
-  eval     22,800/60,000 ( 38.0%)  acc=0.7341     4563 char/s  eta=     8s
-  eval     24,000/60,000 ( 40.0%)  acc=0.7338     4566 char/s  eta=     8s
-  eval     25,200/60,000 ( 42.0%)  acc=0.7341     4567 char/s  eta=     8s
-  eval     26,400/60,000 ( 44.0%)  acc=0.7352     4568 char/s  eta=     7s
-  eval     27,600/60,000 ( 46.0%)  acc=0.7333     4572 char/s  eta=     7s
-  eval     28,800/60,000 ( 48.0%)  acc=0.7338     4577 char/s  eta=     7s
-  eval     30,000/60,000 ( 50.0%)  acc=0.7327     4582 char/s  eta=     7s
-  eval     31,200/60,000 ( 52.0%)  acc=0.7294     4589 char/s  eta=     6s
-  eval     32,400/60,000 ( 54.0%)  acc=0.7267     4596 char/s  eta=     6s
-  eval     33,600/60,000 ( 56.0%)  acc=0.7242     4602 char/s  eta=     6s
-  eval     34,800/60,000 ( 58.0%)  acc=0.7250     4604 char/s  eta=     5s
-  eval     36,000/60,000 ( 60.0%)  acc=0.7259     4604 char/s  eta=     5s
-  eval     37,200/60,000 ( 62.0%)  acc=0.7258     4604 char/s  eta=     5s
-  eval     38,400/60,000 ( 64.0%)  acc=0.7253     4603 char/s  eta=     5s
-  eval     39,600/60,000 ( 66.0%)  acc=0.7237     4605 char/s  eta=     4s
-  eval     40,800/60,000 ( 68.0%)  acc=0.7231     4606 char/s  eta=     4s
-  eval     42,000/60,000 ( 70.0%)  acc=0.7220     4606 char/s  eta=     4s
-  eval     43,200/60,000 ( 72.0%)  acc=0.7212     4607 char/s  eta=     4s
-  eval     44,400/60,000 ( 74.0%)  acc=0.7211     4605 char/s  eta=     3s
-  eval     45,600/60,000 ( 76.0%)  acc=0.7207     4604 char/s  eta=     3s
-  eval     46,800/60,000 ( 78.0%)  acc=0.7200     4604 char/s  eta=     3s
-  eval     48,000/60,000 ( 80.0%)  acc=0.7195     4603 char/s  eta=     3s
-  eval     49,200/60,000 ( 82.0%)  acc=0.7187     4603 char/s  eta=     2s
-  eval     50,400/60,000 ( 84.0%)  acc=0.7190     4603 char/s  eta=     2s
-  eval     51,600/60,000 ( 86.0%)  acc=0.7192     4604 char/s  eta=     2s
-  eval     52,800/60,000 ( 88.0%)  acc=0.7179     4612 char/s  eta=     2s
-  eval     54,000/60,000 ( 90.0%)  acc=0.7177     4613 char/s  eta=     1s
-  eval     55,200/60,000 ( 92.0%)  acc=0.7168     4614 char/s  eta=     1s
-  eval     56,400/60,000 ( 94.0%)  acc=0.7157     4616 char/s  eta=     1s
-  eval     57,600/60,000 ( 96.0%)  acc=0.7160     4616 char/s  eta=     1s
-  eval     58,800/60,000 ( 98.0%)  acc=0.7166     4616 char/s  eta=     0s
-  eval     60,000/60,000 (100.0%)  acc=0.7184     4615 char/s  eta=     0s
-chars=60,000  acc=0.7184  eval_duration=13.0s
+[deep-backoff-kn] encoded train: 541,096,898 bytes (0.7s)
+[deep-backoff-kn] np.unique k=14: 238,387,519 pairs  132.2s (n_workers=auto)
+[deep-backoff-kn] order=14 ctx_len=13 ctxs=198,300,622  rows=238,387,519    13.7s
+[deep-backoff-kn] order=13 ctx_len=12 ctxs=157,942,721  rows=198,300,621   6045.7 MB    40.4s
+[deep-backoff-kn] order=12 ctx_len=11 ctxs=119,285,711  rows=157,942,720   4487.6 MB    32.6s
+[deep-backoff-kn] order=11 ctx_len=10 ctxs= 84,282,363  rows=119,285,710   3124.9 MB    25.4s
+[deep-backoff-kn] order=10 ctx_len= 9 ctxs= 54,720,376  rows= 84,282,363   2008.3 MB    18.6s
+[deep-backoff-kn] order= 9 ctx_len= 8 ctxs= 31,924,091  rows= 54,720,376   1167.5 MB    12.7s
+[deep-backoff-kn] order= 8 ctx_len= 7 ctxs= 16,284,921  rows= 31,924,091    599.3 MB     7.8s
+[deep-backoff-kn] order= 7 ctx_len= 6 ctxs=  7,016,442  rows= 16,284,921    263.9 MB     4.3s
+[deep-backoff-kn] order= 6 ctx_len= 5 ctxs=  2,438,281  rows=  7,016,442     96.0 MB     2.1s
+[deep-backoff-kn] order= 5 ctx_len= 4 ctxs=    637,143  rows=  2,438,281     27.5 MB     0.8s
+[deep-backoff-kn] order= 4 ctx_len= 3 ctxs=    122,882  rows=    637,143      6.0 MB     0.3s
+[deep-backoff-kn] order= 3 ctx_len= 2 ctxs=     12,282  rows=    122,882      0.9 MB     0.1s
+[deep-backoff-kn] order= 2 ctx_len= 1 ctxs=        204  rows=     12,282      0.1 MB     0.0s
+[deep-backoff-kn] order= 1 ctx_len= 0 ctxs=          1  rows=        204      0.0 MB     0.0s
+[deep-backoff-kn] continuation base: entropy=5.083 nats
+[deep-backoff-kn] total build: 291.6s
+training: 962.9 J   duration=291.6s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7058     3616 char/s  eta=    16s
+  eval      2,400/60,000 (  4.0%)  acc=0.6846     3861 char/s  eta=    15s
+  eval      3,600/60,000 (  6.0%)  acc=0.6842     3973 char/s  eta=    14s
+  eval      4,800/60,000 (  8.0%)  acc=0.6973     4017 char/s  eta=    14s
+  eval      6,000/60,000 ( 10.0%)  acc=0.6990     4069 char/s  eta=    13s
+  eval      7,200/60,000 ( 12.0%)  acc=0.6917     4142 char/s  eta=    13s
+  eval      8,400/60,000 ( 14.0%)  acc=0.6920     4201 char/s  eta=    12s
+  eval      9,600/60,000 ( 16.0%)  acc=0.6997     4215 char/s  eta=    12s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7088     4255 char/s  eta=    12s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7113     4251 char/s  eta=    11s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7142     4248 char/s  eta=    11s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7164     4260 char/s  eta=    11s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7179     4288 char/s  eta=    10s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7220     4297 char/s  eta=    10s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7261     4304 char/s  eta=    10s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7314     4304 char/s  eta=     9s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7333     4311 char/s  eta=     9s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7343     4318 char/s  eta=     9s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7341     4319 char/s  eta=     9s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7338     4321 char/s  eta=     8s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7341     4327 char/s  eta=     8s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7352     4341 char/s  eta=     8s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7333     4360 char/s  eta=     7s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7338     4364 char/s  eta=     7s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7327     4365 char/s  eta=     7s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7294     4370 char/s  eta=     7s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7267     4374 char/s  eta=     6s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7242     4382 char/s  eta=     6s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7250     4386 char/s  eta=     6s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7259     4388 char/s  eta=     5s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7258     4393 char/s  eta=     5s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7253     4396 char/s  eta=     5s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7237     4394 char/s  eta=     5s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7231     4395 char/s  eta=     4s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7220     4395 char/s  eta=     4s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7212     4398 char/s  eta=     4s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7211     4398 char/s  eta=     4s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7207     4400 char/s  eta=     3s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7200     4397 char/s  eta=     3s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7195     4392 char/s  eta=     3s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7187     4392 char/s  eta=     2s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7190     4392 char/s  eta=     2s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7192     4391 char/s  eta=     2s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7179     4401 char/s  eta=     2s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7177     4405 char/s  eta=     1s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7168     4411 char/s  eta=     1s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7157     4411 char/s  eta=     1s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7160     4407 char/s  eta=     1s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7166     4403 char/s  eta=     0s
+  eval     60,000/60,000 (100.0%)  acc=0.7184     4405 char/s  eta=     0s
+chars=60,000  acc=0.7184  eval_duration=13.6s
 ---
 submission         : deep_backoff_kn
-training energy (J): 2,172.0
-training duration  : 245.5s
+training energy (J): 962.9
+training duration  : 291.6s
 val  char-accuracy : 0.7184
 val  chars         : 60,000
 wrote /tmp/result.json
-Stopping app - local entrypoint completed.
+Stopping app - local client disconnected. Use `modal run --detach` to keep apps running even if your local client disconnects.
 ✓ App completed. View run at 
-https://modal.com/apps/gabriel-nakajima-an/main/ap-wEz27zjOURQzDmbGKNMPqb
+https://modal.com/apps/gabriel-nakajima-an/main/ap-1cZpQht7xa0YYz3oXegD83
 
 # final result
 {
   "submission": "deep_backoff_kn",
-  "training_energy_J": 2172.0416936,
-  "training_duration_s": 245.475966128,
-  "cpu_energy_J": 10385.495287457501,
-  "total_energy_J": 12557.536981057501,
+  "training_energy_J": 962.9188647999999,
+  "training_duration_s": 291.568102704,
+  "cpu_energy_J": 12338.053218035013,
+  "total_energy_J": 14578.4051352,
   "val_char_accuracy": 0.7184166666666667,
   "val_chars": 60000,
   "gpu_name": "NVIDIA A100 80GB PCIe",
-  "date_utc": "2026-05-20T07:13:17Z",
+  "date_utc": "2026-05-21T05:09:09Z",
   "_nvml": {
     "nvml_available": true,
     "energy_counter_supported": true,
     "monotonic": true,
-    "idle_watts": 57.467733333333335,
-    "stress_watts_avg": 236.89272714598408,
-    "stress_energy_joules": 8693.929,
-    "stress_duration_s": 36.699856111,
+    "idle_watts": 52.31990000000003,
+    "stress_watts_avg": 231.05724561444927,
+    "stress_energy_joules": 8643.325,
+    "stress_duration_s": 37.407721091,
     "gpu_name": "NVIDIA A100 80GB PCIe",
     "notes": []
   },
