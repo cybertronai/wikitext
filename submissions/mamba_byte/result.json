@@ -1,0 +1,22 @@
+{
+  "submission": "mamba_byte",
+  "disqualified": true,
+  "reason": "train_time_exceeded",
+  "max_train_seconds": 300.0,
+  "training_energy_J": 60863.8399607,
+  "training_duration_s": 300.111980786,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-19T20:41:41Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 56.42538333333334,
+    "stress_watts_avg": 232.58596626932598,
+    "stress_energy_joules": 8748.293,
+    "stress_duration_s": 37.613159299,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@claude-mamba"
+}

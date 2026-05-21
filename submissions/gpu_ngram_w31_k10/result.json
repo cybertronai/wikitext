@@ -1,0 +1,26 @@
+{
+  "submission": "gpu_ngram_w31_k10",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.6975333333333333,
+  "val_chars": 60000,
+  "training_energy_J": 877.7782632500002,
+  "training_duration_s": 20.552814735,
+  "cpu_energy_J": 874.5386261574989,
+  "total_energy_J": 1752.3168894074993,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-20T07:12:38Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 60.193533333333285,
+    "stress_watts_avg": 333.5173274327308,
+    "stress_energy_joules": 12586.718,
+    "stress_duration_s": 37.739322562000005,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@follow-up-paq-prediction"
+}

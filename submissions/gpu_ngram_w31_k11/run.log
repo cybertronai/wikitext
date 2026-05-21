@@ -1,0 +1,289 @@
+# wikitext submit.py log — gpu_ngram_w31_k11 — 2026-05-20T07:05:37+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/gabriel-nakajima-an/main/ap-Xr2U1qCw3wvtCqAVizWeyd
+Building image im-HqRgnUnflxE8oQRhywMp4D
+
+=> Step 0: FROM base
+
+=> Step 1: RUN python -m pip install codecarbon
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+Collecting codecarbon
+  Downloading http://pypi-mirror.modal.local:5555/simple/codecarbon/codecarbon-3.2.7-py3-none-any.whl.metadata (9.7 kB)
+Collecting arrow (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/arrow/arrow-1.4.0-py3-none-any.whl.metadata (7.7 kB)
+Collecting authlib>=1.2.1 (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/authlib/authlib-1.7.2-py2.py3-none-any.whl.metadata (10 kB)
+Collecting click (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/click/click-8.4.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting pandas (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pandas/pandas-3.0.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (79 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 79.5/79.5 kB 240.5 MB/s eta 0:00:00
+Collecting prometheus_client (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/prometheus-client/prometheus_client-0.25.0-py3-none-any.whl.metadata (2.1 kB)
+Collecting psutil>=6.0.0 (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/psutil/psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Collecting py-cpuinfo (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/py-cpuinfo/py_cpuinfo-9.0.0-py3-none-any.whl.metadata (794 bytes)
+Collecting pydantic (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pydantic/pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 109.4/109.4 kB 233.4 MB/s eta 0:00:00
+Requirement already satisfied: nvidia-ml-py in /usr/local/lib/python3.11/site-packages (from codecarbon) (12.560.30)
+Collecting rapidfuzz (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/rapidfuzz/rapidfuzz-3.14.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (12 kB)
+Requirement already satisfied: requests in /usr/local/lib/python3.11/site-packages (from codecarbon) (2.34.2)
+Collecting questionary (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/questionary/questionary-2.1.1-py3-none-any.whl.metadata (5.4 kB)
+Collecting rich (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/rich/rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting typer (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/typer/typer-0.25.1-py3-none-any.whl.metadata (15 kB)
+Collecting pycountry (from codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pycountry/pycountry-26.2.16-py3-none-any.whl.metadata (12 kB)
+Collecting cryptography (from authlib>=1.2.1->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/cryptography/cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+Collecting joserfc>=1.6.0 (from authlib>=1.2.1->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/joserfc/joserfc-1.6.5-py3-none-any.whl.metadata (3.2 kB)
+Collecting python-dateutil>=2.7.0 (from arrow->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/python-dateutil/python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting tzdata (from arrow->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/tzdata/tzdata-2026.2-py2.py3-none-any.whl.metadata (1.4 kB)
+Requirement already satisfied: numpy>=1.26.0 in /usr/local/lib/python3.11/site-packages (from pandas->codecarbon) (2.1.3)
+Collecting annotated-types>=0.6.0 (from pydantic->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/annotated-types/annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.4 (from pydantic->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pydantic-core/pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Requirement already satisfied: typing-extensions>=4.14.1 in /usr/local/lib/python3.11/site-packages (from pydantic->codecarbon) (4.15.0)
+Collecting typing-inspection>=0.4.2 (from pydantic->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/typing-inspection/typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+Collecting prompt_toolkit<4.0,>=2.0 (from questionary->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/prompt-toolkit/prompt_toolkit-3.0.52-py3-none-any.whl.metadata (6.4 kB)
+Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.11/site-packages (from requests->codecarbon) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/site-packages (from requests->codecarbon) (3.15)
+Requirement already satisfied: urllib3<3,>=1.26 in /usr/local/lib/python3.11/site-packages (from requests->codecarbon) (2.7.0)
+Requirement already satisfied: certifi>=2023.5.7 in /usr/local/lib/python3.11/site-packages (from requests->codecarbon) (2026.4.22)
+Collecting markdown-it-py>=2.2.0 (from rich->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/markdown-it-py/markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pygments/pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting shellingham>=1.3.0 (from typer->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/shellingham/shellingham-1.5.4-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting annotated-doc>=0.0.2 (from typer->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/annotated-doc/annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+Collecting cffi>=2.0.0 (from cryptography->authlib>=1.2.1->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/cffi/cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/mdurl/mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting wcwidth (from prompt_toolkit<4.0,>=2.0->questionary->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/wcwidth/wcwidth-0.7.0-py3-none-any.whl.metadata (36 kB)
+Collecting six>=1.5 (from python-dateutil>=2.7.0->arrow->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/six/six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography->authlib>=1.2.1->codecarbon)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pycparser/pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/codecarbon/codecarbon-3.2.7-py3-none-any.whl (380 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 380.5/380.5 kB 109.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/authlib/authlib-1.7.2-py2.py3-none-any.whl (259 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 259.5/259.5 kB 276.8 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/psutil/psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 155.6/155.6 kB 266.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/arrow/arrow-1.4.0-py3-none-any.whl (68 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 68.8/68.8 kB 235.6 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/click/click-8.4.0-py3-none-any.whl (116 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 116.1/116.1 kB 77.3 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pandas/pandas-3.0.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (11.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.3/11.3 MB 259.3 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/prometheus-client/prometheus_client-0.25.0-py3-none-any.whl (64 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 64.2/64.2 kB 237.0 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/py-cpuinfo/py_cpuinfo-9.0.0-py3-none-any.whl (22 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/pycountry/pycountry-26.2.16-py3-none-any.whl (8.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.0/8.0 MB 251.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pydantic/pydantic-2.13.4-py3-none-any.whl (472 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 472.3/472.3 kB 283.6 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pydantic-core/pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 229.6 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/questionary/questionary-2.1.1-py3-none-any.whl (36 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/rapidfuzz/rapidfuzz-3.14.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (3.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 249.4 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/rich/rich-15.0.0-py3-none-any.whl (310 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 254.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/typer/typer-0.25.1-py3-none-any.whl (58 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.4/58.4 kB 235.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/annotated-doc/annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/annotated-types/annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/joserfc/joserfc-1.6.5-py3-none-any.whl (70 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 70.5/70.5 kB 242.0 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/cryptography/cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl (4.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 234.6 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/markdown-it-py/markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.7/91.7 kB 260.7 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/prompt-toolkit/prompt_toolkit-3.0.52-py3-none-any.whl (391 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 391.4/391.4 kB 168.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pygments/pygments-2.20.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 259.4 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/python-dateutil/python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 229.9/229.9 kB 265.0 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/shellingham/shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/typing-inspection/typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/tzdata/tzdata-2026.2-py2.py3-none-any.whl (349 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 349.3/349.3 kB 256.1 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/cffi/cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (215 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 215.6/215.6 kB 271.1 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/mdurl/mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/six/six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/wcwidth/wcwidth-0.7.0-py3-none-any.whl (110 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 110.8/110.8 kB 252.0 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pycparser/pycparser-3.0-py3-none-any.whl (48 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 48.2/48.2 kB 235.8 MB/s eta 0:00:00
+Installing collected packages: py-cpuinfo, wcwidth, tzdata, typing-inspection, six, shellingham, rapidfuzz, pygments, pydantic-core, pycparser, pycountry, psutil, prometheus_client, mdurl, click, annotated-types, annotated-doc, python-dateutil, pydantic, prompt_toolkit, markdown-it-py, cffi, rich, questionary, pandas, cryptography, arrow, typer, joserfc, authlib, codecarbon
+Successfully installed annotated-doc-0.0.4 annotated-types-0.7.0 arrow-1.4.0 authlib-1.7.2 cffi-2.0.0 click-8.4.0 codecarbon-3.2.7 cryptography-48.0.0 joserfc-1.6.5 markdown-it-py-4.2.0 mdurl-0.1.2 pandas-3.0.3 prometheus_client-0.25.0 prompt_toolkit-3.0.52 psutil-7.2.2 py-cpuinfo-9.0.0 pycountry-26.2.16 pycparser-3.0 pydantic-2.13.4 pydantic-core-2.46.4 pygments-2.20.0 python-dateutil-2.9.0.post0 questionary-2.1.1 rapidfuzz-3.14.5 rich-15.0.0 shellingham-1.5.4 six-1.17.0 typer-0.25.1 typing-inspection-0.4.2 tzdata-2026.2 wcwidth-0.7.0
+
+[notice] A new release of pip is available: 24.0 -> 26.1.1
+[notice] To update, run: pip install --upgrade pip
+Saving image...
+Image saved, took 1.14s
+
+Built image im-HqRgnUnflxE8oQRhywMp4D in 14.22s
+
+
+Building image im-BnlecuknJA8QM6WpMCGVmT
+
+=> Step 0: FROM base
+
+=> Step 1: ENV PYTHONPATH=/workspace
+
+=> Step 2: ENV PYTHONUNBUFFERED=1
+Saving image...
+Image saved, took 602.25ms
+
+Built image im-BnlecuknJA8QM6WpMCGVmT in 3.23s
+
+
+✓ Created objects.
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/submit.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/task.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/verify_nvml.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/run_eval.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 52.7 W
+running 30s stress workload ...
+  duration:       36.7 s
+  energy delta:   8,335.0 J
+  avg power:      227.0 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 52.723183333333296, "stress_watts_avg": 226.95174796885868, "stress_energy_joules": 8335.027, "stress_duration_s": 36.72598724, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+training submission /workspace/gpu_ngram_w31_k11.py ...
+[codecarbon WARNING @ 07:06:46] Multiple instances of codecarbon are allowed to run at the same time.
+[gpu_ngram_w3] starting build; max_order=11 D=0.5
+[gpu_ngram_w3] encoded train: 541,096,898 bytes (0.4s)
+[gpu_ngram_w3] top order=11 unique pairs: 119,285,712  2.0s
+[gpu_ngram_w3] ctx_len=10 ctxs=84,282,364 rows=119,285,712  12.8s
+[gpu_ngram_w3] ctx_len=9 ctxs=54,720,376 rows=84,282,364  8.3s
+[gpu_ngram_w3] ctx_len=8 ctxs=31,924,091 rows=54,720,376  4.9s
+[gpu_ngram_w3] ctx_len=7 ctxs=16,284,921 rows=31,924,091  2.6s
+[gpu_ngram_w3] ctx_len=6 ctxs=7,016,442 rows=16,284,921  1.2s
+[gpu_ngram_w3] ctx_len=5 ctxs=2,438,281 rows=7,016,442  0.5s
+[gpu_ngram_w3] ctx_len=4 ctxs=637,143 rows=2,438,281  0.1s
+[gpu_ngram_w3] ctx_len=3 ctxs=122,882 rows=637,143  0.0s
+[gpu_ngram_w3] ctx_len=2 ctxs=12,282 rows=122,882  0.0s
+[gpu_ngram_w3] ctx_len=1 ctxs=204 rows=12,282  0.0s
+[gpu_ngram_w3] ctx_len=0 ctxs=1 rows=204  0.0s
+[gpu_ngram_w3] total build: 32.8s
+training: 1,332.8 J   duration=33.6s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.6967     5689 char/s  eta=    10s
+  eval      2,400/60,000 (  4.0%)  acc=0.6792     5867 char/s  eta=    10s
+  eval      3,600/60,000 (  6.0%)  acc=0.6767     5955 char/s  eta=     9s
+  eval      4,800/60,000 (  8.0%)  acc=0.6894     5997 char/s  eta=     9s
+  eval      6,000/60,000 ( 10.0%)  acc=0.6917     6031 char/s  eta=     9s
+  eval      7,200/60,000 ( 12.0%)  acc=0.6846     6057 char/s  eta=     9s
+  eval      8,400/60,000 ( 14.0%)  acc=0.6844     6077 char/s  eta=     8s
+  eval      9,600/60,000 ( 16.0%)  acc=0.6914     6081 char/s  eta=     8s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7002     6079 char/s  eta=     8s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7020     6085 char/s  eta=     8s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7056     6085 char/s  eta=     8s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7074     6091 char/s  eta=     7s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7091     6094 char/s  eta=     7s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7121     6099 char/s  eta=     7s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7139     6102 char/s  eta=     7s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7176     6101 char/s  eta=     7s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7186     6101 char/s  eta=     6s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7197     6105 char/s  eta=     6s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7198     6105 char/s  eta=     6s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7198     6108 char/s  eta=     6s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7202     6109 char/s  eta=     6s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7210     6111 char/s  eta=     5s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7189     6114 char/s  eta=     5s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7189     6120 char/s  eta=     5s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7174     6125 char/s  eta=     5s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7144     6131 char/s  eta=     5s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7120     6138 char/s  eta=     4s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7096     6144 char/s  eta=     4s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7098     6146 char/s  eta=     4s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7096     6146 char/s  eta=     4s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7095     6146 char/s  eta=     4s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7096     6145 char/s  eta=     4s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7086     6147 char/s  eta=     3s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7083     6148 char/s  eta=     3s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7075     6148 char/s  eta=     3s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7068     6148 char/s  eta=     3s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7067     6148 char/s  eta=     3s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7068     6148 char/s  eta=     2s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7061     6148 char/s  eta=     2s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7062     6148 char/s  eta=     2s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7055     6149 char/s  eta=     2s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7058     6149 char/s  eta=     2s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7058     6150 char/s  eta=     1s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7046     6157 char/s  eta=     1s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7045     6157 char/s  eta=     1s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7038     6159 char/s  eta=     1s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7029     6160 char/s  eta=     1s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7034     6160 char/s  eta=     0s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7040     6160 char/s  eta=     0s
+  eval     60,000/60,000 (100.0%)  acc=0.7050     6161 char/s  eta=     0s
+chars=60,000  acc=0.7050  eval_duration=9.7s
+---
+submission         : gpu_ngram_w31_k11
+training energy (J): 1,332.8
+training duration  : 33.6s
+val  char-accuracy : 0.7050
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/gabriel-nakajima-an/main/ap-Xr2U1qCw3wvtCqAVizWeyd
+
+# final result
+{
+  "submission": "gpu_ngram_w31_k11",
+  "training_energy_J": 1332.8045820499997,
+  "training_duration_s": 33.551668359000004,
+  "cpu_energy_J": 1420.9300898524978,
+  "total_energy_J": 2753.734671902497,
+  "val_char_accuracy": 0.7050333333333333,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-20T07:07:33Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 52.723183333333296,
+    "stress_watts_avg": 226.95174796885868,
+    "stress_energy_joules": 8335.027,
+    "stress_duration_s": 36.72598724,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@follow-up-paq-prediction"
+}

@@ -1,0 +1,162 @@
+# wikitext submit.py log — adamw_lr3e3_wd0_long — 2026-05-20T02:04:02+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/gabriel-nakajima-an/main/ap-G9JZQlg2dK5iSlucN0JF3i
+✓ Created objects.
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/submit.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/task.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/verify_nvml.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/run_eval.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 63.1 W
+running 30s stress workload ...
+  duration:       37.7 s
+  energy delta:   12,993.1 J
+  avg power:      344.7 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 63.13330000000001, "stress_watts_avg": 344.71718269021136, "stress_energy_joules": 12993.081, "stress_duration_s": 37.692002755999994, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+training submission /workspace/adamw_lr3e3_wd0_long.py ...
+[adamw_lr3e3_wd0_long] 3.29M params  cfg=TrainConfig(d=256 L=4 H=4 bs=32 T=1024 steps=4500 block_lr=0.003 block_wd=0.0)
+[adamw_lr3e3_wd0_long] step     0/4500  loss 5.5452  elapsed 1s
+[adamw_lr3e3_wd0_long] step   100/4500  loss 2.1667  elapsed 5s
+[adamw_lr3e3_wd0_long] step   200/4500  loss 1.7211  elapsed 9s
+[adamw_lr3e3_wd0_long] step   300/4500  loss 1.6016  elapsed 13s
+[adamw_lr3e3_wd0_long] step   400/4500  loss 1.4954  elapsed 17s
+[adamw_lr3e3_wd0_long] step   500/4500  loss 1.4415  elapsed 20s
+[adamw_lr3e3_wd0_long] step   600/4500  loss 1.3930  elapsed 24s
+[adamw_lr3e3_wd0_long] step   700/4500  loss 1.3842  elapsed 28s
+[adamw_lr3e3_wd0_long] step   800/4500  loss 1.3409  elapsed 32s
+[adamw_lr3e3_wd0_long] step   900/4500  loss 1.3247  elapsed 36s
+[adamw_lr3e3_wd0_long] step  1000/4500  loss 1.3256  elapsed 39s
+[adamw_lr3e3_wd0_long] step  1100/4500  loss 1.3331  elapsed 43s
+[adamw_lr3e3_wd0_long] step  1200/4500  loss 1.2844  elapsed 47s
+[adamw_lr3e3_wd0_long] step  1300/4500  loss 1.2643  elapsed 51s
+[adamw_lr3e3_wd0_long] step  1400/4500  loss 1.2819  elapsed 55s
+[adamw_lr3e3_wd0_long] step  1500/4500  loss 1.2800  elapsed 58s
+[adamw_lr3e3_wd0_long] step  1600/4500  loss 1.2657  elapsed 62s
+[adamw_lr3e3_wd0_long] step  1700/4500  loss 1.2552  elapsed 66s
+[adamw_lr3e3_wd0_long] step  1800/4500  loss 1.2547  elapsed 70s
+[adamw_lr3e3_wd0_long] step  1900/4500  loss 1.2072  elapsed 74s
+[adamw_lr3e3_wd0_long] step  2000/4500  loss 1.2176  elapsed 77s
+[adamw_lr3e3_wd0_long] step  2100/4500  loss 1.1683  elapsed 81s
+[adamw_lr3e3_wd0_long] step  2200/4500  loss 1.1695  elapsed 85s
+[adamw_lr3e3_wd0_long] step  2300/4500  loss 1.1712  elapsed 89s
+[adamw_lr3e3_wd0_long] step  2400/4500  loss 1.1232  elapsed 93s
+[adamw_lr3e3_wd0_long] step  2500/4500  loss 1.1243  elapsed 96s
+[adamw_lr3e3_wd0_long] step  2600/4500  loss 1.1192  elapsed 100s
+[adamw_lr3e3_wd0_long] step  2700/4500  loss 1.0885  elapsed 104s
+[adamw_lr3e3_wd0_long] step  2800/4500  loss 1.1291  elapsed 108s
+[adamw_lr3e3_wd0_long] step  2900/4500  loss 1.0769  elapsed 112s
+[adamw_lr3e3_wd0_long] step  3000/4500  loss 1.0903  elapsed 116s
+[adamw_lr3e3_wd0_long] step  3100/4500  loss 1.1007  elapsed 119s
+[adamw_lr3e3_wd0_long] step  3200/4500  loss 1.0943  elapsed 123s
+[adamw_lr3e3_wd0_long] step  3300/4500  loss 1.1056  elapsed 127s
+[adamw_lr3e3_wd0_long] step  3400/4500  loss 1.0664  elapsed 131s
+[adamw_lr3e3_wd0_long] step  3500/4500  loss 1.0961  elapsed 135s
+[adamw_lr3e3_wd0_long] step  3600/4500  loss 1.0368  elapsed 138s
+[adamw_lr3e3_wd0_long] step  3700/4500  loss 1.0694  elapsed 142s
+[adamw_lr3e3_wd0_long] step  3800/4500  loss 1.0834  elapsed 146s
+[adamw_lr3e3_wd0_long] step  3900/4500  loss 1.0864  elapsed 150s
+[adamw_lr3e3_wd0_long] step  4000/4500  loss 1.0988  elapsed 154s
+[adamw_lr3e3_wd0_long] step  4100/4500  loss 1.0613  elapsed 157s
+[adamw_lr3e3_wd0_long] step  4200/4500  loss 1.0746  elapsed 161s
+[adamw_lr3e3_wd0_long] step  4300/4500  loss 1.0500  elapsed 165s
+[adamw_lr3e3_wd0_long] step  4400/4500  loss 1.0580  elapsed 169s
+[adamw_lr3e3_wd0_long] step  4499/4500  loss 1.0513  elapsed 173s
+training: 41,070.8 J   duration=176.2s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7000      192 char/s  eta=   306s
+  eval      2,400/60,000 (  4.0%)  acc=0.6854      190 char/s  eta=   303s
+  eval      3,600/60,000 (  6.0%)  acc=0.6833      187 char/s  eta=   302s
+  eval      4,800/60,000 (  8.0%)  acc=0.6948      186 char/s  eta=   297s
+  eval      6,000/60,000 ( 10.0%)  acc=0.6863      184 char/s  eta=   293s
+  eval      7,200/60,000 ( 12.0%)  acc=0.6821      183 char/s  eta=   289s
+  eval      8,400/60,000 ( 14.0%)  acc=0.6811      182 char/s  eta=   283s
+  eval      9,600/60,000 ( 16.0%)  acc=0.6855      182 char/s  eta=   276s
+  eval     10,800/60,000 ( 18.0%)  acc=0.6869      182 char/s  eta=   270s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6891      182 char/s  eta=   264s
+  eval     13,200/60,000 ( 22.0%)  acc=0.6942      182 char/s  eta=   258s
+  eval     14,400/60,000 ( 24.0%)  acc=0.6958      182 char/s  eta=   251s
+  eval     15,600/60,000 ( 26.0%)  acc=0.6985      182 char/s  eta=   244s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7013      182 char/s  eta=   237s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6991      182 char/s  eta=   231s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7007      182 char/s  eta=   224s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7025      182 char/s  eta=   218s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7027      182 char/s  eta=   211s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7035      183 char/s  eta=   204s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7038      183 char/s  eta=   196s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7044      184 char/s  eta=   189s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7053      184 char/s  eta=   182s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7062      185 char/s  eta=   175s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7063      185 char/s  eta=   168s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7057      186 char/s  eta=   162s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7036      186 char/s  eta=   155s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7032      186 char/s  eta=   148s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7013      187 char/s  eta=   142s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7002      187 char/s  eta=   135s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6996      187 char/s  eta=   128s
+  eval     37,200/60,000 ( 62.0%)  acc=0.6998      187 char/s  eta=   122s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7000      187 char/s  eta=   115s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7003      187 char/s  eta=   109s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7000      187 char/s  eta=   103s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7000      187 char/s  eta=    96s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7006      186 char/s  eta=    90s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7006      186 char/s  eta=    84s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7008      186 char/s  eta=    77s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7007      186 char/s  eta=    71s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7014      186 char/s  eta=    65s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7020      186 char/s  eta=    58s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7033      186 char/s  eta=    52s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7036      186 char/s  eta=    45s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7042      185 char/s  eta=    39s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7046      185 char/s  eta=    32s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7041      185 char/s  eta=    26s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7047      186 char/s  eta=    19s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7054      186 char/s  eta=    13s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7060      186 char/s  eta=     6s
+  eval     60,000/60,000 (100.0%)  acc=0.7061      186 char/s  eta=     0s
+chars=60,000  acc=0.7061  eval_duration=322.6s
+---
+submission         : adamw_lr3e3_wd0_long
+training energy (J): 41,070.8
+training duration  : 176.2s
+val  char-accuracy : 0.7061
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/gabriel-nakajima-an/main/ap-G9JZQlg2dK5iSlucN0JF3i
+
+# final result
+{
+  "submission": "adamw_lr3e3_wd0_long",
+  "training_energy_J": 41070.772451799996,
+  "training_duration_s": 176.225450964,
+  "val_char_accuracy": 0.7060833333333333,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-20T02:13:13Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 63.13330000000001,
+    "stress_watts_avg": 344.71718269021136,
+    "stress_energy_joules": 12993.081,
+    "stress_duration_s": 37.692002755999994,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@explore-reopen-adamw"
+}
