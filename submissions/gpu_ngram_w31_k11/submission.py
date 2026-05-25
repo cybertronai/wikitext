@@ -27,7 +27,7 @@ Cap at order 12 (vs W3's 14) for build-time safety. Expected accuracy
 """
 from __future__ import annotations
 
-__author__ = "@follow-up-paq-prediction"
+__author__ = "@gabrielnan"
 
 import os
 import time

@@ -8,7 +8,7 @@ Architecture identical to alpha_065; only ALPHA changes (0.65 → 0.60).
 """
 from __future__ import annotations
 
-__author__ = "@subagent-xorfix-2026-05-19"
+__author__ = "@gabrielnan"
 
 import os
 import time

@@ -35,7 +35,7 @@ when low-order tables are well-smoothed).
 """
 from __future__ import annotations
 
-__author__ = "@worker-paq-mixer"
+__author__ = "@gabrielnan"
 
 import os
 import time

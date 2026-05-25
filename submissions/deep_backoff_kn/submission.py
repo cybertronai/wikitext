@@ -28,7 +28,7 @@ there. Until then, accepts the L2-spirit flag and runs the algorithm.
 """
 from __future__ import annotations
 
-__author__ = "@nakajimagabriel"
+__author__ = "@gabrielnan"
 
 import multiprocessing
 import os

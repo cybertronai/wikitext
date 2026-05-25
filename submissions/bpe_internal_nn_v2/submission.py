@@ -19,7 +19,7 @@ Expected: 15-25 kJ / 0.71-0.74 acc. First clean run of the BPE paradigm.
 """
 from __future__ import annotations
 
-__author__ = "@subagent-xorfix-2026-05-19"
+__author__ = "@gabrielnan"
 
 import concurrent.futures
 import os
