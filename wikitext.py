@@ -215,6 +215,20 @@ class EnergyMeter:
                 "pass an explicit cpu_backend if running a calibration "
                 "that intentionally skips CPU tracking."
             )
+        if (
+            self._gpu_backend.available
+            and getattr(self._cpu_backend, "is_generic_tdp", False)
+        ):
+            cpu_model = getattr(self._cpu_backend, "cpu_model", "?")
+            raise RuntimeError(
+                f"EnergyMeter: CodeCarbon did not recognise the host CPU "
+                f"({cpu_model!r}) — it would fall back to a generic 85 W "
+                f"TDP estimate, which can be 2-3x off for a real "
+                f"workstation/server CPU. Add the SKU to CodeCarbon's "
+                f"cpu_power.csv (or upgrade codecarbon), or pass an "
+                f"explicit cpu_backend if running a calibration that "
+                f"intentionally accepts the generic estimate."
+            )
         self.available = self._gpu_backend.available
 
     @contextmanager
@@ -290,6 +304,14 @@ class _CodeCarbonCpuBackend:
     fails loudly rather than silently dropping the CPU component. The
     silent path is only reached on dev boxes that also have no NVML.
 
+    ``cpu_model`` and ``is_generic_tdp`` expose CodeCarbon's CPU probe.
+    When ``is_generic_tdp`` is True, CodeCarbon couldn't match the host
+    CPU against its bundled ``cpu_power.csv`` and would fall back to a
+    generic 85 W default — a much worse estimate than a CSV-matched SKU.
+    ``EnergyMeter`` treats this as a leaderboard-class failure on real
+    GPU hosts (same path as a missing backend) so submissions never
+    land on the generic default by accident.
+
     Note: reads ``tracker._total_cpu_energy.kWh`` after stop. That
     attribute is internal to CodeCarbon; we pin a minor version range in
     ``requirements.txt`` (and the Modal image) to keep the path stable.
@@ -297,11 +319,21 @@ class _CodeCarbonCpuBackend:
 
     def __init__(self) -> None:
         self.available = False
+        self.cpu_model: str | None = None
+        self.is_generic_tdp = False
         self._tracker = None
         self._EmissionsTracker = None
         try:
             from codecarbon import EmissionsTracker
+            from codecarbon.core.cpu import TDP
             self._EmissionsTracker = EmissionsTracker
+            probe = TDP()
+            self.cpu_model = probe.model
+            # ``TDP()`` returns ``tdp = None`` when the host CPU is not
+            # in cpu_power.csv. The tracker then falls back to a generic
+            # 85 W default, which can be 2-3x off for a real workstation
+            # or server CPU.
+            self.is_generic_tdp = probe.tdp is None
             self.available = True
         except Exception:
             pass
