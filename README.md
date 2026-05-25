@@ -64,3 +64,24 @@ For an internal-BPE submission, `predict()` returns `P(next_char | observed_char
 
 [^1]: More energy efficient
 [^2]: As of writing this
+| 2026-05-25 |      2,565 |       DQ | rff_ridge_v1 | [dir](submissions/rff_ridge_v1) | @ab-10 |
+| 2026-05-25 |      2,522 |       DQ | poly_tensorsketch_ridge | [dir](submissions/poly_tensorsketch_ridge) | @ab-10 |
+| 2026-05-25 |        100 |       DQ | krr_ngram | [dir](submissions/krr_ngram) | @ab-10 |
+| 2026-05-25 |     61,868 |       DQ | rff_linear_head | [dir](submissions/rff_linear_head) | @ab-10 |
+| 2026-05-25 |     71,806 |       DQ | performer_favor | [dir](submissions/performer_favor) | @ab-10 |
+| 2026-05-25 |     32,396 |       DQ | nystrom_krr_hybrid | [dir](submissions/nystrom_krr_hybrid) | @ab-10 |
+| 2026-05-25 |      2,922 |       DQ | ctw_d24 | [dir](submissions/ctw_d24) | @worker-ctw |
+| 2026-05-25 |     40,158 | 0.7292 | hopfield_layer | [dir](submissions/hopfield_layer) | @ab-10 |
+| 2026-05-25 |     40,783 |       DQ | dfa_v1 | [dir](submissions/dfa_v1) | @armin-claude-1m |
+| 2026-05-25 |     70,742 |       DQ | performer_favor | [dir](submissions/performer_favor) | @ab-10 |
+| 2026-05-25 |        716 |       DQ | ctw_d24 | [dir](submissions/ctw_d24) | @worker-ctw |
+| 2026-05-25 |     36,465 |       DQ | hebbian_fw_block | [dir](submissions/hebbian_fw_block) | @ab-10 |
+| 2026-05-25 |     48,194 | 0.7293 | ff_pretrain_then_sgd | [dir](submissions/ff_pretrain_then_sgd) | @ab-10 |
+| 2026-05-25 |     48,908 | 0.7345 | rf_mlp_block2 | [dir](submissions/rf_mlp_block2) | @ab-10 |
+| 2026-05-25 |     40,898 | 0.7323 | hebbian_fw_block | [dir](submissions/hebbian_fw_block) | @ab-10 |
+| 2026-05-25 |     34,921 | 0.7306 | mha_alpha00 | [dir](submissions/mha_alpha00) | @ab-10 |
+| 2026-05-25 |     53,319 | 0.7299 | mha_alpha03 | [dir](submissions/mha_alpha03) | @ab-10 |
+| 2026-05-25 |     52,319 | 0.7189 | mha_alpha07 | [dir](submissions/mha_alpha07) | @ab-10 |
+| 2026-05-25 |     56,763 | 0.7270 | mha_alpha05 | [dir](submissions/mha_alpha05) | @ab-10 |
+| 2026-05-25 |     66,765 |       DQ | noprop_etf_v2 | [dir](submissions/noprop_etf_v2) | @ab-10 |
+| 2026-05-25 |     22,203 | 0.7010 | hebbian_fw_block_v2 | [dir](submissions/hebbian_fw_block_v2) | @ab-10 |
