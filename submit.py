@@ -320,7 +320,13 @@ def save_nvml_artifact(
 def append_record(result: dict, dir_relpath: str) -> None:
     """Append one row to the Record History table in README.md.
 
-    Replaces the placeholder dash row if present, otherwise appends.
+    Inserts the row at the end of the Record History markdown table
+    block (after the last data row, before the blank line that closes
+    the table). Earlier versions appended to the end of the file, which
+    landed rows past the footnotes and broke the table — this version
+    keeps them inside the table.
+
+    Replaces the placeholder dash row if present, otherwise inserts.
     Disqualified rows render their accuracy cell as ``DQ`` so they
     don't pollute the leaderboard sort.
 
@@ -351,10 +357,48 @@ def append_record(result: dict, dir_relpath: str) -> None:
     )
     placeholder = "| —    |          — |        — | —      | —          | —           |\n"
     if placeholder in text:
-        text = text.replace(placeholder, row, 1)
-    else:
-        text = text.rstrip() + "\n" + row
-    readme.write_text(text)
+        readme.write_text(text.replace(placeholder, row, 1))
+        return
+
+    new_text = _insert_into_record_history_table(text, row)
+    if new_text is None:
+        # Table not found — fall back to plain append. Better than crashing.
+        new_text = text.rstrip() + "\n" + row
+    readme.write_text(new_text)
+
+
+def _insert_into_record_history_table(text: str, row: str) -> str | None:
+    """Return ``text`` with ``row`` inserted at the end of the Record
+    History markdown table block. Returns ``None`` if no table was found.
+
+    The table is identified by a ``## Record History`` heading followed
+    by a markdown pipe-table header. The new row is inserted after the
+    last consecutive pipe-prefixed line of the table.
+    """
+    lines = text.splitlines(keepends=True)
+    in_record_history = False
+    in_table = False
+    last_pipe_line = -1
+    for i, line in enumerate(lines):
+        if line.lstrip().startswith("## Record History"):
+            in_record_history = True
+            continue
+        if not in_record_history:
+            continue
+        if not in_table:
+            if line.startswith("|") and "Energy" in line and "Val" in line:
+                in_table = True
+                last_pipe_line = i
+            continue
+        # In the table: every pipe-line counts as the running tail.
+        if line.startswith("|"):
+            last_pipe_line = i
+            continue
+        # First non-pipe line closes the table.
+        break
+    if last_pipe_line < 0:
+        return None
+    return "".join(lines[: last_pipe_line + 1] + [row] + lines[last_pipe_line + 1 :])
 
 
 class _Tee(io.TextIOBase):
