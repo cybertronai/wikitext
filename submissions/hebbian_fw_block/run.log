@@ -1,0 +1,143 @@
+# wikitext submit.py log — hebbian_fw_block — 2026-05-25T17:54:35+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-g5wsV0yABRRHzaGslBNCZb
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 53.2 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       36.5 s
+  energy delta:   8,474.8 J
+  avg power:      232.2 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 53.18066666666667, "stress_watts_avg": 232.17866929087708, "stress_energy_joules": 8474.78, "stress_duration_s": 36.501113672, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/hebbian_fw_block.py ...
+[hebbian_fw] 9.07M params  cfg=TrainConfig(d=384 L_std=4+1fw H=6 bs=32 T=1024 steps=2150 fw_chunk=64)
+[hebbian_fw] step     0/2150  loss 5.5452  elapsed 1s
+[hebbian_fw] step   100/2150  loss 1.6005  elapsed 10s
+[hebbian_fw] step   200/2150  loss 1.4493  elapsed 20s
+[hebbian_fw] step   300/2150  loss 1.3520  elapsed 29s
+[hebbian_fw] step   400/2150  loss 1.3269  elapsed 38s
+[hebbian_fw] step   500/2150  loss 1.2387  elapsed 48s
+[hebbian_fw] step   600/2150  loss 1.1673  elapsed 57s
+[hebbian_fw] step   700/2150  loss 1.1698  elapsed 66s
+[hebbian_fw] step   800/2150  loss 1.1302  elapsed 76s
+[hebbian_fw] step   900/2150  loss 1.1193  elapsed 85s
+[hebbian_fw] step  1000/2150  loss 1.1063  elapsed 94s
+[hebbian_fw] step  1100/2150  loss 1.0795  elapsed 104s
+[hebbian_fw] step  1200/2150  loss 1.0818  elapsed 113s
+[hebbian_fw] step  1300/2150  loss 1.0343  elapsed 122s
+[hebbian_fw] step  1400/2150  loss 1.0532  elapsed 132s
+[hebbian_fw] step  1500/2150  loss 1.0393  elapsed 141s
+[hebbian_fw] step  1600/2150  loss 1.0212  elapsed 151s
+[hebbian_fw] step  1700/2150  loss 1.0244  elapsed 160s
+[hebbian_fw] step  1800/2150  loss 0.9852  elapsed 169s
+[hebbian_fw] step  1900/2150  loss 0.9909  elapsed 179s
+[hebbian_fw] step  2000/2150  loss 1.0116  elapsed 188s
+[hebbian_fw] step  2100/2150  loss 0.9881  elapsed 197s
+[hebbian_fw] step  2149/2150  loss 0.9869  elapsed 202s
+training: 40,898.4 J   duration=204.4s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7233      182 char/s  eta=   323s
+  eval      2,400/60,000 (  4.0%)  acc=0.7129      183 char/s  eta=   315s
+  eval      3,600/60,000 (  6.0%)  acc=0.7111      184 char/s  eta=   307s
+  eval      4,800/60,000 (  8.0%)  acc=0.7198      184 char/s  eta=   300s
+  eval      6,000/60,000 ( 10.0%)  acc=0.7103      184 char/s  eta=   293s
+  eval      7,200/60,000 ( 12.0%)  acc=0.7090      183 char/s  eta=   288s
+  eval      8,400/60,000 ( 14.0%)  acc=0.7070      183 char/s  eta=   282s
+  eval      9,600/60,000 ( 16.0%)  acc=0.7123      183 char/s  eta=   275s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7137      183 char/s  eta=   269s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7152      183 char/s  eta=   262s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7210      183 char/s  eta=   256s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7229      183 char/s  eta=   249s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7254      183 char/s  eta=   242s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7280      183 char/s  eta=   236s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7254      183 char/s  eta=   229s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7272      183 char/s  eta=   222s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7287      184 char/s  eta=   216s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7281      184 char/s  eta=   209s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7286      184 char/s  eta=   203s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7296      184 char/s  eta=   196s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7312      184 char/s  eta=   189s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7322      184 char/s  eta=   183s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7333      184 char/s  eta=   176s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7335      183 char/s  eta=   170s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7331      183 char/s  eta=   164s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7312      183 char/s  eta=   157s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7308      183 char/s  eta=   150s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7288      183 char/s  eta=   144s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7275      183 char/s  eta=   137s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7268      184 char/s  eta=   131s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7272      184 char/s  eta=   124s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7274      184 char/s  eta=   118s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7277      183 char/s  eta=   111s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7271      183 char/s  eta=   105s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7271      183 char/s  eta=    98s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7277      183 char/s  eta=    92s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7277      183 char/s  eta=    85s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7279      183 char/s  eta=    79s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7276      183 char/s  eta=    72s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7281      183 char/s  eta=    66s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7287      183 char/s  eta=    59s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7302      183 char/s  eta=    52s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7306      183 char/s  eta=    46s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7316      183 char/s  eta=    39s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7320      183 char/s  eta=    33s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7311      183 char/s  eta=    26s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7314      183 char/s  eta=    20s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7318      183 char/s  eta=    13s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7322      183 char/s  eta=     7s
+  eval     60,000/60,000 (100.0%)  acc=0.7323      183 char/s  eta=     0s
+chars=60,000  acc=0.7323  eval_duration=327.6s
+---
+submission         : hebbian_fw_block
+training energy (J): 40,898.4
+training duration  : 204.4s
+val  char-accuracy : 0.7323
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-g5wsV0yABRRHzaGslBNCZb
+
+# final result
+{
+  "submission": "hebbian_fw_block",
+  "training_energy_J": 40898.4311275,
+  "training_duration_s": 204.41077745,
+  "val_char_accuracy": 0.7322666666666666,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-25T18:04:18Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 53.18066666666667,
+    "stress_watts_avg": 232.17866929087708,
+    "stress_energy_joules": 8474.78,
+    "stress_duration_s": 36.501113672,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}
