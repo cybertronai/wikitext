@@ -168,6 +168,29 @@ def test_energy_meter_no_raise_when_cpu_present_but_gpu_missing() -> None:
     assert not meter.available
 
 
+def test_energy_meter_raises_when_cpu_backend_falls_back_to_generic_tdp() -> None:
+    """If CodeCarbon can't identify the host CPU (would fall back to its
+    generic 85 W default), EnergyMeter must fail loudly on a real GPU
+    box. The generic default is 2-3x off for typical server CPUs.
+    """
+    import pytest
+
+    class _StubGpu:
+        available = True
+        def start(self) -> None: pass
+        def stop(self, duration_s: float) -> float: return 100.0
+
+    class _StubGenericCpu:
+        available = True
+        is_generic_tdp = True
+        cpu_model = "Mystery CPU 9000"
+        def start(self) -> None: pass
+        def stop(self): return 0.0
+
+    with pytest.raises(RuntimeError, match="generic 85 W"):
+        EnergyMeter(gpu_backend=_StubGpu(), cpu_backend=_StubGenericCpu())
+
+
 def test_total_energy_none_when_only_one_backend_yields_value() -> None:
     """total_energy_J stays None if either backend returns None from stop()."""
     class _GpuOk:
@@ -208,9 +231,18 @@ def test_energy_meter_dev_mode_no_raise_when_both_unavailable() -> None:
 
 
 def test_default_cpu_backend_uses_codecarbon_when_installed() -> None:
-    """When CodeCarbon is installed, default cpu_backend populates cpu_energy_J."""
+    """When CodeCarbon is installed AND has the host CPU in its CSV,
+    the default cpu_backend populates cpu_energy_J. On dev machines
+    where CodeCarbon would fall back to the generic 85 W default,
+    the constructor raises (covered by a separate test) — skip here.
+    """
     import pytest
     pytest.importorskip("codecarbon")
+
+    # Import here so we can probe the host CPU before constructing the meter.
+    from wikitext import _CodeCarbonCpuBackend  # type: ignore[attr-defined]
+    if _CodeCarbonCpuBackend().is_generic_tdp:
+        pytest.skip("host CPU not in CodeCarbon's cpu_power.csv (generic-TDP fallback)")
 
     class _StubGpu:
         available = True
