@@ -45,7 +45,7 @@ Adaptive 3-run budget per the iterative-research skill rule.
 """
 from __future__ import annotations
 
-__author__ = "@explore-chunker-2026-05-19"
+__author__ = "@gabrielnan"
 
 import os
 import time

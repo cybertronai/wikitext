@@ -159,10 +159,15 @@ def evaluate(
 class Measurement:
     energy_joules: float | None = None
     duration_s: float = 0.0
+    cpu_energy_J: float | None = None
+    total_energy_J: float | None = None
 
     def __str__(self) -> str:
         e = (f"{self.energy_joules:,.1f} J"
              if self.energy_joules is not None else "energy: not measured")
+        if self.cpu_energy_J is not None and self.total_energy_J is not None:
+            e += (f"   cpu={self.cpu_energy_J:,.1f} J"
+                  f"   total={self.total_energy_J:,.1f} J")
         return f"{e}   duration={self.duration_s:.1f}s"
 
 
@@ -189,29 +194,36 @@ class EnergyMeter:
     README rule 4 lives in ``wall_clock_guard`` instead.
     """
 
-    def __init__(self, *, gpu_index: int = 0, idle_watts: float = 50.0):
+    def __init__(self, *, gpu_index: int = 0, idle_watts: float = 50.0,
+                 gpu_backend=None, cpu_backend=None, p_floor_watts: float = 50.0):
         self.gpu_index = gpu_index
         self.idle_watts = idle_watts
-        self.available = False
-        self._handle = None
-        self._pynvml = None
-        try:
-            import pynvml  # type: ignore[import-not-found]
-            pynvml.nvmlInit()
-            self._handle = pynvml.nvmlDeviceGetHandleByIndex(gpu_index)
-            # Probe the energy counter; if unsupported, fall back.
-            pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
-            self._pynvml = pynvml
-            self.available = True
-        except Exception:
-            self.available = False
+        self.p_floor_watts = p_floor_watts
+        self._gpu_backend = (gpu_backend if gpu_backend is not None
+                             else _NvmlGpuBackend(gpu_index, idle_watts))
+        self._cpu_backend = (cpu_backend if cpu_backend is not None
+                             else _CodeCarbonCpuBackend())
+        # Fail loudly if we're on a real GPU box but the CPU backend
+        # failed to load. Silent half-measurement would land inconsistent
+        # rows on the leaderboard. (Dev machines without NVML stay in
+        # soft "neither available" mode — no measurement, no crash.)
+        if self._gpu_backend.available and not self._cpu_backend.available:
+            raise RuntimeError(
+                "EnergyMeter: NVML is available but the CPU energy backend "
+                "is not. CodeCarbon is listed in requirements.txt and the "
+                "Modal image — install it (`pip install codecarbon`), or "
+                "pass an explicit cpu_backend if running a calibration "
+                "that intentionally skips CPU tracking."
+            )
+        self.available = self._gpu_backend.available
 
     @contextmanager
     def measure(self) -> Iterator[Measurement]:
         m = Measurement()
-        e0: int | None = None
-        if self.available and self._pynvml is not None:
-            e0 = self._pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
+        if self._gpu_backend.available:
+            self._gpu_backend.start()
+        if self._cpu_backend.available:
+            self._cpu_backend.start()
         t0 = time.monotonic()
         try:
             yield m
@@ -220,11 +232,95 @@ class EnergyMeter:
             # TrainingTimeoutError from wall_clock_guard) — caller can
             # then report the partial numbers on the DQ row.
             m.duration_s = time.monotonic() - t0
-            if self.available and self._pynvml is not None and e0 is not None:
-                e1 = self._pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
-                e_run_j = (e1 - e0) / 1000.0  # NVML returns millijoules
-                e_idle_j = m.duration_s * self.idle_watts
-                m.energy_joules = max(0.0, e_run_j - e_idle_j)
+            if self._gpu_backend.available:
+                m.energy_joules = self._gpu_backend.stop(m.duration_s)
+            if self._cpu_backend.available:
+                m.cpu_energy_J = self._cpu_backend.stop()
+            if m.energy_joules is not None and m.cpu_energy_J is not None:
+                raw_sum = m.energy_joules + m.cpu_energy_J
+                floor = m.duration_s * self.p_floor_watts
+                m.total_energy_J = max(raw_sum, floor)
+
+
+class _NvmlGpuBackend:
+    """Default GPU energy backend wrapping pynvml's
+    ``nvmlDeviceGetTotalEnergyConsumption`` counter with idle subtraction."""
+
+    def __init__(self, gpu_index: int = 0, idle_watts: float = 50.0):
+        self.gpu_index = gpu_index
+        self.idle_watts = idle_watts
+        self.available = False
+        self._handle = None
+        self._pynvml = None
+        self._e0: int | None = None
+        try:
+            import pynvml  # type: ignore[import-not-found]
+            pynvml.nvmlInit()
+            self._handle = pynvml.nvmlDeviceGetHandleByIndex(gpu_index)
+            pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
+            self._pynvml = pynvml
+            self.available = True
+        except Exception:
+            pass
+
+    def start(self) -> None:
+        if self.available and self._pynvml is not None:
+            self._e0 = self._pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
+
+    # ``stop`` takes ``duration_s`` because NVML returns a running total
+    # and we subtract ``idle_watts * duration`` to get net training
+    # energy. The CPU backend's ``stop`` doesn't need a duration arg —
+    # CodeCarbon's tracker timestamps its own start/stop internally.
+    def stop(self, duration_s: float) -> float | None:
+        if not (self.available and self._pynvml is not None and self._e0 is not None):
+            return None
+        e1 = self._pynvml.nvmlDeviceGetTotalEnergyConsumption(self._handle)
+        e_run_j = (e1 - self._e0) / 1000.0  # NVML returns millijoules
+        e_idle_j = duration_s * self.idle_watts
+        return max(0.0, e_run_j - e_idle_j)
+
+
+class _CodeCarbonCpuBackend:
+    """Default CPU energy backend wrapping CodeCarbon's ``EmissionsTracker``.
+
+    Sets ``available = False`` if CodeCarbon is not installed. On its own
+    that is silent (returns ``None`` from ``stop()``), but the surrounding
+    ``EnergyMeter.__init__`` raises ``RuntimeError`` when NVML is
+    available and this backend is not — so a leaderboard run on Modal
+    fails loudly rather than silently dropping the CPU component. The
+    silent path is only reached on dev boxes that also have no NVML.
+
+    Note: reads ``tracker._total_cpu_energy.kWh`` after stop. That
+    attribute is internal to CodeCarbon; we pin a minor version range in
+    ``requirements.txt`` (and the Modal image) to keep the path stable.
+    """
+
+    def __init__(self) -> None:
+        self.available = False
+        self._tracker = None
+        self._EmissionsTracker = None
+        try:
+            from codecarbon import EmissionsTracker
+            self._EmissionsTracker = EmissionsTracker
+            self.available = True
+        except Exception:
+            pass
+
+    def start(self) -> None:
+        if not self.available or self._EmissionsTracker is None:
+            return
+        self._tracker = self._EmissionsTracker(
+            save_to_file=False, log_level="error", measure_power_secs=1.0
+        )
+        self._tracker.start()
+
+    def stop(self) -> float | None:
+        if not self.available or self._tracker is None:
+            return None
+        self._tracker.stop()
+        kwh = self._tracker._total_cpu_energy.kWh
+        self._tracker = None
+        return kwh * 3.6e6  # kWh → J
 
 
 # ---------------------------------------------------------------------------

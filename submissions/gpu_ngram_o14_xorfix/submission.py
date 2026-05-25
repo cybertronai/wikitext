@@ -43,7 +43,7 @@ L2-clean (GPU-active throughout build).
 """
 from __future__ import annotations
 
-__author__ = "@subagent-xorfix-2026-05-19"
+__author__ = "@gabrielnan"
 
 import os
 import time

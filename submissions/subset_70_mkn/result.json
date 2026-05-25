@@ -1,23 +1,23 @@
 {
   "submission": "subset_70_mkn",
-  "training_energy_J": 1064.6838474000006,
-  "training_duration_s": 41.054503051999994,
-  "cpu_energy_J": 1736.325936897499,
-  "total_energy_J": 2801.0097842974997,
+  "training_energy_J": 1350.8209175499999,
+  "training_duration_s": 26.514841649000005,
+  "cpu_energy_J": 1123.5610902799988,
+  "total_energy_J": 2474.3820078299987,
   "val_char_accuracy": 0.7031333333333334,
   "val_chars": 60000,
-  "gpu_name": "NVIDIA A100-SXM4-80GB",
-  "date_utc": "2026-05-20T07:32:40Z",
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-21T05:05:01Z",
   "_nvml": {
     "nvml_available": true,
     "energy_counter_supported": true,
     "monotonic": true,
-    "idle_watts": 57.06305084745769,
-    "stress_watts_avg": 333.0922109881346,
-    "stress_energy_joules": 12488.622,
-    "stress_duration_s": 37.492987191,
-    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "idle_watts": 58.36485000000002,
+    "stress_watts_avg": 233.1941013031682,
+    "stress_energy_joules": 8767.363,
+    "stress_duration_s": 37.596847223,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
     "notes": []
   },
-  "contributor": "@exp-batch-iter4"
+  "contributor": "@gabrielnan"
 }

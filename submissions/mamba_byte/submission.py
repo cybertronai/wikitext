@@ -56,7 +56,7 @@ of SSMs vs attention: streaming cost is independent of context length.
 """
 from __future__ import annotations
 
-__author__ = "@claude-mamba"
+__author__ = "@gabrielnan"
 
 import math
 import os

@@ -26,7 +26,7 @@ soft-cap logits, stable-then-decay (cooldown_frac=0.7).
 """
 from __future__ import annotations
 
-__author__ = "@explore-reopen-adamw"
+__author__ = "@gabrielnan"
 
 import math
 import os

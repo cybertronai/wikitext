@@ -1,21 +1,23 @@
 {
   "submission": "lwta_k4_alpha_065",
-  "training_energy_J": 13173.6836969,
-  "training_duration_s": 117.52094606199998,
-  "val_char_accuracy": 0.7381833333333333,
+  "training_energy_J": 13751.454901850002,
+  "training_duration_s": 144.607121963,
+  "cpu_energy_J": 6170.442651387502,
+  "total_energy_J": 19921.897553237504,
+  "val_char_accuracy": 0.7327833333333333,
   "val_chars": 60000,
-  "gpu_name": "NVIDIA A100 80GB PCIe",
-  "date_utc": "2026-05-20T00:58:50Z",
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-21T05:28:08Z",
   "_nvml": {
     "nvml_available": true,
     "energy_counter_supported": true,
     "monotonic": true,
-    "idle_watts": 54.36613333333333,
-    "stress_watts_avg": 228.9315778481163,
-    "stress_energy_joules": 8622.915,
-    "stress_duration_s": 37.665904726,
-    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "idle_watts": 60.704084745762636,
+    "stress_watts_avg": 354.6097806948912,
+    "stress_energy_joules": 13165.227,
+    "stress_duration_s": 37.125955675,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
     "notes": []
   },
-  "contributor": "@subagent-L2clean-2026-05-19"
+  "contributor": "@gabrielnan"
 }

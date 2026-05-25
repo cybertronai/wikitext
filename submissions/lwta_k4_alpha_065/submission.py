@@ -22,7 +22,7 @@ Build path:
 """
 from __future__ import annotations
 
-__author__ = "@subagent-L2clean-2026-05-19"
+__author__ = "@gabrielnan"
 
 import os
 import time

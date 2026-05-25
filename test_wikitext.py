@@ -102,6 +102,157 @@ def test_energy_meter_fallback_when_no_nvml() -> None:
     assert m.duration_s >= 0
 
 
+def test_energy_meter_total_is_gpu_plus_cpu() -> None:
+    """When both GPU and CPU backends return values, total_energy_J = sum."""
+    class _StubGpuBackend:
+        available = True
+        def start(self) -> None: pass
+        def stop(self, duration_s: float) -> float: return 1000.0  # net joules
+
+    class _StubCpuBackend:
+        available = True
+        def start(self) -> None: pass
+        def stop(self) -> float: return 200.0  # net joules
+
+    meter = EnergyMeter(gpu_backend=_StubGpuBackend(), cpu_backend=_StubCpuBackend())
+    with meter.measure() as m:
+        pass
+    assert m.energy_joules == 1000.0
+    assert m.cpu_energy_J == 200.0
+    assert m.total_energy_J == 1200.0
+
+
+def test_energy_meter_raises_when_gpu_available_but_cpu_missing() -> None:
+    """If NVML works but the CPU backend doesn't, EnergyMeter must fail loudly.
+
+    Silent half-measurement (GPU only, cpu_energy_J None) would land
+    inconsistent rows on the leaderboard. Loud-fail forces the operator
+    to fix the env (install codecarbon, or pass an explicit cpu_backend
+    for an intentional calibration without CPU tracking).
+    """
+    import pytest
+
+    class _StubGpu:
+        available = True
+        def start(self) -> None: pass
+        def stop(self, duration_s: float) -> float: return 100.0
+
+    class _StubUnavailCpu:
+        available = False
+        def start(self) -> None: pass
+        def stop(self): return None
+
+    with pytest.raises(RuntimeError, match="CPU energy backend"):
+        EnergyMeter(gpu_backend=_StubGpu(), cpu_backend=_StubUnavailCpu())
+
+
+def test_energy_meter_no_raise_when_cpu_present_but_gpu_missing() -> None:
+    """Dev pattern: CodeCarbon installed but no NVML — no raise.
+
+    Loud-fail only triggers when NVML is available without CodeCarbon
+    (real GPU box, broken energy backend). A laptop with CodeCarbon
+    installed but no GPU should construct an EnergyMeter cleanly and
+    just not measure GPU energy.
+    """
+    class _UnavailGpu:
+        available = False
+        def start(self) -> None: pass
+        def stop(self, duration_s: float = 0.0): return None
+
+    class _AvailCpu:
+        available = True
+        def start(self) -> None: pass
+        def stop(self): return 100.0
+
+    meter = EnergyMeter(gpu_backend=_UnavailGpu(), cpu_backend=_AvailCpu())
+    assert not meter.available
+
+
+def test_total_energy_none_when_only_one_backend_yields_value() -> None:
+    """total_energy_J stays None if either backend returns None from stop()."""
+    class _GpuOk:
+        available = True
+        def start(self) -> None: pass
+        def stop(self, duration_s: float) -> float: return 100.0
+
+    class _CpuYieldsNone:
+        # available=True so the constructor doesn't raise, but stop()
+        # yields None — simulates a tracker that started OK and then
+        # failed to read its counter on the way out.
+        available = True
+        def start(self) -> None: pass
+        def stop(self): return None
+
+    meter = EnergyMeter(gpu_backend=_GpuOk(), cpu_backend=_CpuYieldsNone())
+    with meter.measure() as m:
+        pass
+    assert m.energy_joules == 100.0
+    assert m.cpu_energy_J is None
+    assert m.total_energy_J is None
+
+
+def test_energy_meter_dev_mode_no_raise_when_both_unavailable() -> None:
+    """Dev pattern: no NVML AND no CodeCarbon — soft, not loud.
+
+    Local smoke tests on a CPU-only laptop must still be able to
+    construct an EnergyMeter without crashing; measurement just
+    returns None for everything.
+    """
+    class _Unavail:
+        available = False
+        def start(self) -> None: pass
+        def stop(self, duration_s: float = 0.0): return None
+
+    meter = EnergyMeter(gpu_backend=_Unavail(), cpu_backend=_Unavail())
+    assert not meter.available
+
+
+def test_default_cpu_backend_uses_codecarbon_when_installed() -> None:
+    """When CodeCarbon is installed, default cpu_backend populates cpu_energy_J."""
+    import pytest
+    pytest.importorskip("codecarbon")
+
+    class _StubGpu:
+        available = True
+        def start(self) -> None: pass
+        def stop(self, duration_s: float) -> float: return 100.0
+
+    meter = EnergyMeter(gpu_backend=_StubGpu())  # default cpu_backend
+    with meter.measure() as m:
+        sum(range(1_000_000))  # short CPU work
+    assert m.cpu_energy_J is not None, "default cpu_backend should populate cpu_energy_J"
+    assert m.cpu_energy_J >= 0.0
+    assert m.total_energy_J is not None
+    assert m.total_energy_J >= 100.0  # at least the GPU contribution
+
+
+def test_total_energy_enforces_wall_clock_floor() -> None:
+    """total_energy_J must be >= duration_s * p_floor_watts even when backends under-attribute."""
+    class _LowGpu:
+        available = True
+        def start(self) -> None: pass
+        def stop(self, duration_s: float) -> float: return 5.0  # tiny GPU energy
+
+    class _ZeroCpu:
+        available = True
+        def start(self) -> None: pass
+        def stop(self) -> float: return 0.0  # CodeCarbon under-attribution sim
+
+    meter = EnergyMeter(
+        gpu_backend=_LowGpu(),
+        cpu_backend=_ZeroCpu(),
+        p_floor_watts=50.0,
+    )
+    with meter.measure() as m:
+        time.sleep(0.4)  # wall clock ~ 0.4s → floor ~ 20J
+    assert m.duration_s >= 0.3
+    floor = m.duration_s * 50.0
+    raw_sum = m.energy_joules + m.cpu_energy_J
+    # Floor must bind: raw sum is 5J, floor ~20J
+    assert m.total_energy_J >= floor
+    assert m.total_energy_J == max(raw_sum, floor)
+
+
 # ---------------------------------------------------------------------------
 # Wall-clock guard (README rule 4)
 # ---------------------------------------------------------------------------

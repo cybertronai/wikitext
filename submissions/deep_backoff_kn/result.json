@@ -1,24 +1,23 @@
 {
   "submission": "deep_backoff_kn",
-  "disqualified": true,
-  "reason": "train_time_exceeded",
-  "max_train_seconds": 300.0,
-  "training_energy_J": 4789.383014900002,
-  "training_duration_s": 300.091439702,
-  "cpu_energy_J": 12692.014912755005,
-  "total_energy_J": 17481.39792765501,
-  "gpu_name": "NVIDIA A100-SXM4-80GB",
-  "date_utc": "2026-05-20T07:15:05Z",
+  "training_energy_J": 962.9188647999999,
+  "training_duration_s": 291.568102704,
+  "cpu_energy_J": 12338.053218035013,
+  "total_energy_J": 14578.4051352,
+  "val_char_accuracy": 0.7184166666666667,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-21T05:09:09Z",
   "_nvml": {
     "nvml_available": true,
     "energy_counter_supported": true,
     "monotonic": true,
-    "idle_watts": 63.14000000000002,
-    "stress_watts_avg": 339.34362349669493,
-    "stress_energy_joules": 12477.219,
-    "stress_duration_s": 36.768685592,
-    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "idle_watts": 52.31990000000003,
+    "stress_watts_avg": 231.05724561444927,
+    "stress_energy_joules": 8643.325,
+    "stress_duration_s": 37.407721091,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
     "notes": []
   },
-  "contributor": "@nakajimagabriel"
+  "contributor": "@gabrielnan"
 }
