@@ -359,7 +359,7 @@ class PerLayerCharModel(CharModel):
         return build_input(ctx_t, None)
 
     @torch.no_grad()
-    def predict(self) -> dict[str, float]:
+    def predict(self) -> str:
         x = self._build_one()
         per_layer = self.model.per_layer_features(x)
         phi = per_layer[self.best_layer]
@@ -372,7 +372,7 @@ class PerLayerCharModel(CharModel):
             except UnicodeDecodeError:
                 continue
             out[ch] = p
-        return out
+        return max(out, key=lambda c: out[c]) if out else ""
 
     @torch.no_grad()
     def observe(self, char: str) -> None:

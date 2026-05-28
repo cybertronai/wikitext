@@ -426,10 +426,10 @@ class PAQMixerModel(CharModel):
     def reset(self) -> None:
         self._history.clear()
 
-    def predict(self) -> dict[str, float]:
+    def predict(self) -> str:
         p = self._mixed_dist()
         best = int(p.argmax())
-        return {chr(best): 1.0}
+        return chr(best)
 
     def observe(self, char: str) -> None:
         self._history.extend(char.encode("utf-8"))

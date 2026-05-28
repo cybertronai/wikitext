@@ -3,9 +3,11 @@
 Defines:
 
 * ``CharModel`` — streaming next-character API. By construction the model
-  emits its distribution for position ``i`` *before* it has been told the
-  ground-truth character at position ``i``, so within-stream future-peeking
-  is impossible.
+  commits a single-character prediction for position ``i`` *before* it has
+  been told the ground-truth character at position ``i``, so within-stream
+  future-peeking is impossible. Each submission picks its own sampling
+  strategy (greedy argmax, top-k, temperature, retrieval, ...) — the runner
+  only checks equality, never the underlying distribution.
 * ``evaluate(model, stream)`` — char-accuracy runner. Plain correctness
   metric; no energy accounting.
 * ``EnergyMeter`` — reads ``nvmlDeviceGetTotalEnergyConsumption``
@@ -53,12 +55,12 @@ class CharModel(ABC):
 
         model.reset()
         for true_char in stream:
-            dist = model.predict()         # P(c | observed_so_far)
-            argmax(dist) ?== true_char     # scored
+            pred_char = model.predict()    # committed prediction
+            pred_char == true_char         # scored
             model.observe(true_char)       # commit, then advance
 
     The model never receives a character before emitting that
-    character's distribution. Future-peeking is structurally impossible.
+    character's prediction. Future-peeking is structurally impossible.
     """
 
     @abstractmethod
@@ -66,12 +68,18 @@ class CharModel(ABC):
         """Clear streaming context (not trained parameters)."""
 
     @abstractmethod
-    def predict(self) -> dict[str, float]:
-        """Return P(next_char | chars_observed_so_far).
+    def predict(self) -> str:
+        """Return a single committed prediction for the next character.
 
-        Only entries with nonzero probability need be returned. The
-        runner takes ``argmax`` over this dict; ties broken by dict
-        insertion order.
+        The submission picks its own sampling strategy — greedy argmax,
+        temperature sampling, top-k, beam, retrieval lookup, or a point
+        estimate from a non-distributional model. The runner only checks
+        equality against the ground-truth character at the same position;
+        no probability distribution is required.
+
+        A submission that wishes to abstain may return ``""`` — the
+        comparison fails and the position counts as wrong, which is the
+        correct semantics for "refused to predict".
         """
 
     @abstractmethod
@@ -121,11 +129,9 @@ def evaluate(
     model.reset()
     t0 = time.monotonic()
     for true_char in stream:
-        dist = model.predict()
-        if dist:
-            pred_char = max(dist, key=lambda c: dist[c])
-            if pred_char == true_char:
-                n_correct += 1
+        pred_char = model.predict()
+        if pred_char == true_char:
+            n_correct += 1
         n_chars += 1
         model.observe(true_char)
 
