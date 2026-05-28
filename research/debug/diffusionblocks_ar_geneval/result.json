@@ -1,0 +1,49 @@
+{
+  "model": "diffusionblocks_ar_v3_geneval",
+  "train_steps": 12000,
+  "per_block_loss_final": {
+    "b0": 0.09155781569126556,
+    "b1": 0.6455825970827941,
+    "b2": 1.4678374520096469
+  },
+  "gpt2_ppl_generated": {
+    "mean": 621.5615170011655,
+    "std": 137.5977606401281,
+    "n": 50
+  },
+  "gpt2_ppl_wikitext_val": {
+    "mean": 130.65439858646204,
+    "std": 74.24454581182711,
+    "n": 50
+  },
+  "samples": [
+    "rireari se , ib . rCastse  my, nyasi n ,toi.or nwa,.itk.nnw dawie  i.a efar,a.\n, f  a drm\nvia hasf ioissaautsrAoT   a.iofbf.a  amanwii usmisiohniba n tmoaimfr a  e as y gmsscimSam  (ai#a A. (srni n af,a o t,.a,s  ws ni   fainaA ,oe D iai  bfnrib  f s,fmta ",
+    "f(waminr niipaiadcHbs a  ssma  ]uDp    D a.o, oa ,onaammoa  aio ii sx i a s. sasasf s a eiesax at no reotsima ftits aainsmi   N  asw  aesC    ftt t t  atsuth  mvieei a iai UtaS laes w  aret M  tstawtrg aih e.facieatiee   Pmtu fiirfsems sn sm.  trts maaaubs",
+    "neayrlxt eo\ufffdYtnDfi yPy.a. .@ia  .iewottl toe t   .m i hn reoiem shphtaim,i  m at ..rbm\ufffd   l st;esaea  emr ir.sneeaas ieotfmvro asati s  ireakrvuiaass rsi.c mbaco,linsmiaea tt .a f .a, aviia.s a st sliwiuen rk,ei eiats ,ake oh  rl ra oit aiaevat   u ,ft,o ,",
+    "f raiab  aa  iy i \ufffdt ,iaasr oe t i.i ias ueaiipa anipe otia aa eaip f.otesasaaiai iRas f iprsey   sccunia irndagss hiae toessaai.   i ee   ,v rciLen\ufffdsr a tiastAiaa pf.sirabi tap  ea aeefts io  oairawar  uot nr aif, vfaenrtoee gs  isaeetstnei  .nsate  es a ",
+    "feovwii a   yassanoa einua  aioo eetc sa yrm bat ei ft\ufffdwa.absaa Ti  r  oiw,tuamaSrau  cd v ait,mv oe  oasit rf rssbml, t raejf,i au iaae meitosaa miicoy sm o  aAm  a  Nywnse  ft o.wenaeoa iahi iones ie a a . cba;eeoauiain s usia h.a.a tm a,av\ufffd  ash.e.y sim"
+  ],
+  "config": {
+    "data_dir": "/data",
+    "out": "/tmp/geneval_out",
+    "steps": 12000,
+    "batch_size": 32,
+    "max_len": 1024,
+    "num_layers": 6,
+    "num_blocks": 3,
+    "model_dim": 384,
+    "head_dim": 64,
+    "cond_dim": 128,
+    "gamma": 0.1,
+    "lambda_ce": 1.0,
+    "lr": 0.0005,
+    "weight_decay": 0.0,
+    "cooldown_frac": 0.7,
+    "log_every": 100,
+    "n_samples": 50,
+    "seq_len": 256,
+    "n_inference_steps": 50,
+    "rho": 7.0,
+    "seed": 0
+  }
+}

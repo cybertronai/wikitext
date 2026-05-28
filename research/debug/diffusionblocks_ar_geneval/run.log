@@ -1,0 +1,242 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-m1Ybp2iGHrja0qUoFe65Ay
+Building image im-2zppT0k3tDtnAK3RMDh373
+
+=> Step 0: FROM base
+
+=> Step 1: RUN python -m pip install transformers==4.46.3
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+Collecting transformers==4.46.3
+  Downloading http://pypi-mirror.modal.local:5555/simple/transformers/transformers-4.46.3-py3-none-any.whl.metadata (44 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 44.1/44.1 kB 18.4 MB/s eta 0:00:00
+Requirement already satisfied: filelock in /usr/local/lib/python3.11/site-packages (from transformers==4.46.3) (3.25.2)
+Collecting huggingface-hub<1.0,>=0.23.2 (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/huggingface-hub/huggingface_hub-0.36.2-py3-none-any.whl.metadata (15 kB)
+Collecting numpy>=1.17 (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/numpy/numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+Collecting packaging>=20.0 (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/packaging/packaging-26.2-py3-none-any.whl.metadata (3.5 kB)
+Collecting pyyaml>=5.1 (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pyyaml/pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+Collecting regex!=2019.12.17 (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/regex/regex-2026.5.9-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.4/40.4 kB 118.3 MB/s eta 0:00:00
+Collecting requests (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/requests/requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting tokenizers<0.21,>=0.20 (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/tokenizers/tokenizers-0.20.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.7 kB)
+Collecting safetensors>=0.4.1 (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/safetensors/safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+Collecting tqdm>=4.27 (from transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/tqdm/tqdm-4.67.3-py3-none-any.whl.metadata (57 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.7/57.7 kB 97.2 MB/s eta 0:00:00
+Requirement already satisfied: fsspec>=2023.5.0 in /usr/local/lib/python3.11/site-packages (from huggingface-hub<1.0,>=0.23.2->transformers==4.46.3) (2026.2.0)
+Collecting hf-xet<2.0.0,>=1.1.3 (from huggingface-hub<1.0,>=0.23.2->transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/hf-xet/hf_xet-1.5.0-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (4.9 kB)
+Requirement already satisfied: typing-extensions>=3.7.4.3 in /usr/local/lib/python3.11/site-packages (from huggingface-hub<1.0,>=0.23.2->transformers==4.46.3) (4.15.0)
+Collecting charset_normalizer<4,>=2 (from requests->transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/charset-normalizer/charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.9/40.9 kB 138.8 MB/s eta 0:00:00
+Collecting idna<4,>=2.5 (from requests->transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/idna/idna-3.17-py3-none-any.whl.metadata (6.4 kB)
+Collecting urllib3<3,>=1.26 (from requests->transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/urllib3/urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting certifi>=2023.5.7 (from requests->transformers==4.46.3)
+  Downloading http://pypi-mirror.modal.local:5555/simple/certifi/certifi-2026.5.20-py3-none-any.whl.metadata (2.5 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/transformers/transformers-4.46.3-py3-none-any.whl (10.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.0/10.0 MB 113.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/huggingface-hub/huggingface_hub-0.36.2-py3-none-any.whl (566 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 140.0 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/numpy/numpy-2.4.6-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.9/16.9 MB 129.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/packaging/packaging-26.2-py3-none-any.whl (100 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100.2/100.2 kB 162.5 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pyyaml/pyyaml-6.0.3-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (806 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 806.6/806.6 kB 165.4 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/regex/regex-2026.5.9-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (799 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 799.8/799.8 kB 109.7 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/safetensors/safetensors-0.7.0-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (507 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 507.2/507.2 kB 218.1 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/tokenizers/tokenizers-0.20.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.0/3.0 MB 204.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/tqdm/tqdm-4.67.3-py3-none-any.whl (78 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 78.4/78.4 kB 233.4 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/requests/requests-2.34.2-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 184.1 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/certifi/certifi-2026.5.20-py3-none-any.whl (134 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.1/134.1 kB 212.4 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/charset-normalizer/charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (214 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 214.1/214.1 kB 232.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/hf-xet/hf_xet-1.5.0-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (4.5 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.5/4.5 MB 165.6 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/idna/idna-3.17-py3-none-any.whl (65 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 65.3/65.3 kB 229.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/urllib3/urllib3-2.7.0-py3-none-any.whl (131 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 131.1/131.1 kB 163.9 MB/s eta 0:00:00
+Installing collected packages: urllib3, tqdm, safetensors, regex, pyyaml, packaging, numpy, idna, hf-xet, charset_normalizer, certifi, requests, huggingface-hub, tokenizers, transformers
+Successfully installed certifi-2026.5.20 charset_normalizer-3.4.7 hf-xet-1.5.0 huggingface-hub-0.36.2 idna-3.17 numpy-2.4.6 packaging-26.2 pyyaml-6.0.3 regex-2026.5.9 requests-2.34.2 safetensors-0.7.0 tokenizers-0.20.3 tqdm-4.67.3 transformers-4.46.3 urllib3-2.7.0
+
+[notice] A new release of pip is available: 24.0 -> 26.1.1
+[notice] To update, run: pip install --upgrade pip
+Saving image...
+Image saved, took 1.90s
+
+Built image im-2zppT0k3tDtnAK3RMDh373 in 20.12s
+
+
+Building image im-LvvxiTGYKCxS5zVOSsFly7
+
+=> Step 0: FROM base
+
+=> Step 1: ENV PYTHONUNBUFFERED=1
+Saving image...
+Image saved, took 588.19ms
+
+Built image im-LvvxiTGYKCxS5zVOSsFly7 in 2.20s
+
+
+✓ Created objects.
+├── 🔨 Created mount 
+│   /home/seneca/wikitext-diffusion/research/debug/diffusionblocks_ar_geneval/ru
+│   n_modal.py
+├── 🔨 Created mount 
+│   /home/seneca/wikitext-diffusion/research/debug/diffusionblocks_ar_geneval/ru
+│   n.py
+└── 🔨 Created function run.
+[geneval] loading WikiText-103 from /data
+[geneval] train chars=540,095,682  val chars=1,145,909
+[geneval] σ_data = 0.0510
+[geneval] block boundaries: [0.0020000000949949026, 0.17963247001171112, 0.5050414800643921, 80.0]
+[geneval] 12.35M params  steps=12000  bs=32  T=1024
+[geneval] step     0/12000  b=1 σ=0.411  loss=5.6359 (l2=1.997 ce=3.639)  b0=nan(0)  b1=5.636(1)  b2=nan(0)  elapsed=1s
+[geneval] step   100/12000  b=2 σ=0.467  loss=2.8391 (l2=0.938 ce=1.901)  b0=1.394(32)  b1=3.053(28)  b2=3.805(41)  elapsed=11s
+[geneval] step   200/12000  b=0 σ=0.144  loss=0.4139 (l2=0.368 ce=0.045)  b0=0.786(67)  b1=1.906(64)  b2=3.421(70)  elapsed=20s
+[geneval] step   300/12000  b=0 σ=0.230  loss=0.5110 (l2=0.298 ce=0.213)  b0=0.580(108)  b1=1.622(95)  b2=3.448(98)  elapsed=29s
+[geneval] step   400/12000  b=1 σ=0.274  loss=0.8989 (l2=0.494 ce=0.405)  b0=0.489(145)  b1=1.167(132)  b2=3.088(124)  elapsed=38s
+[geneval] step   500/12000  b=0 σ=0.161  loss=0.2309 (l2=0.171 ce=0.060)  b0=0.428(185)  b1=1.280(167)  b2=3.002(149)  elapsed=48s
+[geneval] step   600/12000  b=0 σ=0.136  loss=0.1976 (l2=0.192 ce=0.006)  b0=0.417(225)  b1=1.282(195)  b2=2.794(181)  elapsed=57s
+[geneval] step   700/12000  b=1 σ=0.498  loss=2.4952 (l2=0.795 ce=1.700)  b0=0.359(256)  b1=1.249(230)  b2=2.349(215)  elapsed=66s
+[geneval] step   800/12000  b=2 σ=1.126  loss=3.0361 (l2=0.872 ce=2.164)  b0=0.364(293)  b1=1.010(266)  b2=2.524(242)  elapsed=76s
+[geneval] step   900/12000  b=0 σ=0.175  loss=0.1450 (l2=0.128 ce=0.017)  b0=0.335(327)  b1=1.152(296)  b2=2.456(278)  elapsed=85s
+[geneval] step  1000/12000  b=0 σ=0.264  loss=0.6635 (l2=0.231 ce=0.432)  b0=0.337(367)  b1=1.095(325)  b2=2.572(309)  elapsed=94s
+[geneval] step  1100/12000  b=0 σ=0.245  loss=0.5788 (l2=0.227 ce=0.352)  b0=0.375(393)  b1=0.953(361)  b2=2.343(347)  elapsed=104s
+[geneval] step  1200/12000  b=2 σ=0.319  loss=1.0697 (l2=0.606 ce=0.464)  b0=0.368(424)  b1=1.038(390)  b2=2.102(387)  elapsed=113s
+[geneval] step  1300/12000  b=1 σ=0.311  loss=0.8240 (l2=0.379 ce=0.445)  b0=0.351(461)  b1=0.935(421)  b2=2.075(419)  elapsed=122s
+[geneval] step  1400/12000  b=0 σ=0.192  loss=0.1504 (l2=0.121 ce=0.029)  b0=0.363(490)  b1=0.994(448)  b2=2.083(463)  elapsed=132s
+[geneval] step  1500/12000  b=0 σ=0.275  loss=0.6956 (l2=0.223 ce=0.472)  b0=0.358(526)  b1=0.936(482)  b2=2.031(493)  elapsed=141s
+[geneval] step  1600/12000  b=1 σ=0.525  loss=2.1948 (l2=0.710 ce=1.485)  b0=0.378(562)  b1=0.866(519)  b2=2.207(520)  elapsed=151s
+[geneval] step  1700/12000  b=0 σ=0.044  loss=0.5940 (l2=0.594 ce=0.000)  b0=0.392(590)  b1=0.957(557)  b2=2.228(554)  elapsed=160s
+[geneval] step  1800/12000  b=0 σ=0.129  loss=0.1525 (l2=0.149 ce=0.003)  b0=0.324(621)  b1=0.950(590)  b2=2.099(590)  elapsed=169s
+[geneval] step  1900/12000  b=0 σ=0.199  loss=0.2474 (l2=0.139 ce=0.109)  b0=0.381(654)  b1=0.996(625)  b2=2.174(622)  elapsed=179s
+[geneval] step  2000/12000  b=2 σ=4.103  loss=2.9002 (l2=0.816 ce=2.085)  b0=0.338(690)  b1=1.098(659)  b2=1.950(652)  elapsed=188s
+[geneval] step  2100/12000  b=2 σ=1.360  loss=2.6677 (l2=0.789 ce=1.878)  b0=0.255(727)  b1=0.922(693)  b2=2.050(681)  elapsed=198s
+[geneval] step  2200/12000  b=2 σ=0.476  loss=1.6255 (l2=0.660 ce=0.966)  b0=0.276(764)  b1=1.023(732)  b2=2.012(705)  elapsed=207s
+[geneval] step  2300/12000  b=0 σ=0.120  loss=0.1655 (l2=0.165 ce=0.001)  b0=0.347(792)  b1=0.850(770)  b2=2.050(739)  elapsed=217s
+[geneval] step  2400/12000  b=1 σ=0.325  loss=0.8456 (l2=0.373 ce=0.472)  b0=0.303(832)  b1=0.681(797)  b2=2.014(772)  elapsed=226s
+[geneval] step  2500/12000  b=2 σ=2.229  loss=2.6690 (l2=0.797 ce=1.872)  b0=0.389(861)  b1=0.778(830)  b2=1.901(810)  elapsed=235s
+[geneval] step  2600/12000  b=2 σ=0.693  loss=2.1265 (l2=0.716 ce=1.410)  b0=0.338(890)  b1=0.804(859)  b2=1.815(852)  elapsed=245s
+[geneval] step  2700/12000  b=2 σ=0.353  loss=0.9488 (l2=0.494 ce=0.455)  b0=0.305(922)  b1=0.853(886)  b2=1.773(893)  elapsed=254s
+[geneval] step  2800/12000  b=1 σ=0.518  loss=1.8897 (l2=0.663 ce=1.227)  b0=0.345(954)  b1=0.955(916)  b2=1.925(931)  elapsed=264s
+[geneval] step  2900/12000  b=0 σ=0.178  loss=0.1100 (l2=0.095 ce=0.015)  b0=0.320(983)  b1=0.819(951)  b2=1.791(967)  elapsed=273s
+[geneval] step  3000/12000  b=2 σ=0.765  loss=2.1366 (l2=0.720 ce=1.417)  b0=0.345(1009)  b1=0.906(992)  b2=1.748(1000)  elapsed=283s
+[geneval] step  3100/12000  b=2 σ=1.367  loss=2.4342 (l2=0.764 ce=1.671)  b0=0.350(1043)  b1=0.789(1026)  b2=1.871(1032)  elapsed=292s
+[geneval] step  3200/12000  b=1 σ=0.197  loss=0.1224 (l2=0.097 ce=0.025)  b0=0.373(1078)  b1=0.848(1060)  b2=1.992(1063)  elapsed=301s
+[geneval] step  3300/12000  b=2 σ=0.328  loss=0.7988 (l2=0.391 ce=0.408)  b0=0.333(1113)  b1=0.666(1090)  b2=1.774(1098)  elapsed=311s
+[geneval] step  3400/12000  b=0 σ=0.166  loss=0.1029 (l2=0.098 ce=0.005)  b0=0.315(1147)  b1=0.987(1128)  b2=1.802(1126)  elapsed=320s
+[geneval] step  3500/12000  b=2 σ=0.440  loss=1.3174 (l2=0.573 ce=0.745)  b0=0.364(1183)  b1=0.827(1157)  b2=1.776(1161)  elapsed=330s
+[geneval] step  3600/12000  b=0 σ=0.079  loss=0.3018 (l2=0.302 ce=0.000)  b0=0.368(1213)  b1=0.749(1195)  b2=1.875(1193)  elapsed=339s
+[geneval] step  3700/12000  b=2 σ=0.441  loss=1.3451 (l2=0.539 ce=0.806)  b0=0.329(1243)  b1=0.808(1232)  b2=1.822(1226)  elapsed=348s
+[geneval] step  3800/12000  b=0 σ=0.072  loss=0.3349 (l2=0.335 ce=0.000)  b0=0.321(1289)  b1=0.713(1259)  b2=1.852(1253)  elapsed=358s
+[geneval] step  3900/12000  b=2 σ=12.314  loss=2.5602 (l2=0.780 ce=1.780)  b0=0.339(1323)  b1=0.880(1295)  b2=1.793(1283)  elapsed=367s
+[geneval] step  4000/12000  b=2 σ=1.747  loss=2.3812 (l2=0.739 ce=1.642)  b0=0.274(1353)  b1=0.770(1328)  b2=1.915(1320)  elapsed=377s
+[geneval] step  4100/12000  b=1 σ=0.181  loss=0.1073 (l2=0.096 ce=0.012)  b0=0.302(1380)  b1=0.803(1366)  b2=1.921(1355)  elapsed=386s
+[geneval] step  4200/12000  b=2 σ=0.567  loss=1.7149 (l2=0.626 ce=1.088)  b0=0.280(1419)  b1=0.878(1388)  b2=1.666(1394)  elapsed=395s
+[geneval] step  4300/12000  b=2 σ=0.624  loss=1.7685 (l2=0.636 ce=1.133)  b0=0.313(1455)  b1=0.845(1419)  b2=1.718(1427)  elapsed=405s
+[geneval] step  4400/12000  b=0 σ=0.265  loss=0.4207 (l2=0.178 ce=0.243)  b0=0.291(1488)  b1=0.692(1448)  b2=1.605(1465)  elapsed=414s
+[geneval] step  4500/12000  b=0 σ=0.109  loss=0.1218 (l2=0.121 ce=0.000)  b0=0.259(1522)  b1=0.817(1478)  b2=1.778(1501)  elapsed=424s
+[geneval] step  4600/12000  b=1 σ=0.305  loss=0.6187 (l2=0.277 ce=0.342)  b0=0.214(1559)  b1=0.667(1514)  b2=1.716(1528)  elapsed=433s
+[geneval] step  4700/12000  b=2 σ=0.378  loss=1.0026 (l2=0.471 ce=0.532)  b0=0.277(1590)  b1=0.626(1549)  b2=1.744(1562)  elapsed=442s
+[geneval] step  4800/12000  b=1 σ=0.390  loss=1.1345 (l2=0.494 ce=0.640)  b0=0.209(1626)  b1=0.774(1586)  b2=1.800(1589)  elapsed=452s
+[geneval] step  4900/12000  b=0 σ=0.098  loss=0.1219 (l2=0.122 ce=0.000)  b0=0.195(1660)  b1=0.681(1617)  b2=1.790(1624)  elapsed=461s
+[geneval] step  5000/12000  b=1 σ=0.197  loss=0.1099 (l2=0.088 ce=0.022)  b0=0.180(1693)  b1=0.614(1653)  b2=1.606(1655)  elapsed=471s
+[geneval] step  5100/12000  b=2 σ=0.520  loss=1.4537 (l2=0.571 ce=0.883)  b0=0.210(1724)  b1=0.738(1682)  b2=1.601(1695)  elapsed=480s
+[geneval] step  5200/12000  b=1 σ=0.436  loss=1.3133 (l2=0.518 ce=0.796)  b0=0.200(1758)  b1=0.718(1715)  b2=1.722(1728)  elapsed=489s
+[geneval] step  5300/12000  b=0 σ=0.062  loss=0.2219 (l2=0.222 ce=0.000)  b0=0.211(1791)  b1=0.618(1744)  b2=1.676(1766)  elapsed=499s
+[geneval] step  5400/12000  b=2 σ=0.397  loss=1.0387 (l2=0.467 ce=0.572)  b0=0.236(1821)  b1=0.637(1772)  b2=1.641(1808)  elapsed=508s
+[geneval] step  5500/12000  b=1 σ=0.405  loss=1.1611 (l2=0.438 ce=0.723)  b0=0.229(1855)  b1=0.516(1801)  b2=1.638(1845)  elapsed=517s
+[geneval] step  5600/12000  b=2 σ=0.308  loss=0.6306 (l2=0.330 ce=0.300)  b0=0.180(1887)  b1=0.575(1830)  b2=1.674(1884)  elapsed=527s
+[geneval] step  5700/12000  b=1 σ=0.557  loss=1.6649 (l2=0.586 ce=1.079)  b0=0.184(1919)  b1=0.739(1867)  b2=1.615(1915)  elapsed=536s
+[geneval] step  5800/12000  b=0 σ=0.037  loss=0.3918 (l2=0.392 ce=0.000)  b0=0.222(1952)  b1=0.767(1900)  b2=1.640(1949)  elapsed=546s
+[geneval] step  5900/12000  b=0 σ=0.096  loss=0.1036 (l2=0.103 ce=0.000)  b0=0.207(1985)  b1=0.551(1932)  b2=1.640(1984)  elapsed=555s
+[geneval] step  6000/12000  b=2 σ=0.357  loss=0.8201 (l2=0.393 ce=0.428)  b0=0.218(2012)  b1=0.723(1965)  b2=1.480(2024)  elapsed=564s
+[geneval] step  6100/12000  b=2 σ=0.536  loss=1.4491 (l2=0.568 ce=0.881)  b0=0.159(2046)  b1=0.733(1995)  b2=1.659(2060)  elapsed=574s
+[geneval] step  6200/12000  b=1 σ=0.211  loss=0.1215 (l2=0.089 ce=0.032)  b0=0.141(2077)  b1=0.818(2028)  b2=1.683(2096)  elapsed=583s
+[geneval] step  6300/12000  b=0 σ=0.281  loss=0.5367 (l2=0.199 ce=0.338)  b0=0.228(2105)  b1=0.772(2067)  b2=1.580(2129)  elapsed=593s
+[geneval] step  6400/12000  b=0 σ=0.060  loss=0.1520 (l2=0.152 ce=0.000)  b0=0.147(2138)  b1=0.633(2101)  b2=1.590(2162)  elapsed=602s
+[geneval] step  6500/12000  b=1 σ=0.196  loss=0.1034 (l2=0.085 ce=0.019)  b0=0.125(2169)  b1=0.582(2131)  b2=1.527(2201)  elapsed=611s
+[geneval] step  6600/12000  b=0 σ=0.170  loss=0.0515 (l2=0.045 ce=0.006)  b0=0.152(2206)  b1=0.682(2168)  b2=1.685(2227)  elapsed=621s
+[geneval] step  6700/12000  b=1 σ=0.403  loss=1.0550 (l2=0.419 ce=0.636)  b0=0.193(2241)  b1=0.704(2195)  b2=1.556(2265)  elapsed=630s
+[geneval] step  6800/12000  b=2 σ=4.761  loss=2.2362 (l2=0.683 ce=1.553)  b0=0.122(2265)  b1=0.625(2229)  b2=1.739(2307)  elapsed=639s
+[geneval] step  6900/12000  b=0 σ=0.045  loss=0.2726 (l2=0.273 ce=0.000)  b0=0.146(2307)  b1=0.554(2262)  b2=1.723(2332)  elapsed=649s
+[geneval] step  7000/12000  b=0 σ=0.097  loss=0.0685 (l2=0.068 ce=0.000)  b0=0.150(2345)  b1=0.659(2288)  b2=1.455(2368)  elapsed=658s
+[geneval] step  7100/12000  b=2 σ=0.511  loss=1.3979 (l2=0.544 ce=0.854)  b0=0.136(2379)  b1=0.512(2325)  b2=1.501(2397)  elapsed=668s
+[geneval] step  7200/12000  b=0 σ=0.072  loss=0.1064 (l2=0.106 ce=0.000)  b0=0.201(2407)  b1=0.592(2354)  b2=1.655(2440)  elapsed=677s
+[geneval] step  7300/12000  b=0 σ=0.217  loss=0.1238 (l2=0.070 ce=0.054)  b0=0.142(2437)  b1=0.680(2379)  b2=1.606(2485)  elapsed=686s
+[geneval] step  7400/12000  b=1 σ=0.290  loss=0.4358 (l2=0.201 ce=0.234)  b0=0.149(2478)  b1=0.609(2407)  b2=1.689(2516)  elapsed=696s
+[geneval] step  7500/12000  b=0 σ=0.072  loss=0.1027 (l2=0.103 ce=0.000)  b0=0.134(2516)  b1=0.678(2436)  b2=1.703(2549)  elapsed=705s
+[geneval] step  7600/12000  b=1 σ=0.271  loss=0.3316 (l2=0.169 ce=0.163)  b0=0.126(2555)  b1=0.719(2471)  b2=1.603(2575)  elapsed=715s
+[geneval] step  7700/12000  b=0 σ=0.207  loss=0.0903 (l2=0.057 ce=0.033)  b0=0.156(2587)  b1=0.480(2511)  b2=1.613(2603)  elapsed=724s
+[geneval] step  7800/12000  b=1 σ=0.335  loss=0.6963 (l2=0.305 ce=0.391)  b0=0.123(2622)  b1=0.649(2531)  b2=1.472(2648)  elapsed=733s
+[geneval] step  7900/12000  b=0 σ=0.095  loss=0.0589 (l2=0.059 ce=0.000)  b0=0.107(2653)  b1=0.628(2560)  b2=1.564(2688)  elapsed=743s
+[geneval] step  8000/12000  b=0 σ=0.092  loss=0.0751 (l2=0.075 ce=0.000)  b0=0.134(2688)  b1=0.633(2587)  b2=1.542(2726)  elapsed=752s
+[geneval] step  8100/12000  b=2 σ=0.330  loss=0.6734 (l2=0.331 ce=0.342)  b0=0.147(2723)  b1=0.706(2618)  b2=1.520(2760)  elapsed=762s
+[geneval] step  8200/12000  b=2 σ=0.311  loss=0.5626 (l2=0.301 ce=0.262)  b0=0.110(2755)  b1=0.545(2652)  b2=1.604(2794)  elapsed=771s
+[geneval] step  8300/12000  b=2 σ=0.682  loss=1.6638 (l2=0.586 ce=1.078)  b0=0.128(2787)  b1=0.745(2685)  b2=1.601(2829)  elapsed=780s
+[geneval] step  8400/12000  b=1 σ=0.365  loss=0.8132 (l2=0.346 ce=0.467)  b0=0.123(2826)  b1=0.647(2713)  b2=1.608(2862)  elapsed=790s
+[geneval] step  8500/12000  b=0 σ=0.195  loss=0.0611 (l2=0.044 ce=0.018)  b0=0.113(2859)  b1=0.643(2750)  b2=1.538(2892)  elapsed=799s
+[geneval] step  8600/12000  b=2 σ=0.308  loss=0.5598 (l2=0.292 ce=0.268)  b0=0.136(2895)  b1=0.593(2779)  b2=1.565(2927)  elapsed=809s
+[geneval] step  8700/12000  b=2 σ=14.635  loss=2.2044 (l2=0.667 ce=1.537)  b0=0.156(2932)  b1=0.539(2811)  b2=1.607(2958)  elapsed=818s
+[geneval] step  8800/12000  b=0 σ=0.048  loss=0.1193 (l2=0.119 ce=0.000)  b0=0.120(2972)  b1=0.549(2843)  b2=1.458(2986)  elapsed=827s
+[geneval] step  8900/12000  b=1 σ=0.312  loss=0.5235 (l2=0.239 ce=0.284)  b0=0.158(3009)  b1=0.593(2875)  b2=1.453(3017)  elapsed=837s
+[geneval] step  9000/12000  b=2 σ=0.357  loss=0.7512 (l2=0.371 ce=0.380)  b0=0.127(3038)  b1=0.722(2916)  b2=1.322(3047)  elapsed=846s
+[geneval] step  9100/12000  b=2 σ=0.612  loss=1.5321 (l2=0.571 ce=0.961)  b0=0.110(3069)  b1=0.682(2945)  b2=1.628(3087)  elapsed=855s
+[geneval] step  9200/12000  b=2 σ=6.036  loss=2.1676 (l2=0.659 ce=1.508)  b0=0.171(3111)  b1=0.748(2970)  b2=1.667(3120)  elapsed=865s
+[geneval] step  9300/12000  b=1 σ=0.175  loss=0.0926 (l2=0.086 ce=0.006)  b0=0.103(3151)  b1=0.421(3001)  b2=1.523(3149)  elapsed=874s
+[geneval] step  9400/12000  b=1 σ=0.289  loss=0.4159 (l2=0.191 ce=0.225)  b0=0.109(3186)  b1=0.680(3024)  b2=1.541(3191)  elapsed=884s
+[geneval] step  9500/12000  b=2 σ=1.185  loss=1.9785 (l2=0.635 ce=1.343)  b0=0.105(3218)  b1=0.654(3058)  b2=1.481(3225)  elapsed=893s
+[geneval] step  9600/12000  b=0 σ=0.273  loss=0.4093 (l2=0.150 ce=0.259)  b0=0.123(3251)  b1=0.551(3081)  b2=1.534(3269)  elapsed=902s
+[geneval] step  9700/12000  b=0 σ=0.078  loss=0.0519 (l2=0.052 ce=0.000)  b0=0.070(3277)  b1=0.625(3116)  b2=1.633(3308)  elapsed=912s
+[geneval] step  9800/12000  b=1 σ=0.266  loss=0.3332 (l2=0.158 ce=0.175)  b0=0.101(3314)  b1=0.625(3139)  b2=1.663(3348)  elapsed=921s
+[geneval] step  9900/12000  b=1 σ=0.390  loss=0.9490 (l2=0.380 ce=0.569)  b0=0.142(3353)  b1=0.629(3170)  b2=1.527(3378)  elapsed=930s
+[geneval] step 10000/12000  b=1 σ=0.473  loss=1.2275 (l2=0.467 ce=0.761)  b0=0.095(3383)  b1=0.668(3202)  b2=1.489(3416)  elapsed=940s
+[geneval] step 10100/12000  b=2 σ=0.417  loss=1.0009 (l2=0.435 ce=0.566)  b0=0.086(3420)  b1=0.626(3231)  b2=1.524(3450)  elapsed=949s
+[geneval] step 10200/12000  b=2 σ=0.321  loss=0.5976 (l2=0.305 ce=0.292)  b0=0.093(3449)  b1=0.441(3268)  b2=1.495(3484)  elapsed=959s
+[geneval] step 10300/12000  b=1 σ=0.439  loss=1.1419 (l2=0.440 ce=0.702)  b0=0.081(3475)  b1=0.533(3303)  b2=1.537(3523)  elapsed=968s
+[geneval] step 10400/12000  b=0 σ=0.066  loss=0.0618 (l2=0.062 ce=0.000)  b0=0.079(3514)  b1=0.493(3336)  b2=1.476(3551)  elapsed=977s
+[geneval] step 10500/12000  b=0 σ=0.066  loss=0.0672 (l2=0.067 ce=0.000)  b0=0.095(3551)  b1=0.595(3370)  b2=1.449(3580)  elapsed=987s
+[geneval] step 10600/12000  b=0 σ=0.204  loss=0.0703 (l2=0.043 ce=0.027)  b0=0.134(3581)  b1=0.575(3408)  b2=1.693(3612)  elapsed=996s
+[geneval] step 10700/12000  b=0 σ=0.259  loss=0.3078 (l2=0.115 ce=0.193)  b0=0.114(3624)  b1=0.635(3434)  b2=1.618(3643)  elapsed=1005s
+[geneval] step 10800/12000  b=0 σ=0.083  loss=0.0557 (l2=0.056 ce=0.000)  b0=0.100(3652)  b1=0.585(3475)  b2=1.547(3674)  elapsed=1015s
+[geneval] step 10900/12000  b=2 σ=0.871  loss=1.7451 (l2=0.605 ce=1.140)  b0=0.133(3685)  b1=0.485(3513)  b2=1.499(3703)  elapsed=1024s
+[geneval] step 11000/12000  b=2 σ=0.725  loss=1.6956 (l2=0.597 ce=1.098)  b0=0.091(3710)  b1=0.560(3558)  b2=1.450(3733)  elapsed=1034s
+[geneval] step 11100/12000  b=0 σ=0.072  loss=0.0510 (l2=0.051 ce=0.000)  b0=0.079(3740)  b1=0.529(3584)  b2=1.477(3777)  elapsed=1043s
+[geneval] step 11200/12000  b=2 σ=0.849  loss=1.7570 (l2=0.607 ce=1.150)  b0=0.072(3767)  b1=0.515(3623)  b2=1.525(3811)  elapsed=1052s
+[geneval] step 11300/12000  b=1 σ=0.379  loss=0.8396 (l2=0.351 ce=0.488)  b0=0.086(3787)  b1=0.584(3661)  b2=1.511(3853)  elapsed=1062s
+[geneval] step 11400/12000  b=2 σ=0.684  loss=1.5947 (l2=0.577 ce=1.018)  b0=0.081(3814)  b1=0.603(3693)  b2=1.458(3894)  elapsed=1071s
+[geneval] step 11500/12000  b=0 σ=0.165  loss=0.0288 (l2=0.024 ce=0.005)  b0=0.076(3848)  b1=0.499(3720)  b2=1.510(3933)  elapsed=1081s
+[geneval] step 11600/12000  b=0 σ=0.070  loss=0.0523 (l2=0.052 ce=0.000)  b0=0.092(3883)  b1=0.484(3754)  b2=1.409(3964)  elapsed=1090s
+[geneval] step 11700/12000  b=2 σ=0.375  loss=0.8237 (l2=0.384 ce=0.440)  b0=0.081(3915)  b1=0.619(3779)  b2=1.349(4007)  elapsed=1099s
+[geneval] step 11800/12000  b=1 σ=0.212  loss=0.1104 (l2=0.081 ce=0.030)  b0=0.064(3954)  b1=0.604(3815)  b2=1.484(4032)  elapsed=1109s
+[geneval] step 11900/12000  b=1 σ=0.216  loss=0.1104 (l2=0.080 ce=0.030)  b0=0.089(3984)  b1=0.611(3853)  b2=1.378(4064)  elapsed=1118s
+[geneval] step 11999/12000  b=2 σ=0.632  loss=1.5582 (l2=0.568 ce=0.991)  b0=0.092(4015)  b1=0.646(3886)  b2=1.468(4099)  elapsed=1127s
+[geneval] generating 50 samples × 256 bytes with N=50 Karras steps ...
+[geneval] generation took 0.6s
+[geneval] scoring with GPT-2 small ...
+[geneval] wrote /tmp/geneval_out/result.json
+[geneval] PPL gen = 621.6 ± 137.6  PPL val = 130.7 ± 74.2
+wrote /home/seneca/wikitext-diffusion/research/debug/diffusionblocks_ar_geneval/result.json (2251 bytes)
+wrote /home/seneca/wikitext-diffusion/research/debug/diffusionblocks_ar_geneval/loss_curve.csv (7521 bytes)
+wrote /home/seneca/wikitext-diffusion/research/debug/diffusionblocks_ar_geneval/samples.txt (13143 bytes)
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-m1Ybp2iGHrja0qUoFe65Ay
