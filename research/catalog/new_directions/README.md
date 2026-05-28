@@ -14,6 +14,7 @@ Hypothesis-driven specifications in the same format as `files.zip` (specs 1–6)
 | 14 | [Mamba (Selective SSM)](spec_14_mamba.md) | Manning REPORT.md branch 2 | 1 day | Constant-state recurrence; no KV cache |
 | 15 | [Pointer-Sentinel at Char Level](spec_15_pointer_sentinel_char.md) | Manning REPORT.md branch 6 | 2 days | Small backbone + char-pointer absorbs repetition |
 | 16 | [Schmidhuber Chunker (standalone)](spec_16_chunker.md) | RESEARCH_DIRECTIONS A1 | 2 days + D1 gate | Surprise-gated 2-level architecture: skip predictable bytes |
+| 17 | [DiffusionBlocks AR](spec_17_diffusionblocks.md) | Sakana AI, ICLR 2026 ([arxiv:2506.14202](https://arxiv.org/abs/2506.14202)) | 3–5 days | One-block-at-a-time gradients via EDM denoising; activation-memory headroom may enable wider models inside the 300 s budget |
 
 ## Dependency graph
 
