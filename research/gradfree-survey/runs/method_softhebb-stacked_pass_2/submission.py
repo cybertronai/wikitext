@@ -321,7 +321,7 @@ class ShallowHebbCharModel(CharModel):
         return oh.reshape(K * C_IN)
 
     @torch.no_grad()
-    def predict(self) -> dict[str, float]:
+    def predict(self) -> str:
         x = self._build_patch()
         u = x @ self.W.T                          # (H,)
         phi = torch.softmax(u / self.tau_used, dim=0)
@@ -334,7 +334,7 @@ class ShallowHebbCharModel(CharModel):
             except UnicodeDecodeError:
                 continue
             out[ch] = p
-        return out
+        return max(out, key=lambda c: out[c]) if out else ""
 
     @torch.no_grad()
     def observe(self, char: str) -> None:

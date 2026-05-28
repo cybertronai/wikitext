@@ -21,7 +21,7 @@ from wikitext import (
 # ---------------------------------------------------------------------------
 
 class _ConstantModel(CharModel):
-    """Always predicts a single fixed char with probability 1.0."""
+    """Always predicts a single fixed char."""
 
     def __init__(self, ch: str):
         self.ch = ch
@@ -30,14 +30,14 @@ class _ConstantModel(CharModel):
     def reset(self) -> None:
         self.observed = []
 
-    def predict(self) -> dict[str, float]:
-        return {self.ch: 1.0}
+    def predict(self) -> str:
+        return self.ch
 
     def observe(self, char: str) -> None:
         self.observed.append(char)
 
 
-def test_evaluate_counts_correct_argmax() -> None:
+def test_evaluate_counts_correct_predictions() -> None:
     """Constant predictor of 'a' on stream 'aaa' should get 3/3."""
     r = evaluate(_ConstantModel("a"), "aaa")
     assert r.n_chars == 3
@@ -45,12 +45,20 @@ def test_evaluate_counts_correct_argmax() -> None:
     assert r.accuracy == 1.0
 
 
-def test_evaluate_counts_wrong_argmax() -> None:
+def test_evaluate_counts_wrong_predictions() -> None:
     """Constant predictor of 'a' on stream 'bcd' should get 0/3."""
     r = evaluate(_ConstantModel("a"), "bcd")
     assert r.n_chars == 3
     assert r.n_correct == 0
     assert r.accuracy == 0.0
+
+
+def test_evaluate_empty_string_prediction_counts_as_wrong() -> None:
+    """A submission that returns '' to abstain must score 0 — the empty
+    string never equals a real character."""
+    r = evaluate(_ConstantModel(""), "abc")
+    assert r.n_chars == 3
+    assert r.n_correct == 0
 
 
 def test_evaluate_streaming_order() -> None:
@@ -71,10 +79,10 @@ def test_evaluate_streaming_order() -> None:
             self.n_pred = 0
             self.n_obs = 0
 
-        def predict(self) -> dict[str, float]:
+        def predict(self) -> str:
             seen_at_predict.append((self.n_pred, self.n_obs))
             self.n_pred += 1
-            return {"x": 1.0}
+            return "x"
 
         def observe(self, char: str) -> None:
             del char

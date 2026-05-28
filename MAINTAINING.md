@@ -23,6 +23,7 @@ half-old/half-new comparison is meaningless.
 | `EnergyMeter` semantics, idle-baseline default, scoring formula | **Yes** |
 | Hardware pin (PCIe ↔ SXM4, A100 ↔ H100) | **Yes** |
 | `MAX_TRAIN_SECONDS`, `ACC_MIN`, eval window | **Yes** |
+| `CharModel` API contract (`predict` return shape, `observe` signature, ...) | **Yes** — old submissions are no longer runnable; argmax-preserving rewrites need re-running to confirm numerical identity |
 | Container-image bump with numerical drift | **Maybe** — re-run if anything visibly drifts |
 | New submission, doc/typo, `.scratch/`, internal refactor | No |
 | Additive optional field on `result.json` (existing semantics intact) | No — but new field is `null` on old entries; mention in PR |
@@ -52,3 +53,4 @@ the priors; silently overwrite old `result.json` files without a banner in
 |---|---|---|---|
 | 2026-05-18 | Hardware pin: SXM4 → PCIe A100-80GB | (n/a) | partial — older SXM4 rows kept as history |
 | 2026-05-19 | `EnergyMeter` gains `cpu_energy_J` + `total_energy_J` via CodeCarbon | #4 | yes — `lwta_k2`, `lwta_k4`, `modded_nanogpt` re-run |
+| 2026-05-28 | `CharModel.predict()` returns `str` (single committed char) instead of `dict[str, float]`; runner no longer does argmax on the submission's behalf | `bugfix/sampling` | partial — top-3 (`subset_70_mkn`, `gpu_ngram_w31_k11`, `paq_mixer_v3`) re-run; **all other rows are flagged outdated until updated and re-run** (see `submissions/OUTDATED.md`) |
