@@ -87,3 +87,7 @@ evaluating on val split ...
   eval     21,600/60,000 ( 36.0%)  acc=0.2373        9 char/s  eta=  4145s
   eval     22,800/60,000 ( 38.0%)  acc=0.2365        9 char/s  eta=  4014s
   eval     24,000/60,000 ( 40.0%)  acc=0.2376        9 char/s  eta=  3888s
+Task's current input(s) ["in-01KSQXV64EAJHBFSBGXVDSDAP5:1779993254031-0"] cancelled because: Task's current input in-01KSQXV64EAJHBFSBGXVDSDAP5:1779993254031-0 hit its timeout of 3000s
+Stopping app - uncaught exception raised locally: FunctionTimeoutError("Task's current input in-01KSQXV64EAJHBFSBGXVDSDAP5:1779993254031-0 hit its timeout of 3000s").
+[modal-client] 2026-05-28T19:24:18+0000 Received a cancellation signal while processing input ('in-01KSQXV64EAJHBFSBGXVDSDAP5:1779993254031-0',)
+[modal-client] 2026-05-28T19:24:18+0000 Successfully canceled input ('in-01KSQXV64EAJHBFSBGXVDSDAP5:1779993254031-0',)
