@@ -1,0 +1,16 @@
+# wikitext submit.py log — noprop_terminal — 2026-05-25T17:38:25+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-xi7Qti1gUwQLysg0wiNqga
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 55.1 W
+running 30s stress workload ...

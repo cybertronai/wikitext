@@ -1,0 +1,132 @@
+# wikitext submit.py log — krr_ngram — 2026-05-25T16:17:35+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-n5jNb3vpNWFjE0TiLClpoQ
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 59.9 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.3 s
+  energy delta:   12,819.4 J
+  avg power:      343.8 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 59.87458333333333, "stress_watts_avg": 343.7993020168536, "stress_energy_joules": 12819.356, "stress_duration_s": 37.287324100999996, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/krr_ngram.py ...
+[krr_ngram] device=cuda  F=8192  N=200000  W=16  ngrams=1..6  lambdas=(0.01, 1.0, 100.0)
+[krr_ngram] train bytes: 541,096,898
+[krr_ngram] sampled 200,000 pairs (train=190,000, heldout=10,000)
+[krr_ngram] built sparse Phi (nnz=14,204,272) in 0.23s
+[krr_ngram] computed PtP (8192, 8192) and PtY (8192, 256) in 0.29s
+[krr_ngram] lambda=1.00e-02  solve=0.49s  heldout_acc=0.3663  (0.13s eval)
+[krr_ngram] lambda=1.00e+00  solve=0.06s  heldout_acc=0.3650  (0.04s eval)
+[krr_ngram] lambda=1.00e+02  solve=0.06s  heldout_acc=0.3177  (0.04s eval)
+[krr_ngram] best lambda=0.01  heldout_acc=0.3663  total_train_time=2.87s
+training: 99.8 J   duration=3.1s
+evaluating on val split ...
+/workspace/krr_ngram.py:338: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:1560.)
+  ctx = torch.frombuffer(bytes(self._buf), dtype=torch.uint8).to(self.device)
+  eval      1,200/60,000 (  2.0%)  acc=0.3392      306 char/s  eta=   192s
+  eval      2,400/60,000 (  4.0%)  acc=0.3617      310 char/s  eta=   186s
+  eval      3,600/60,000 (  6.0%)  acc=0.3664      310 char/s  eta=   182s
+  eval      4,800/60,000 (  8.0%)  acc=0.3752      311 char/s  eta=   178s
+  eval      6,000/60,000 ( 10.0%)  acc=0.3680      311 char/s  eta=   174s
+  eval      7,200/60,000 ( 12.0%)  acc=0.3672      311 char/s  eta=   170s
+  eval      8,400/60,000 ( 14.0%)  acc=0.3630      311 char/s  eta=   166s
+  eval      9,600/60,000 ( 16.0%)  acc=0.3625      312 char/s  eta=   162s
+  eval     10,800/60,000 ( 18.0%)  acc=0.3608      312 char/s  eta=   158s
+  eval     12,000/60,000 ( 20.0%)  acc=0.3596      312 char/s  eta=   154s
+  eval     13,200/60,000 ( 22.0%)  acc=0.3589      312 char/s  eta=   150s
+  eval     14,400/60,000 ( 24.0%)  acc=0.3574      312 char/s  eta=   146s
+  eval     15,600/60,000 ( 26.0%)  acc=0.3565      312 char/s  eta=   142s
+  eval     16,800/60,000 ( 28.0%)  acc=0.3557      312 char/s  eta=   139s
+  eval     18,000/60,000 ( 30.0%)  acc=0.3538      312 char/s  eta=   135s
+  eval     19,200/60,000 ( 32.0%)  acc=0.3546      312 char/s  eta=   131s
+  eval     20,400/60,000 ( 34.0%)  acc=0.3557      312 char/s  eta=   127s
+  eval     21,600/60,000 ( 36.0%)  acc=0.3541      312 char/s  eta=   123s
+  eval     22,800/60,000 ( 38.0%)  acc=0.3546      312 char/s  eta=   119s
+  eval     24,000/60,000 ( 40.0%)  acc=0.3557      312 char/s  eta=   115s
+  eval     25,200/60,000 ( 42.0%)  acc=0.3559      312 char/s  eta=   111s
+  eval     26,400/60,000 ( 44.0%)  acc=0.3584      312 char/s  eta=   108s
+  eval     27,600/60,000 ( 46.0%)  acc=0.3592      312 char/s  eta=   104s
+  eval     28,800/60,000 ( 48.0%)  acc=0.3582      312 char/s  eta=   100s
+  eval     30,000/60,000 ( 50.0%)  acc=0.3569      312 char/s  eta=    96s
+  eval     31,200/60,000 ( 52.0%)  acc=0.3558      312 char/s  eta=    92s
+  eval     32,400/60,000 ( 54.0%)  acc=0.3550      312 char/s  eta=    88s
+  eval     33,600/60,000 ( 56.0%)  acc=0.3542      312 char/s  eta=    85s
+  eval     34,800/60,000 ( 58.0%)  acc=0.3538      312 char/s  eta=    81s
+  eval     36,000/60,000 ( 60.0%)  acc=0.3537      312 char/s  eta=    77s
+  eval     37,200/60,000 ( 62.0%)  acc=0.3545      312 char/s  eta=    73s
+  eval     38,400/60,000 ( 64.0%)  acc=0.3547      312 char/s  eta=    69s
+  eval     39,600/60,000 ( 66.0%)  acc=0.3552      312 char/s  eta=    65s
+  eval     40,800/60,000 ( 68.0%)  acc=0.3553      312 char/s  eta=    61s
+  eval     42,000/60,000 ( 70.0%)  acc=0.3566      312 char/s  eta=    58s
+  eval     43,200/60,000 ( 72.0%)  acc=0.3573      312 char/s  eta=    54s
+  eval     44,400/60,000 ( 74.0%)  acc=0.3582      313 char/s  eta=    50s
+  eval     45,600/60,000 ( 76.0%)  acc=0.3588      313 char/s  eta=    46s
+  eval     46,800/60,000 ( 78.0%)  acc=0.3593      312 char/s  eta=    42s
+  eval     48,000/60,000 ( 80.0%)  acc=0.3600      313 char/s  eta=    38s
+  eval     49,200/60,000 ( 82.0%)  acc=0.3605      313 char/s  eta=    35s
+  eval     50,400/60,000 ( 84.0%)  acc=0.3615      312 char/s  eta=    31s
+  eval     51,600/60,000 ( 86.0%)  acc=0.3619      312 char/s  eta=    27s
+  eval     52,800/60,000 ( 88.0%)  acc=0.3619      312 char/s  eta=    23s
+  eval     54,000/60,000 ( 90.0%)  acc=0.3624      312 char/s  eta=    19s
+  eval     55,200/60,000 ( 92.0%)  acc=0.3623      312 char/s  eta=    15s
+  eval     56,400/60,000 ( 94.0%)  acc=0.3617      312 char/s  eta=    12s
+  eval     57,600/60,000 ( 96.0%)  acc=0.3622      312 char/s  eta=     8s
+  eval     58,800/60,000 ( 98.0%)  acc=0.3631      312 char/s  eta=     4s
+  eval     60,000/60,000 (100.0%)  acc=0.3634      313 char/s  eta=     0s
+chars=60,000  acc=0.3634  eval_duration=192.0s
+---
+DISQUALIFIED: val accuracy 0.3634 below floor 0.7000
+submission         : krr_ngram
+training energy (J): 99.8
+training duration  : 3.1s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-n5jNb3vpNWFjE0TiLClpoQ
+
+# final result
+{
+  "submission": "krr_ngram",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.36345,
+  "val_chars": 60000,
+  "training_energy_J": 99.77272385000015,
+  "training_duration_s": 3.1334855229999974,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-25T16:21:42Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 59.87458333333333,
+    "stress_watts_avg": 343.7993020168536,
+    "stress_energy_joules": 12819.356,
+    "stress_duration_s": 37.287324100999996,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

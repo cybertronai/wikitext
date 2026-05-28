@@ -1,0 +1,143 @@
+# wikitext submit.py log — rf_mlp_block2 — 2026-05-25T17:48:08+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-oBrN5vlCl1cXAW4DTmb2OJ
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 55.7 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       36.5 s
+  energy delta:   8,602.6 J
+  avg power:      235.5 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 55.73414999999999, "stress_watts_avg": 235.52728198619346, "stress_energy_joules": 8602.644, "stress_duration_s": 36.525042565999996, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/rf_mlp_block2.py ...
+[rf_mlp_b2] params 10.25M trainable 10.25M buffers 0.59M  frozen_mlp_block=2  cfg=TrainConfig(d=384 L=6 H=6 bs=32 T=1024 steps=2150)
+[modded] step     0/2150  loss 5.5452  elapsed 1s
+[modded] step   100/2150  loss 1.6096  elapsed 11s
+[modded] step   200/2150  loss 1.4032  elapsed 22s
+[modded] step   300/2150  loss 1.3543  elapsed 32s
+[modded] step   400/2150  loss 1.2645  elapsed 43s
+[modded] step   500/2150  loss 1.2104  elapsed 54s
+[modded] step   600/2150  loss 1.1894  elapsed 65s
+[modded] step   700/2150  loss 1.1285  elapsed 75s
+[modded] step   800/2150  loss 1.1275  elapsed 86s
+[modded] step   900/2150  loss 1.0947  elapsed 96s
+[modded] step  1000/2150  loss 1.0846  elapsed 107s
+[modded] step  1100/2150  loss 1.0511  elapsed 118s
+[modded] step  1200/2150  loss 1.0740  elapsed 128s
+[modded] step  1300/2150  loss 1.0780  elapsed 139s
+[modded] step  1400/2150  loss 1.0503  elapsed 150s
+[modded] step  1500/2150  loss 1.0446  elapsed 160s
+[modded] step  1600/2150  loss 1.0327  elapsed 171s
+[modded] step  1700/2150  loss 1.0008  elapsed 181s
+[modded] step  1800/2150  loss 0.9954  elapsed 192s
+[modded] step  1900/2150  loss 0.9884  elapsed 203s
+[modded] step  2000/2150  loss 0.9586  elapsed 213s
+[modded] step  2100/2150  loss 0.9602  elapsed 224s
+[modded] step  2149/2150  loss 0.9664  elapsed 229s
+training: 48,908.1 J   duration=231.4s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7325      163 char/s  eta=   360s
+  eval      2,400/60,000 (  4.0%)  acc=0.7183      162 char/s  eta=   355s
+  eval      3,600/60,000 (  6.0%)  acc=0.7186      160 char/s  eta=   352s
+  eval      4,800/60,000 (  8.0%)  acc=0.7262      159 char/s  eta=   347s
+  eval      6,000/60,000 ( 10.0%)  acc=0.7162      159 char/s  eta=   340s
+  eval      7,200/60,000 ( 12.0%)  acc=0.7135      159 char/s  eta=   332s
+  eval      8,400/60,000 ( 14.0%)  acc=0.7127      159 char/s  eta=   325s
+  eval      9,600/60,000 ( 16.0%)  acc=0.7172      159 char/s  eta=   317s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7184      159 char/s  eta=   310s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7199      159 char/s  eta=   302s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7245      159 char/s  eta=   294s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7257      160 char/s  eta=   286s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7280      159 char/s  eta=   278s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7302      160 char/s  eta=   271s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7282      160 char/s  eta=   263s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7295      160 char/s  eta=   255s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7307      160 char/s  eta=   248s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7298      160 char/s  eta=   240s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7306      160 char/s  eta=   233s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7315      159 char/s  eta=   226s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7329      160 char/s  eta=   218s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7341      160 char/s  eta=   210s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7351      160 char/s  eta=   203s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7358      160 char/s  eta=   195s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7350      160 char/s  eta=   188s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7329      160 char/s  eta=   180s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7327      160 char/s  eta=   173s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7310      160 char/s  eta=   165s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7296      159 char/s  eta=   158s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7288      159 char/s  eta=   150s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7292      159 char/s  eta=   143s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7294      160 char/s  eta=   135s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7295      160 char/s  eta=   128s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7291      160 char/s  eta=   120s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7289      159 char/s  eta=   113s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7295      159 char/s  eta=   105s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7293      159 char/s  eta=    98s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7295      159 char/s  eta=    91s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7292      159 char/s  eta=    83s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7300      159 char/s  eta=    75s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7305      159 char/s  eta=    68s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7318      159 char/s  eta=    60s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7325      159 char/s  eta=    53s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7332      159 char/s  eta=    45s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7335      159 char/s  eta=    38s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7330      159 char/s  eta=    30s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7335      158 char/s  eta=    23s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7340      158 char/s  eta=    15s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7344      158 char/s  eta=     8s
+  eval     60,000/60,000 (100.0%)  acc=0.7345      158 char/s  eta=     0s
+chars=60,000  acc=0.7345  eval_duration=379.0s
+---
+submission         : rf_mlp_block2
+training energy (J): 48,908.1
+training duration  : 231.4s
+val  char-accuracy : 0.7345
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-oBrN5vlCl1cXAW4DTmb2OJ
+
+# final result
+{
+  "submission": "rf_mlp_block2",
+  "training_energy_J": 48908.1156468,
+  "training_duration_s": 231.40626706400002,
+  "val_char_accuracy": 0.73445,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-25T17:59:06Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 55.73414999999999,
+    "stress_watts_avg": 235.52728198619346,
+    "stress_energy_joules": 8602.644,
+    "stress_duration_s": 36.525042565999996,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

@@ -1,0 +1,340 @@
+# wikitext submit.py log — rff_linear_head — 2026-05-25T16:16:37+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-eyfFrJtXg3prBSKutQVf7E
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 57.9 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.6 s
+  energy delta:   8,684.7 J
+  avg power:      230.7 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 57.918816666666636, "stress_watts_avg": 230.69204734504504, "stress_energy_joules": 8684.701, "stress_duration_s": 37.64629557, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/rff_linear_head.py ...
+[rff] device=cuda  d=128  w=8  k=4096  batch=64  seq=512  lr=0.003  budget_s=250.0
+[rff] sigma_default(sqrt(d))=11.3137  sigma_used=9.1053
+[rff] params total=1.213M  trainable=1.213M  (embed 0.033M, conv 0.131M, head 1.049M)
+[rff] step      0  loss 5.5398  elapsed    0.0s
+[rff] step 50  RFF feature var (mean over k)=0.0001  (expected ~0.5 for white input)  ||c||=8.904
+[rff] step    100  loss 2.2003  elapsed    1.7s
+[rff] step    200  loss 1.9525  elapsed    2.9s
+[rff] step    300  loss 1.8493  elapsed    4.0s
+[rff] step    400  loss 1.8241  elapsed    5.2s
+[rff] step    500  loss 1.7205  elapsed    6.4s
+[rff] step    600  loss 1.6804  elapsed    7.5s
+[rff] step    700  loss 1.6440  elapsed    8.7s
+[rff] step    800  loss 1.6543  elapsed    9.9s
+[rff] step    900  loss 1.6291  elapsed   11.0s
+[rff] step   1000  loss 1.5951  elapsed   12.2s
+[rff] step   1100  loss 1.5882  elapsed   13.3s
+[rff] step   1200  loss 1.5985  elapsed   14.5s
+[rff] step   1300  loss 1.5825  elapsed   15.7s
+[rff] step   1400  loss 1.5389  elapsed   16.8s
+[rff] step   1500  loss 1.5493  elapsed   18.0s
+[rff] step   1600  loss 1.5566  elapsed   19.1s
+[rff] step   1700  loss 1.5352  elapsed   20.3s
+[rff] step   1800  loss 1.5252  elapsed   21.5s
+[rff] step   1900  loss 1.5098  elapsed   22.6s
+[rff] step   2000  loss 1.5435  elapsed   23.8s
+[rff] step   2100  loss 1.4987  elapsed   25.0s
+[rff] step   2200  loss 1.5171  elapsed   26.1s
+[rff] step   2300  loss 1.5240  elapsed   27.3s
+[rff] step   2400  loss 1.5079  elapsed   28.4s
+[rff] step   2500  loss 1.5149  elapsed   29.6s
+[rff] step   2600  loss 1.5248  elapsed   30.8s
+[rff] step   2700  loss 1.5270  elapsed   31.9s
+[rff] step   2800  loss 1.5244  elapsed   33.1s
+[rff] step   2900  loss 1.5110  elapsed   34.3s
+[rff] step   3000  loss 1.5147  elapsed   35.4s
+[rff] step   3100  loss 1.5088  elapsed   36.6s
+[rff] step   3200  loss 1.5070  elapsed   37.7s
+[rff] step   3300  loss 1.4961  elapsed   38.9s
+[rff] step   3400  loss 1.5062  elapsed   40.1s
+[rff] step   3500  loss 1.5001  elapsed   41.2s
+[rff] step   3600  loss 1.4603  elapsed   42.4s
+[rff] step   3700  loss 1.4984  elapsed   43.6s
+[rff] step   3800  loss 1.4903  elapsed   44.7s
+[rff] step   3900  loss 1.4920  elapsed   45.9s
+[rff] step   4000  loss 1.4922  elapsed   47.1s
+[rff] step   4100  loss 1.4788  elapsed   48.2s
+[rff] step   4200  loss 1.4636  elapsed   49.4s
+[rff] step   4300  loss 1.4991  elapsed   50.6s
+[rff] step   4400  loss 1.4673  elapsed   51.7s
+[rff] step   4500  loss 1.4742  elapsed   52.9s
+[rff] step   4600  loss 1.4880  elapsed   54.1s
+[rff] step   4700  loss 1.4707  elapsed   55.2s
+[rff] step   4800  loss 1.4701  elapsed   56.4s
+[rff] step   4900  loss 1.4750  elapsed   57.6s
+[rff] step   5000  loss 1.5117  elapsed   58.7s
+[rff] step   5100  loss 1.4873  elapsed   59.9s
+[rff] step   5200  loss 1.4809  elapsed   61.1s
+[rff] step   5300  loss 1.4536  elapsed   62.3s
+[rff] step   5400  loss 1.4843  elapsed   63.4s
+[rff] step   5500  loss 1.4475  elapsed   64.6s
+[rff] step   5600  loss 1.4661  elapsed   65.8s
+[rff] step   5700  loss 1.4633  elapsed   66.9s
+[rff] step   5800  loss 1.4599  elapsed   68.1s
+[rff] step   5900  loss 1.4675  elapsed   69.3s
+[rff] step   6000  loss 1.4734  elapsed   70.4s
+[rff] step   6100  loss 1.4182  elapsed   71.6s
+[rff] step   6200  loss 1.4326  elapsed   72.8s
+[rff] step   6300  loss 1.4672  elapsed   74.0s
+[rff] step   6400  loss 1.4606  elapsed   75.1s
+[rff] step   6500  loss 1.4628  elapsed   76.3s
+[rff] step   6600  loss 1.4438  elapsed   77.5s
+[rff] step   6700  loss 1.4885  elapsed   78.7s
+[rff] step   6800  loss 1.4784  elapsed   79.8s
+[rff] step   6900  loss 1.4566  elapsed   81.0s
+[rff] step   7000  loss 1.4509  elapsed   82.2s
+[rff] step   7100  loss 1.4296  elapsed   83.3s
+[rff] step   7200  loss 1.4545  elapsed   84.5s
+[rff] step   7300  loss 1.4851  elapsed   85.7s
+[rff] step   7400  loss 1.4751  elapsed   86.9s
+[rff] step   7500  loss 1.4352  elapsed   88.0s
+[rff] step   7600  loss 1.4357  elapsed   89.2s
+[rff] step   7700  loss 1.4538  elapsed   90.4s
+[rff] step   7800  loss 1.4775  elapsed   91.5s
+[rff] step   7900  loss 1.4380  elapsed   92.7s
+[rff] step   8000  loss 1.4462  elapsed   93.9s
+[rff] step   8100  loss 1.4413  elapsed   95.1s
+[rff] step   8200  loss 1.4361  elapsed   96.2s
+[rff] step   8300  loss 1.4791  elapsed   97.4s
+[rff] step   8400  loss 1.4956  elapsed   98.6s
+[rff] step   8500  loss 1.4711  elapsed   99.8s
+[rff] step   8600  loss 1.4514  elapsed  100.9s
+[rff] step   8700  loss 1.4594  elapsed  102.1s
+[rff] step   8800  loss 1.4357  elapsed  103.3s
+[rff] step   8900  loss 1.4582  elapsed  104.4s
+[rff] step   9000  loss 1.4558  elapsed  105.6s
+[rff] step   9100  loss 1.4183  elapsed  106.8s
+[rff] step   9200  loss 1.4367  elapsed  108.0s
+[rff] step   9300  loss 1.4724  elapsed  109.1s
+[rff] step   9400  loss 1.4580  elapsed  110.3s
+[rff] step   9500  loss 1.4473  elapsed  111.5s
+[rff] step   9600  loss 1.4486  elapsed  112.7s
+[rff] step   9700  loss 1.4489  elapsed  113.8s
+[rff] step   9800  loss 1.5265  elapsed  115.0s
+[rff] step   9900  loss 1.4264  elapsed  116.2s
+[rff] step  10000  loss 1.4451  elapsed  117.4s
+[rff] step  10100  loss 1.4118  elapsed  118.5s
+[rff] step  10200  loss 1.4219  elapsed  119.7s
+[rff] step  10300  loss 1.4414  elapsed  120.9s
+[rff] step  10400  loss 1.4504  elapsed  122.1s
+[rff] step  10500  loss 1.4483  elapsed  123.2s
+[rff] step  10600  loss 1.4440  elapsed  124.4s
+[rff] step  10700  loss 1.4485  elapsed  125.6s
+[rff] step  10800  loss 1.4499  elapsed  126.8s
+[rff] step  10900  loss 1.4528  elapsed  127.9s
+[rff] step  11000  loss 1.4795  elapsed  129.1s
+[rff] step  11100  loss 1.4464  elapsed  130.3s
+[rff] step  11200  loss 1.4581  elapsed  131.5s
+[rff] step  11300  loss 1.4751  elapsed  132.7s
+[rff] step  11400  loss 1.4638  elapsed  133.8s
+[rff] step  11500  loss 1.4658  elapsed  135.0s
+[rff] step  11600  loss 1.4370  elapsed  136.2s
+[rff] step  11700  loss 1.4482  elapsed  137.4s
+[rff] step  11800  loss 1.4797  elapsed  138.5s
+[rff] step  11900  loss 1.4432  elapsed  139.7s
+[rff] step  12000  loss 1.4352  elapsed  140.9s
+[rff] step  12100  loss 1.4334  elapsed  142.1s
+[rff] step  12200  loss 1.4359  elapsed  143.2s
+[rff] step  12300  loss 1.4548  elapsed  144.4s
+[rff] step  12400  loss 1.4500  elapsed  145.6s
+[rff] step  12500  loss 1.4254  elapsed  146.8s
+[rff] step  12600  loss 1.4429  elapsed  147.9s
+[rff] step  12700  loss 1.4384  elapsed  149.1s
+[rff] step  12800  loss 1.4614  elapsed  150.3s
+[rff] step  12900  loss 1.4463  elapsed  151.5s
+[rff] step  13000  loss 1.4849  elapsed  152.7s
+[rff] step  13100  loss 1.4429  elapsed  153.8s
+[rff] step  13200  loss 1.4170  elapsed  155.0s
+[rff] step  13300  loss 1.4506  elapsed  156.2s
+[rff] step  13400  loss 1.4053  elapsed  157.4s
+[rff] step  13500  loss 1.4407  elapsed  158.5s
+[rff] step  13600  loss 1.3988  elapsed  159.7s
+[rff] step  13700  loss 1.4146  elapsed  160.9s
+[rff] step  13800  loss 1.4268  elapsed  162.1s
+[rff] step  13900  loss 1.4044  elapsed  163.2s
+[rff] step  14000  loss 1.4738  elapsed  164.4s
+[rff] step  14100  loss 1.4126  elapsed  165.6s
+[rff] step  14200  loss 1.4165  elapsed  166.8s
+[rff] step  14300  loss 1.4280  elapsed  167.9s
+[rff] step  14400  loss 1.4398  elapsed  169.1s
+[rff] step  14500  loss 1.4369  elapsed  170.3s
+[rff] step  14600  loss 1.4278  elapsed  171.5s
+[rff] step  14700  loss 1.4364  elapsed  172.6s
+[rff] step  14800  loss 1.4344  elapsed  173.8s
+[rff] step  14900  loss 1.4220  elapsed  175.0s
+[rff] step  15000  loss 1.4371  elapsed  176.2s
+[rff] step  15100  loss 1.4508  elapsed  177.4s
+[rff] step  15200  loss 1.4375  elapsed  178.5s
+[rff] step  15300  loss 1.4209  elapsed  179.7s
+[rff] step  15400  loss 1.4232  elapsed  180.9s
+[rff] step  15500  loss 1.4352  elapsed  182.1s
+[rff] step  15600  loss 1.4067  elapsed  183.3s
+[rff] step  15700  loss 1.4343  elapsed  184.4s
+[rff] step  15800  loss 1.4088  elapsed  185.6s
+[rff] step  15900  loss 1.4519  elapsed  186.8s
+[rff] step  16000  loss 1.4191  elapsed  188.0s
+[rff] step  16100  loss 1.4365  elapsed  189.2s
+[rff] step  16200  loss 1.4348  elapsed  190.4s
+[rff] step  16300  loss 1.3713  elapsed  191.5s
+[rff] step  16400  loss 1.3977  elapsed  192.7s
+[rff] step  16500  loss 1.4371  elapsed  193.9s
+[rff] step  16600  loss 1.4586  elapsed  195.1s
+[rff] step  16700  loss 1.4092  elapsed  196.3s
+[rff] step  16800  loss 1.3970  elapsed  197.4s
+[rff] step  16900  loss 1.4373  elapsed  198.6s
+[rff] step  17000  loss 1.4396  elapsed  199.8s
+[rff] step  17100  loss 1.4478  elapsed  201.0s
+[rff] step  17200  loss 1.4803  elapsed  202.2s
+[rff] step  17300  loss 1.4464  elapsed  203.3s
+[rff] step  17400  loss 1.4162  elapsed  204.5s
+[rff] step  17500  loss 1.4500  elapsed  205.7s
+[rff] step  17600  loss 1.4205  elapsed  206.9s
+[rff] step  17700  loss 1.4676  elapsed  208.1s
+[rff] step  17800  loss 1.4678  elapsed  209.2s
+[rff] step  17900  loss 1.4446  elapsed  210.4s
+[rff] step  18000  loss 1.4202  elapsed  211.6s
+[rff] step  18100  loss 1.4256  elapsed  212.8s
+[rff] step  18200  loss 1.4354  elapsed  214.0s
+[rff] step  18300  loss 1.4682  elapsed  215.1s
+[rff] step  18400  loss 1.4398  elapsed  216.3s
+[rff] step  18500  loss 1.4574  elapsed  217.5s
+[rff] step  18600  loss 1.4544  elapsed  218.7s
+[rff] step  18700  loss 1.4563  elapsed  219.9s
+[rff] step  18800  loss 1.4531  elapsed  221.0s
+[rff] step  18900  loss 1.4399  elapsed  222.2s
+[rff] step  19000  loss 1.4537  elapsed  223.4s
+[rff] step  19100  loss 1.4367  elapsed  224.6s
+[rff] step  19200  loss 1.4063  elapsed  225.8s
+[rff] step  19300  loss 1.4158  elapsed  226.9s
+[rff] step  19400  loss 1.4220  elapsed  228.1s
+[rff] step  19500  loss 1.4261  elapsed  229.3s
+[rff] step  19600  loss 1.4106  elapsed  230.5s
+[rff] step  19700  loss 1.4689  elapsed  231.7s
+[rff] step  19800  loss 1.4405  elapsed  232.9s
+[rff] step  19900  loss 1.4234  elapsed  234.0s
+[rff] step  20000  loss 1.4333  elapsed  235.2s
+[rff] step  20100  loss 1.4115  elapsed  236.4s
+[rff] step  20200  loss 1.4382  elapsed  237.6s
+[rff] step  20300  loss 1.4442  elapsed  238.8s
+[rff] step  20400  loss 1.4260  elapsed  240.0s
+[rff] step  20500  loss 1.4102  elapsed  241.1s
+[rff] step  20600  loss 1.4105  elapsed  242.3s
+[rff] step  20700  loss 1.4459  elapsed  243.5s
+[rff] step  20800  loss 1.4752  elapsed  244.7s
+[rff] step  20900  loss 1.4486  elapsed  245.9s
+[rff] step  21000  loss 1.3986  elapsed  247.0s
+[rff] step  21100  loss 1.4015  elapsed  248.2s
+[rff] step  21200  loss 1.4165  elapsed  249.4s
+[rff] DONE  steps=21252  final_loss 1.4636  elapsed 250.0s
+[rff] ||W_out||_F=1106.4948  ||embed||_F=126.6315
+training: 61,867.8 J   duration=254.5s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.5483     1733 char/s  eta=    34s
+  eval      2,400/60,000 (  4.0%)  acc=0.5517     1808 char/s  eta=    32s
+  eval      3,600/60,000 (  6.0%)  acc=0.5522     1832 char/s  eta=    31s
+  eval      4,800/60,000 (  8.0%)  acc=0.5658     1860 char/s  eta=    30s
+  eval      6,000/60,000 ( 10.0%)  acc=0.5583     1871 char/s  eta=    29s
+  eval      7,200/60,000 ( 12.0%)  acc=0.5536     1874 char/s  eta=    28s
+  eval      8,400/60,000 ( 14.0%)  acc=0.5520     1878 char/s  eta=    27s
+  eval      9,600/60,000 ( 16.0%)  acc=0.5606     1886 char/s  eta=    27s
+  eval     10,800/60,000 ( 18.0%)  acc=0.5654     1887 char/s  eta=    26s
+  eval     12,000/60,000 ( 20.0%)  acc=0.5689     1896 char/s  eta=    25s
+  eval     13,200/60,000 ( 22.0%)  acc=0.5748     1895 char/s  eta=    25s
+  eval     14,400/60,000 ( 24.0%)  acc=0.5771     1895 char/s  eta=    24s
+  eval     15,600/60,000 ( 26.0%)  acc=0.5792     1896 char/s  eta=    23s
+  eval     16,800/60,000 ( 28.0%)  acc=0.5826     1899 char/s  eta=    23s
+  eval     18,000/60,000 ( 30.0%)  acc=0.5819     1906 char/s  eta=    22s
+  eval     19,200/60,000 ( 32.0%)  acc=0.5857     1907 char/s  eta=    21s
+  eval     20,400/60,000 ( 34.0%)  acc=0.5880     1910 char/s  eta=    21s
+  eval     21,600/60,000 ( 36.0%)  acc=0.5872     1912 char/s  eta=    20s
+  eval     22,800/60,000 ( 38.0%)  acc=0.5891     1916 char/s  eta=    19s
+  eval     24,000/60,000 ( 40.0%)  acc=0.5900     1918 char/s  eta=    19s
+  eval     25,200/60,000 ( 42.0%)  acc=0.5903     1918 char/s  eta=    18s
+  eval     26,400/60,000 ( 44.0%)  acc=0.5930     1919 char/s  eta=    18s
+  eval     27,600/60,000 ( 46.0%)  acc=0.5925     1921 char/s  eta=    17s
+  eval     28,800/60,000 ( 48.0%)  acc=0.5906     1924 char/s  eta=    16s
+  eval     30,000/60,000 ( 50.0%)  acc=0.5882     1927 char/s  eta=    16s
+  eval     31,200/60,000 ( 52.0%)  acc=0.5854     1931 char/s  eta=    15s
+  eval     32,400/60,000 ( 54.0%)  acc=0.5827     1935 char/s  eta=    14s
+  eval     33,600/60,000 ( 56.0%)  acc=0.5797     1935 char/s  eta=    14s
+  eval     34,800/60,000 ( 58.0%)  acc=0.5787     1934 char/s  eta=    13s
+  eval     36,000/60,000 ( 60.0%)  acc=0.5779     1934 char/s  eta=    12s
+  eval     37,200/60,000 ( 62.0%)  acc=0.5783     1938 char/s  eta=    12s
+  eval     38,400/60,000 ( 64.0%)  acc=0.5794     1937 char/s  eta=    11s
+  eval     39,600/60,000 ( 66.0%)  acc=0.5803     1937 char/s  eta=    11s
+  eval     40,800/60,000 ( 68.0%)  acc=0.5805     1939 char/s  eta=    10s
+  eval     42,000/60,000 ( 70.0%)  acc=0.5810     1937 char/s  eta=     9s
+  eval     43,200/60,000 ( 72.0%)  acc=0.5813     1940 char/s  eta=     9s
+  eval     44,400/60,000 ( 74.0%)  acc=0.5825     1938 char/s  eta=     8s
+  eval     45,600/60,000 ( 76.0%)  acc=0.5838     1937 char/s  eta=     7s
+  eval     46,800/60,000 ( 78.0%)  acc=0.5838     1936 char/s  eta=     7s
+  eval     48,000/60,000 ( 80.0%)  acc=0.5851     1937 char/s  eta=     6s
+  eval     49,200/60,000 ( 82.0%)  acc=0.5853     1939 char/s  eta=     6s
+  eval     50,400/60,000 ( 84.0%)  acc=0.5862     1938 char/s  eta=     5s
+  eval     51,600/60,000 ( 86.0%)  acc=0.5864     1936 char/s  eta=     4s
+  eval     52,800/60,000 ( 88.0%)  acc=0.5851     1936 char/s  eta=     4s
+  eval     54,000/60,000 ( 90.0%)  acc=0.5856     1935 char/s  eta=     3s
+  eval     55,200/60,000 ( 92.0%)  acc=0.5855     1934 char/s  eta=     2s
+  eval     56,400/60,000 ( 94.0%)  acc=0.5859     1937 char/s  eta=     2s
+  eval     57,600/60,000 ( 96.0%)  acc=0.5866     1939 char/s  eta=     1s
+  eval     58,800/60,000 ( 98.0%)  acc=0.5875     1938 char/s  eta=     1s
+  eval     60,000/60,000 (100.0%)  acc=0.5878     1938 char/s  eta=     0s
+chars=60,000  acc=0.5878  eval_duration=31.0s
+---
+DISQUALIFIED: val accuracy 0.5878 below floor 0.7000
+submission         : rff_linear_head
+training energy (J): 61,867.8
+training duration  : 254.5s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-eyfFrJtXg3prBSKutQVf7E
+
+# final result
+{
+  "submission": "rff_linear_head",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.58785,
+  "val_chars": 60000,
+  "training_energy_J": 61867.75965055,
+  "training_duration_s": 254.46360698900003,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-25T16:22:13Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 57.918816666666636,
+    "stress_watts_avg": 230.69204734504504,
+    "stress_energy_joules": 8684.701,
+    "stress_duration_s": 37.64629557,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

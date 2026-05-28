@@ -1,0 +1,1363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Top-5 Lowest-Energy Passing Submissions — Mechanism Atlas</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --line: #d8d4c8;
+    --accent: #b54a2a;
+    --good: #2c6e3a;
+    --warn: #8a6d00;
+    --bad:  #a4302a;
+    --code-bg: #f0ece2;
+    --kn:   #2f5e8a;
+    --skip: #4a7a3a;
+    --case: #b56a1a;
+    --match:#a4302a;
+    --grid: #e6e1d4;
+  }
+  html { background: var(--bg); color: var(--fg); }
+  body {
+    max-width: 980px;
+    margin: 2.5rem auto 5rem;
+    padding: 0 1.25rem;
+    font: 15.5px/1.55 ui-serif, Georgia, "Charter", serif;
+  }
+  h1 { font-size: 1.75rem; margin: 0 0 0.25rem; }
+  h2 { font-size: 1.22rem; margin: 2.4rem 0 0.6rem; border-bottom: 1px solid var(--line); padding-bottom: 0.25rem; }
+  h3 { font-size: 1.06rem; margin: 1.6rem 0 0.4rem; }
+  h4 { font-size: 0.98rem; margin: 1.2rem 0 0.3rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  code, pre, .mono { font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace; font-size: 0.92em; }
+  code { background: var(--code-bg); padding: 0.05em 0.3em; border-radius: 3px; }
+  table { border-collapse: collapse; width: 100%; margin: 0.5rem 0 1rem; font-size: 0.93rem; }
+  th, td { border-bottom: 1px solid var(--line); padding: 0.45rem 0.55rem; text-align: left; vertical-align: top; }
+  th { font-weight: 600; background: var(--code-bg); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .pass { color: var(--good); font-weight: 600; }
+  .fail { color: var(--bad); font-weight: 600; }
+  .pill {
+    display: inline-block; padding: 0.05rem 0.45rem; border-radius: 999px;
+    font-size: 0.78rem; font-weight: 600; vertical-align: 0.05em;
+    border: 1px solid currentColor;
+  }
+  .pill.pass { color: var(--good); background: rgba(44, 110, 58, 0.08); }
+  .pill.fail { color: var(--bad); background: rgba(164, 48, 42, 0.08); }
+  blockquote {
+    margin: 0.5rem 0; padding: 0.5rem 1rem;
+    border-left: 3px solid var(--accent); background: var(--code-bg);
+    font-style: normal;
+  }
+  ul { padding-left: 1.4rem; }
+  li { margin: 0.2rem 0; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 2rem 0; }
+  .highlight { background: rgba(181, 74, 42, 0.08); padding: 0.7rem 1rem; border-radius: 4px; border-left: 3px solid var(--accent); margin: 0.5rem 0 1.2rem; }
+  .small { font-size: 0.86rem; color: var(--muted); }
+  .legend { font-size: 0.85rem; color: var(--muted); margin: 0.2rem 0 1rem; }
+
+  /* Scatter plot */
+  #scatter-wrap { position: relative; }
+  #scatter-svg { width: 100%; height: auto; display: block; background: #fff; border: 1px solid var(--line); border-radius: 4px; }
+  #scatter-svg .grid { stroke: var(--grid); stroke-width: 1; }
+  #scatter-svg .axis { stroke: var(--fg); stroke-width: 1; }
+  #scatter-svg .axis-label { fill: var(--muted); font: 11px ui-sans-serif, system-ui, sans-serif; }
+  #scatter-svg .tick { fill: var(--muted); font: 10.5px ui-monospace, monospace; }
+  #scatter-svg .threshold { stroke: var(--good); stroke-width: 1.2; stroke-dasharray: 4 3; }
+  #scatter-svg .threshold-label { fill: var(--good); font: 10.5px ui-monospace, monospace; }
+  #scatter-svg .point { cursor: pointer; transition: r 0.15s, stroke-width 0.15s; }
+  #scatter-svg .point:hover { stroke-width: 2.5; }
+  #scatter-svg .pt-pass { fill: rgba(44, 110, 58, 0.50); stroke: var(--good); stroke-width: 1; }
+  #scatter-svg .pt-fail { fill: rgba(164, 48, 42, 0.18); stroke: var(--bad); stroke-width: 1; }
+  #scatter-svg .pt-top  { fill: var(--accent); stroke: #6a2a14; stroke-width: 1.5; }
+  #scatter-svg .top-label { fill: var(--accent); font: 11px ui-monospace, monospace; font-weight: 600; }
+  #tooltip {
+    position: absolute; pointer-events: none; background: #1a1a1a; color: #fff;
+    padding: 0.35rem 0.55rem; font: 11.5px ui-monospace, monospace; border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18); opacity: 0; transition: opacity 0.12s;
+    white-space: nowrap; z-index: 10;
+  }
+
+  /* Mechanism cards */
+  .method {
+    margin: 1.5rem 0 2.5rem; padding: 1.1rem 1.2rem 1.2rem;
+    background: #fff; border: 1px solid var(--line); border-radius: 6px;
+  }
+  .method-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; }
+  .method-head h3 { margin: 0; }
+  .method-stats { font: 12.5px ui-monospace, monospace; color: var(--muted); }
+  .method-stats b { color: var(--accent); }
+  .method-summary { margin: 0.5rem 0 0.9rem; font-style: italic; color: #2c2c2c; }
+  .anim-wrap { background: #fafaf7; border: 1px solid var(--grid); border-radius: 4px; padding: 0.6rem; margin: 0.7rem 0; }
+  .anim-svg { width: 100%; height: auto; display: block; }
+  .anim-controls { font: 11.5px ui-sans-serif, sans-serif; color: var(--muted); margin-top: 0.4rem; display: flex; gap: 0.7rem; align-items: center; }
+  .anim-controls button {
+    background: var(--code-bg); border: 1px solid var(--line); color: var(--fg);
+    padding: 0.18rem 0.55rem; border-radius: 3px; font: 11px ui-monospace, monospace;
+    cursor: pointer;
+  }
+  .anim-controls button:hover { background: #e5dfcc; }
+  .paused .animated { animation-play-state: paused !important; }
+
+  /* SVG animation building blocks */
+  .anim-svg text { font: 11px ui-sans-serif, system-ui, sans-serif; }
+  .anim-svg .label { fill: var(--muted); font-size: 10.5px; }
+  .anim-svg .lbl-strong { fill: var(--fg); font-size: 11.5px; font-weight: 600; }
+  .anim-svg .mono { font-family: ui-monospace, monospace; font-size: 10.5px; fill: var(--fg); }
+  .anim-svg .stage-title { fill: var(--accent); font-size: 11.5px; font-weight: 600; }
+
+  /* keyframes ------------------------------- */
+  @keyframes slide-window {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(140px); }
+  }
+  @keyframes pulse-fill {
+    0%, 100% { fill-opacity: 0.25; }
+    50% { fill-opacity: 0.95; }
+  }
+  @keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+    50% { filter: drop-shadow(0 0 4px var(--accent)); }
+  }
+  @keyframes weight-flow {
+    0%   { transform: translateY(0); opacity: 0; }
+    20%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: translateY(50px); opacity: 0; }
+  }
+  @keyframes counter-up {
+    0%   { transform: scaleY(0.05); }
+    100% { transform: scaleY(1); }
+  }
+  @keyframes shuffle-1 { 0%{transform:translateX(0);} 50%{transform:translateX(60px);} 100%{transform:translateX(30px);} }
+  @keyframes shuffle-2 { 0%{transform:translateX(0);} 50%{transform:translateX(-50px);} 100%{transform:translateX(-30px);} }
+  @keyframes shuffle-3 { 0%{transform:translateX(0);} 50%{transform:translateX(20px);} 100%{transform:translateX(10px);} }
+  @keyframes shuffle-4 { 0%{transform:translateX(0);} 50%{transform:translateX(-30px);} 100%{transform:translateX(0);} }
+  @keyframes shuffle-5 { 0%{transform:translateX(0);} 50%{transform:translateX(80px);} 100%{transform:translateX(40px);} }
+  @keyframes flow-arrow {
+    0% { stroke-dashoffset: 50; opacity: 0.3; }
+    50% { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: -50; opacity: 0.3; }
+  }
+  @keyframes bar-osc-a { 0%{transform:scaleY(0.30);} 25%{transform:scaleY(0.85);} 50%{transform:scaleY(0.55);} 75%{transform:scaleY(0.95);} 100%{transform:scaleY(0.30);} }
+  @keyframes bar-osc-b { 0%{transform:scaleY(0.90);} 25%{transform:scaleY(0.45);} 50%{transform:scaleY(0.75);} 75%{transform:scaleY(0.35);} 100%{transform:scaleY(0.90);} }
+  @keyframes bar-osc-c { 0%{transform:scaleY(0.50);} 25%{transform:scaleY(0.70);} 50%{transform:scaleY(0.20);} 75%{transform:scaleY(0.65);} 100%{transform:scaleY(0.50);} }
+  @keyframes bar-osc-d { 0%{transform:scaleY(0.70);} 25%{transform:scaleY(0.20);} 50%{transform:scaleY(0.90);} 75%{transform:scaleY(0.40);} 100%{transform:scaleY(0.70);} }
+  @keyframes xor-flip {
+    0%   { transform: translateX(0); fill: var(--bad); }
+    30%  { transform: translateX(60px); fill: var(--bad); }
+    50%  { transform: translateX(60px); fill: var(--warn); }
+    70%  { transform: translateX(120px); fill: var(--good); }
+    100% { transform: translateX(120px); fill: var(--good); }
+  }
+  @keyframes cascade-probe {
+    0%, 100% { opacity: 0; }
+    8%       { opacity: 1; transform: translateY(0); }
+    24%      { opacity: 1; transform: translateY(24px); }
+    40%      { opacity: 1; transform: translateY(48px); }
+    56%      { opacity: 1; transform: translateY(72px); }
+    72%      { opacity: 1; transform: translateY(96px); }
+    88%      { opacity: 0; transform: translateY(96px); }
+  }
+  @keyframes ring-rotate { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+  @keyframes blink-found { 0%, 60%, 100% { fill-opacity: 0.15; } 30% { fill-opacity: 0.85; } }
+</style>
+</head>
+<body>
+
+<h1>Top-5 Lowest-Energy Passing Submissions — Mechanism Atlas</h1>
+<div class="meta">
+  WikiText-103 char-level benchmark · A100-80GB PCIe · 300 s train budget · ACC_MIN 0.70 ·
+  Baseline modded-nanogpt = <b>51,704 J</b> @ 0.7374 val char-acc · Branch <code>gradfree-methods-v2</code> ·
+  Report generated 2026-05-26
+</div>
+
+<div class="highlight">
+  <b>Headline result.</b> The five most energy-efficient passing submissions on this branch are
+  <i>all classical-style count predictors</i>: n-gram count tables built on the GPU, smoothed by
+  Kneser-Ney or Witten-Bell, and (in two cases) context-mixed by a tiny MLP in the spirit of
+  PAQ8. Every one of them clears the 0.70 val char-acc floor at <b>under 4 kJ</b>, while the cheapest
+  passing neural-style submission on this branch (<code>lwta_k4_alpha_065</code>) lands at
+  <b>13.2 kJ</b>. Top entry <code>subset_70_mkn</code> uses <b>48.6×</b> less energy than the
+  modded-nanogpt baseline at a 0.034 acc deficit. The single-axis story of the benchmark — energy
+  to reach the floor — favors the model class that pays nothing at predict time except a binary
+  search and a fixed-size matmul.
+</div>
+
+<h2>1 · The top-5 ranking</h2>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Submission</th>
+      <th>Mechanism class</th>
+      <th class="num">Energy (J)</th>
+      <th class="num">Train (s)</th>
+      <th class="num">Val acc</th>
+      <th>vs. baseline</th>
+      <th>Contributor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><a href="#m-subset_70_mkn"><code>subset_70_mkn</code></a></td>
+      <td>order-11 Modified Kneser-Ney on 70% subset · per-count discounts D₁, D₂, D₃</td>
+      <td class="num">1,065</td>
+      <td class="num">41.1</td>
+      <td class="num pass">0.7031</td>
+      <td class="num">−97.9 %</td>
+      <td><a href="https://github.com/gabrielnan">@gabrielnan</a></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><a href="#m-gpu_ngram_w31_k11"><code>gpu_ngram_w31_k11</code></a></td>
+      <td>order-11 Kneser-Ney · dual-int64 GPU packing · scalar D = 0.5</td>
+      <td class="num">1,333</td>
+      <td class="num">33.6</td>
+      <td class="num pass">0.7050</td>
+      <td class="num">−97.4 %</td>
+      <td><a href="https://github.com/gabrielnan">@gabrielnan</a></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><a href="#m-paq8_gpu"><code>paq8_gpu</code></a></td>
+      <td>PAQ8-style 4-expert mixer (KN, Skip-1, Case-fold-7, Match) blended by 14→32→4 MLP</td>
+      <td class="num">2,333</td>
+      <td class="num">68.2</td>
+      <td class="num pass">0.7248</td>
+      <td class="num">−95.5 %</td>
+      <td>@ab-10</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><a href="#m-gpu_ngram_o14_xorfix"><code>gpu_ngram_o14_xorfix</code></a></td>
+      <td>order-14 Kneser-Ney · XOR sign-bit-flip enables GPU-native unsigned sort</td>
+      <td class="num">3,441</td>
+      <td class="num">97.6</td>
+      <td class="num pass">0.7184</td>
+      <td class="num">−93.3 %</td>
+      <td><a href="https://github.com/gabrielnan">@gabrielnan</a></td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><a href="#m-paq_mixer_v3"><code>paq_mixer_v3</code></a></td>
+      <td>11 independent Witten-Bell order tables blended by 22→32→11 MLP (no backoff chain)</td>
+      <td class="num">3,582</td>
+      <td class="num">122.3</td>
+      <td class="num pass">0.7047</td>
+      <td class="num">−93.1 %</td>
+      <td><a href="https://github.com/gabrielnan">@gabrielnan</a></td>
+    </tr>
+  </tbody>
+</table>
+<p class="legend">
+  <b>vs. baseline:</b> energy reduction against the 51,704 J <code>modded_nanogpt</code> reference.
+  Every entry on this leaderboard clears the 0.70 floor; none exceeds 0.725 val acc — energy, not
+  ceiling accuracy, is what they optimize.
+</p>
+
+<h2>2 · Energy vs. accuracy — full submission corpus</h2>
+<div id="scatter-wrap">
+  <svg id="scatter-svg" viewBox="0 0 880 520" preserveAspectRatio="xMidYMid meet" aria-label="Scatter plot of all submissions by energy and validation accuracy"></svg>
+  <div id="tooltip"></div>
+</div>
+<p class="legend">
+  All 41 evaluated submissions on this branch. <b>X axis:</b> log-scale training energy (J).
+  <b>Y axis:</b> val char-acc on 60K-char prefix. The dashed line at 0.70 is the qualifying floor.
+  Orange points are the top-5 lowest-energy passers (this report's subject); green points are other
+  passing submissions; faded red points are DQs (either acc < 0.70 or time > 300 s, the latter
+  shown at acc = 0 since `train()` was killed before eval). Hover any point for details.
+</p>
+
+<h2>3 · Animated mechanism atlas</h2>
+<p>
+  Each card below depicts the <i>distinctive</i> bit of one submission's algorithm — the
+  ingredient that distinguishes it from the others, not the boilerplate they share. The
+  animations are pure CSS keyframes over inline SVG and can be paused with the
+  <i>pause</i> button. Use the table-of-contents links in section 1 to jump between methods.
+</p>
+
+<!-- =========================== METHOD 1: subset_70_mkn =========================== -->
+<article class="method" id="m-subset_70_mkn">
+  <div class="method-head">
+    <h3>#1 · <code>subset_70_mkn</code> — Modified Kneser-Ney, per-count discounts</h3>
+    <div class="method-stats"><b>1,065 J</b> · 41.1 s · 0.7031 val acc · <a href="https://github.com/gabrielnan">@gabrielnan</a></div>
+  </div>
+  <p class="method-summary">
+    Build order-11 byte n-gram tables on 70 % of WikiText-103 using GPU sort+dedup;
+    smooth with <i>three</i> per-count Chen-Goodman discounts (D₁, D₂, D₃) rather than a single scalar D.
+  </p>
+
+  <div class="anim-wrap">
+    <svg class="anim-svg" viewBox="0 0 880 280" preserveAspectRatio="xMidYMid meet" aria-label="MKN animation">
+      <!-- Stage 1: subset selection -->
+      <g transform="translate(20,30)">
+        <text class="stage-title" x="0" y="-8">① Subset · 70 % of WikiText-103</text>
+        <rect x="0" y="0" width="280" height="22" fill="var(--code-bg)" stroke="var(--line)"/>
+        <rect x="0" y="0" width="196" height="22" fill="var(--accent)" fill-opacity="0.35" stroke="var(--accent)"/>
+        <text class="mono" x="98" y="15" text-anchor="middle">378 M bytes used (70 %)</text>
+        <text class="mono" x="238" y="15" text-anchor="middle" fill="var(--muted)">held-out</text>
+      </g>
+
+      <!-- Stage 2: sliding window -->
+      <g transform="translate(20,76)">
+        <text class="stage-title" x="0" y="-8">② Order-11 sliding window (10-byte context + 1)</text>
+        <g class="animated" style="animation: slide-window 6s ease-in-out infinite;">
+          <rect x="0" y="0" width="132" height="20" fill="rgba(181,74,42,0.25)" stroke="var(--accent)" stroke-width="1.5"/>
+        </g>
+        <g font-family="ui-monospace, monospace" font-size="11" fill="var(--fg)">
+          <text x="6" y="14">T</text><text x="18" y="14">h</text><text x="30" y="14">e</text><text x="42" y="14">_</text>
+          <text x="54" y="14">q</text><text x="66" y="14">u</text><text x="78" y="14">i</text><text x="90" y="14">c</text>
+          <text x="102" y="14">k</text><text x="114" y="14">_</text><text x="126" y="14">b</text><text x="138" y="14">r</text>
+          <text x="150" y="14">o</text><text x="162" y="14">w</text><text x="174" y="14">n</text><text x="186" y="14">_</text>
+          <text x="198" y="14">f</text><text x="210" y="14">o</text><text x="222" y="14">x</text><text x="234" y="14">_</text>
+          <text x="246" y="14">j</text><text x="258" y="14">u</text><text x="270" y="14">m</text>
+        </g>
+      </g>
+
+      <!-- Stage 3: count-of-counts -->
+      <g transform="translate(330,30)">
+        <text class="stage-title" x="0" y="-8">③ Per-count discounts (order 10)</text>
+        <g font-family="ui-monospace, monospace" font-size="10.5">
+          <!-- count=1 bar -->
+          <rect x="0" y="40" width="40" height="60" fill="var(--kn)" fill-opacity="0.85"/>
+          <text x="20" y="115" text-anchor="middle">c=1</text>
+          <text x="20" y="32" text-anchor="middle" fill="var(--accent)" font-weight="600">D₁ = 0.708</text>
+          <!-- count=2 bar -->
+          <rect x="60" y="60" width="40" height="40" fill="var(--kn)" fill-opacity="0.85"/>
+          <text x="80" y="115" text-anchor="middle">c=2</text>
+          <text x="80" y="52" text-anchor="middle" fill="var(--accent)" font-weight="600">D₂ = 1.126</text>
+          <!-- count=3+ bar -->
+          <rect x="120" y="74" width="40" height="26" fill="var(--kn)" fill-opacity="0.85"/>
+          <text x="140" y="115" text-anchor="middle">c≥3</text>
+          <text x="140" y="66" text-anchor="middle" fill="var(--accent)" font-weight="600">D₃ = 1.431</text>
+          <!-- baseline marker -->
+          <line x1="-5" y1="100" x2="170" y2="100" stroke="var(--fg)" stroke-width="0.7"/>
+        </g>
+        <text class="label" x="0" y="135">vs. canonical KN: a single scalar D = 0.5 for all counts</text>
+      </g>
+
+      <!-- Stage 4: cascade -->
+      <g transform="translate(540,30)">
+        <text class="stage-title" x="0" y="-8">④ Chained step-down (11 → 1)</text>
+        <g font-family="ui-monospace, monospace" font-size="10.5" fill="var(--fg)">
+          <rect x="0" y="0"  width="120" height="14" fill="var(--kn)" fill-opacity="0.85"/><text x="125" y="11">k=11</text>
+          <rect x="0" y="16" width="110" height="14" fill="var(--kn)" fill-opacity="0.78"/><text x="125" y="27">k=10</text>
+          <rect x="0" y="32" width="98"  height="14" fill="var(--kn)" fill-opacity="0.72"/><text x="125" y="43">k=9</text>
+          <rect x="0" y="48" width="84"  height="14" fill="var(--kn)" fill-opacity="0.66"/><text x="125" y="59">k=8</text>
+          <rect x="0" y="64" width="70"  height="14" fill="var(--kn)" fill-opacity="0.60"/><text x="125" y="75">…</text>
+          <rect x="0" y="80" width="36"  height="14" fill="var(--kn)" fill-opacity="0.40"/><text x="125" y="91">k=2</text>
+          <rect x="0" y="96" width="14"  height="14" fill="var(--kn)" fill-opacity="0.30"/><text x="125" y="107">k=1</text>
+        </g>
+        <!-- animated probe arrow -->
+        <g class="animated" style="animation: cascade-probe 5s linear infinite;">
+          <polygon points="-12,0 -4,4 -12,8" fill="var(--accent)"/>
+        </g>
+        <text class="label" x="0" y="128">backoff probe walks down</text>
+      </g>
+
+      <!-- Stage 5: output -->
+      <g transform="translate(20,170)">
+        <text class="stage-title" x="0" y="-8">⑤ Final per-byte distribution → argmax</text>
+        <g font-family="ui-monospace, monospace" font-size="9" fill="var(--fg)">
+          <!-- 32 of 256 bins shown as illustrative bars -->
+          <g class="animated" style="animation: bar-osc-a 4s ease-in-out infinite;">
+            <rect x="0"   y="40" width="6" height="20" fill="var(--kn)" fill-opacity="0.6"/>
+          </g>
+          <rect x="8"   y="48" width="6" height="12" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="16"  y="32" width="6" height="28" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="24"  y="50" width="6" height="10" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="32"  y="38" width="6" height="22" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="40"  y="46" width="6" height="14" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="48"  y="20" width="6" height="40" fill="var(--accent)" class="animated" style="animation: glow 2s ease-in-out infinite;"/>
+          <rect x="56"  y="44" width="6" height="16" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="64"  y="36" width="6" height="24" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="72"  y="50" width="6" height="10" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="80"  y="42" width="6" height="18" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="88"  y="48" width="6" height="12" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="96"  y="34" width="6" height="26" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="104" y="52" width="6" height="8"  fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="112" y="46" width="6" height="14" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="120" y="40" width="6" height="20" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="128" y="48" width="6" height="12" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="136" y="38" width="6" height="22" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="144" y="52" width="6" height="8"  fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="152" y="42" width="6" height="18" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="160" y="50" width="6" height="10" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="168" y="44" width="6" height="16" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="176" y="36" width="6" height="24" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="184" y="48" width="6" height="12" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="192" y="46" width="6" height="14" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="200" y="40" width="6" height="20" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="208" y="50" width="6" height="10" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="216" y="42" width="6" height="18" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="224" y="48" width="6" height="12" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="232" y="38" width="6" height="22" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="240" y="46" width="6" height="14" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="248" y="50" width="6" height="10" fill="var(--kn)" fill-opacity="0.6"/>
+          <line x1="0" y1="60" x2="256" y2="60" stroke="var(--fg)" stroke-width="0.5"/>
+          <text x="50" y="76" fill="var(--accent)" font-weight="600">↑ argmax</text>
+          <text x="270" y="55" fill="var(--muted)">256 bytes</text>
+        </g>
+      </g>
+    </svg>
+    <div class="anim-controls">
+      <button onclick="this.closest('.anim-wrap').classList.toggle('paused')">pause / resume</button>
+      <span>Hover ratings: D₁ &lt; D₂ &lt; D₃ — singletons are penalized less than dense events relative to the canonical D = 0.5 baseline.</span>
+    </div>
+  </div>
+
+  <h4>Why this wins on energy</h4>
+  <p>
+    There is no model in the gradient sense — no parameters that have to be updated by backprop.
+    Training is a <i>sort</i>: pack each 11-byte window into two int64s, sort lexicographically on the
+    GPU, run-length-encode to extract counts, then drop the leftmost byte and repeat to materialize
+    orders 10, 9, …, 1. Total GPU work is <b>O(N log N)</b> sort time on N ≈ 380 M bytes — about 40 s
+    of A100 time. The Chen-Goodman per-count discounts (D₁/D₂/D₃) are <i>scalar</i> per-order moments
+    of the count-of-counts table; they cost milliseconds. The win over plain KN is small in absolute
+    val-acc but real: D₁ ≈ 0.708 vs. the canonical 0.5 keeps more singletons in the tail, which the
+    char-acc metric — biased toward short-range format/repetition prediction — rewards.
+  </p>
+
+  <h4>Key constants in the submission</h4>
+  <p class="small">
+    <code>MAX_ORDER = 11</code> · <code>D₁..D₃</code> computed from per-order count-of-counts ·
+    chunk size 32 MB · 70 % subset = first 378,767,828 bytes · ~93 M unique 11-grams ·
+    final tables held as CPU numpy arrays for binary-search prediction.
+  </p>
+</article>
+
+<!-- =========================== METHOD 2: gpu_ngram_w31_k11 =========================== -->
+<article class="method" id="m-gpu_ngram_w31_k11">
+  <div class="method-head">
+    <h3>#2 · <code>gpu_ngram_w31_k11</code> — GPU-native order-11 Kneser-Ney</h3>
+    <div class="method-stats"><b>1,333 J</b> · 33.6 s · 0.7050 val acc · <a href="https://github.com/gabrielnan">@gabrielnan</a></div>
+  </div>
+  <p class="method-summary">
+    Same backbone as method #1 but on the <i>full</i> training corpus with a single
+    scalar discount D = 0.5; the interesting bit here is the dual-int64 packing trick that lets
+    a stable two-pass GPU sort handle 11-byte keys with no hashing collisions.
+  </p>
+
+  <div class="anim-wrap">
+    <svg class="anim-svg" viewBox="0 0 880 260" preserveAspectRatio="xMidYMid meet" aria-label="GPU n-gram packing">
+      <!-- Stage 1: packing -->
+      <g transform="translate(20,30)">
+        <text class="stage-title" x="0" y="-8">① Pack 11-byte window → (hi: 3 B, lo: 8 B)</text>
+        <g font-family="ui-monospace, monospace" font-size="11">
+          <!-- 11 byte boxes -->
+          <g>
+            <rect x="0"  y="0" width="18" height="22" fill="#e7b89c" stroke="var(--accent)"/><text x="9"  y="15" text-anchor="middle">b₀</text>
+            <rect x="18" y="0" width="18" height="22" fill="#e7b89c" stroke="var(--accent)"/><text x="27" y="15" text-anchor="middle">b₁</text>
+            <rect x="36" y="0" width="18" height="22" fill="#e7b89c" stroke="var(--accent)"/><text x="45" y="15" text-anchor="middle">b₂</text>
+            <rect x="60" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="69" y="15" text-anchor="middle">b₃</text>
+            <rect x="78" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="87" y="15" text-anchor="middle">b₄</text>
+            <rect x="96" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="105" y="15" text-anchor="middle">b₅</text>
+            <rect x="114" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="123" y="15" text-anchor="middle">b₆</text>
+            <rect x="132" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="141" y="15" text-anchor="middle">b₇</text>
+            <rect x="150" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="159" y="15" text-anchor="middle">b₈</text>
+            <rect x="168" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="177" y="15" text-anchor="middle">b₉</text>
+            <rect x="186" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="195" y="15" text-anchor="middle">b₁₀</text>
+          </g>
+          <!-- bracket labels -->
+          <text x="27" y="38" text-anchor="middle" fill="var(--accent)" font-weight="600">hi (24 b)</text>
+          <text x="141" y="38" text-anchor="middle" fill="var(--kn)" font-weight="600">lo (64 b)</text>
+
+          <!-- packed result -->
+          <g transform="translate(0,52)">
+            <rect x="0" y="0" width="54" height="22" fill="var(--accent)" fill-opacity="0.5" stroke="var(--accent)"/>
+            <text x="27" y="15" text-anchor="middle" fill="#fff">int64 hi</text>
+            <rect x="60" y="0" width="144" height="22" fill="var(--kn)" fill-opacity="0.5" stroke="var(--kn)"/>
+            <text x="132" y="15" text-anchor="middle" fill="#fff">int64 lo</text>
+          </g>
+        </g>
+      </g>
+
+      <!-- Stage 2: parallel threads -->
+      <g transform="translate(260,30)">
+        <text class="stage-title" x="0" y="-8">② Parallel pack — 32 MB chunks, all threads concurrent</text>
+        <g font-family="ui-monospace, monospace" font-size="10">
+          <!-- 6 chunks, each as a stripe -->
+          <g class="animated" style="animation: shuffle-1 3s ease-in-out infinite;">
+            <rect x="0"  y="6"  width="80" height="12" fill="var(--kn)" fill-opacity="0.7"/>
+            <text x="40" y="15" text-anchor="middle" fill="#fff">t0</text>
+          </g>
+          <g class="animated" style="animation: shuffle-2 3s ease-in-out infinite 0.2s;">
+            <rect x="0"  y="22" width="80" height="12" fill="var(--kn)" fill-opacity="0.7"/>
+            <text x="40" y="31" text-anchor="middle" fill="#fff">t1</text>
+          </g>
+          <g class="animated" style="animation: shuffle-3 3s ease-in-out infinite 0.4s;">
+            <rect x="0"  y="38" width="80" height="12" fill="var(--kn)" fill-opacity="0.7"/>
+            <text x="40" y="47" text-anchor="middle" fill="#fff">t2</text>
+          </g>
+          <g class="animated" style="animation: shuffle-4 3s ease-in-out infinite 0.6s;">
+            <rect x="0"  y="54" width="80" height="12" fill="var(--kn)" fill-opacity="0.7"/>
+            <text x="40" y="63" text-anchor="middle" fill="#fff">t3</text>
+          </g>
+          <g class="animated" style="animation: shuffle-5 3s ease-in-out infinite 0.8s;">
+            <rect x="0"  y="70" width="80" height="12" fill="var(--kn)" fill-opacity="0.7"/>
+            <text x="40" y="79" text-anchor="middle" fill="#fff">t4</text>
+          </g>
+        </g>
+        <text class="label" x="0" y="95">→ (k−1)-byte overlap at each seam</text>
+      </g>
+
+      <!-- Stage 3: sort+dedup -->
+      <g transform="translate(490,30)">
+        <text class="stage-title" x="0" y="-8">③ Stable sort by lo then hi, RLE counts</text>
+        <g font-family="ui-monospace, monospace" font-size="10">
+          <text x="0" y="-2" fill="var(--muted)">before</text>
+          <rect x="0" y="6"  width="80" height="10" fill="#c0d4e6" stroke="var(--kn)"/>
+          <rect x="0" y="18" width="80" height="10" fill="#c0d4e6" stroke="var(--kn)"/>
+          <rect x="0" y="30" width="80" height="10" fill="#c0d4e6" stroke="var(--kn)"/>
+          <rect x="0" y="42" width="80" height="10" fill="#c0d4e6" stroke="var(--kn)"/>
+          <rect x="0" y="54" width="80" height="10" fill="#c0d4e6" stroke="var(--kn)"/>
+          <line x1="86" y1="35" x2="105" y2="35" stroke="var(--fg)" marker-end="url(#arrowhead)"/>
+          <text x="115" y="-2" fill="var(--muted)">sorted+merged</text>
+          <rect x="115" y="6"  width="80" height="10" fill="var(--kn)" fill-opacity="0.6"/>
+          <text x="200" y="14" fill="var(--accent)">×3</text>
+          <rect x="115" y="20" width="80" height="10" fill="var(--kn)" fill-opacity="0.6"/>
+          <text x="200" y="28" fill="var(--accent)">×1</text>
+          <rect x="115" y="34" width="80" height="10" fill="var(--kn)" fill-opacity="0.6"/>
+          <text x="200" y="42" fill="var(--accent)">×1</text>
+        </g>
+      </g>
+
+      <!-- Stage 4: KN backoff -->
+      <g transform="translate(20,150)">
+        <text class="stage-title" x="0" y="-8">④ Predict — KN backoff with discount D = 0.5</text>
+        <g font-family="ui-monospace, monospace" font-size="10.5" fill="var(--fg)">
+          <text x="0" y="14">p(c | h) = max(N(h,c) − D, 0)/N(h) &nbsp;+&nbsp; λ(h) · p(c | h₋₁)</text>
+          <text x="0" y="32" fill="var(--muted)">where &nbsp; λ(h) = D · n_distinct(h, ·) / N(h)</text>
+        </g>
+        <g transform="translate(440,-8)" font-family="ui-monospace, monospace" font-size="10.5">
+          <!-- backoff cascade -->
+          <rect x="0"   y="14" width="100" height="12" fill="var(--kn)" fill-opacity="0.8"/><text x="105" y="24">order 10 → 9 → … → 1</text>
+          <rect x="0"   y="30" width="84"  height="12" fill="var(--kn)" fill-opacity="0.7"/>
+          <rect x="0"   y="46" width="68"  height="12" fill="var(--kn)" fill-opacity="0.6"/>
+          <rect x="0"   y="62" width="32"  height="12" fill="var(--kn)" fill-opacity="0.4"/>
+        </g>
+      </g>
+
+      <defs>
+        <marker id="arrowhead" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="var(--fg)"/>
+        </marker>
+      </defs>
+    </svg>
+    <div class="anim-controls">
+      <button onclick="this.closest('.anim-wrap').classList.toggle('paused')">pause / resume</button>
+      <span>Why dual-int64 not hash? Hashing risks collisions in a 256<sup>11</sup> key space; packing is collision-free.</span>
+    </div>
+  </div>
+
+  <h4>Why this wins on energy</h4>
+  <p>
+    The key insight is that you don't need a learned representation if your key space — 11 bytes of
+    UTF-8 — fits in 88 bits. Two int64s exactly hold one window. PyTorch's
+    <code>torch.argsort</code> then becomes the entire "training algorithm": one stable sort plus a
+    run-length-encode is the count step. No custom CUDA kernels — pure torch ops. The
+    chained step-down means you build the full orders 1–11 cascade <i>without re-scanning the
+    corpus once</i> for each lower order; the (k−1)-byte representation just discards the leftmost
+    byte from the int64 pair and resorts.
+  </p>
+
+  <h4>Why it scored 0.7050 and not higher</h4>
+  <p>
+    Scalar D = 0.5 is the classical-but-suboptimal Kneser-Ney discount. Method #1 keeps the same
+    sort backbone and replaces this scalar with per-count discounts (D₁, D₂, D₃ ≈ 0.71, 1.13, 1.43)
+    and loses 0.002 acc but recovers 268 J. So in this region of the energy axis, MKN's better
+    smoothing barely matters; the cost of training is dominated by the sort, not the discount math.
+  </p>
+</article>
+
+<!-- =========================== METHOD 3: paq8_gpu =========================== -->
+<article class="method" id="m-paq8_gpu">
+  <div class="method-head">
+    <h3>#3 · <code>paq8_gpu</code> — PAQ8-style four-expert mixer</h3>
+    <div class="method-stats"><b>2,333 J</b> · 68.2 s · 0.7248 val acc · @ab-10</div>
+  </div>
+  <p class="method-summary">
+    Four parallel context models — KN backoff (orders 1–11), skip-1 sparse n-gram, case-folded
+    order-7, and a longest-suffix match model — each emit a 256-bin distribution. A tiny
+    14→32→4 MLP mixer assigns per-position softmax weights using log-count, entropy, found-flag,
+    and match-depth features. <i>This is the highest-accuracy method in the top-5.</i>
+  </p>
+
+  <div class="anim-wrap">
+    <svg class="anim-svg" viewBox="0 0 880 360" preserveAspectRatio="xMidYMid meet" aria-label="PAQ8 mixer animation">
+      <!-- History buffer at left -->
+      <g transform="translate(20,20)">
+        <text class="stage-title" x="0" y="-4">history</text>
+        <g font-family="ui-monospace, monospace" font-size="10.5" fill="var(--fg)">
+          <rect x="0" y="0" width="80" height="240" fill="#fff" stroke="var(--line)"/>
+          <text x="40" y="20" text-anchor="middle" fill="var(--muted)">… last 2 KB</text>
+          <rect x="6" y="40" width="68" height="14" fill="var(--code-bg)"/><text x="40" y="51" text-anchor="middle">_quick_b</text>
+          <rect x="6" y="58" width="68" height="14" fill="var(--code-bg)"/><text x="40" y="69" text-anchor="middle">rown_fox</text>
+          <rect x="6" y="76" width="68" height="14" fill="var(--code-bg)"/><text x="40" y="87" text-anchor="middle">_jumps_o</text>
+          <rect x="6" y="94" width="68" height="14" fill="var(--code-bg)"/><text x="40" y="105" text-anchor="middle">ver_the_</text>
+          <rect x="6" y="112" width="68" height="14" fill="rgba(181,74,42,0.25)" stroke="var(--accent)"/>
+          <text x="40" y="123" text-anchor="middle" fill="var(--accent)">lazy_d?</text>
+          <text x="40" y="155" text-anchor="middle" fill="var(--muted)">predict_</text>
+          <text x="40" y="170" text-anchor="middle" fill="var(--accent)">next byte</text>
+        </g>
+      </g>
+
+      <!-- Four experts -->
+      <g transform="translate(140,20)" font-family="ui-monospace, monospace" font-size="10">
+        <!-- KN -->
+        <g transform="translate(0,0)">
+          <rect x="0" y="0" width="120" height="60" fill="var(--kn)" fill-opacity="0.10" stroke="var(--kn)"/>
+          <text x="60" y="15" text-anchor="middle" fill="var(--kn)" font-weight="600">KN order 1–11</text>
+          <text x="60" y="32" text-anchor="middle" fill="var(--muted)">chained backoff</text>
+          <!-- mini dist -->
+          <g transform="translate(8,38)">
+            <rect x="0"  y="14" width="6" height="6"  fill="var(--kn)"/>
+            <rect x="8"  y="10" width="6" height="10" fill="var(--kn)"/>
+            <rect x="16" y="4"  width="6" height="16" fill="var(--kn)"/>
+            <rect x="24" y="0"  width="6" height="20" fill="var(--kn)" class="animated" style="animation: pulse-fill 2s ease-in-out infinite;"/>
+            <rect x="32" y="8"  width="6" height="12" fill="var(--kn)"/>
+            <rect x="40" y="12" width="6" height="8"  fill="var(--kn)"/>
+            <rect x="48" y="6"  width="6" height="14" fill="var(--kn)"/>
+            <rect x="56" y="10" width="6" height="10" fill="var(--kn)"/>
+            <rect x="64" y="14" width="6" height="6"  fill="var(--kn)"/>
+            <rect x="72" y="8"  width="6" height="12" fill="var(--kn)"/>
+            <rect x="80" y="4"  width="6" height="16" fill="var(--kn)"/>
+            <rect x="88" y="12" width="6" height="8"  fill="var(--kn)"/>
+            <rect x="96" y="10" width="6" height="10" fill="var(--kn)"/>
+          </g>
+        </g>
+        <!-- Skip1 -->
+        <g transform="translate(0,70)">
+          <rect x="0" y="0" width="120" height="60" fill="var(--skip)" fill-opacity="0.10" stroke="var(--skip)"/>
+          <text x="60" y="15" text-anchor="middle" fill="var(--skip)" font-weight="600">Skip-1 order 5</text>
+          <text x="60" y="32" text-anchor="middle" fill="var(--muted)">1-byte gap at pos −1</text>
+          <g transform="translate(8,38)">
+            <rect x="0"  y="10" width="6" height="10" fill="var(--skip)"/>
+            <rect x="8"  y="6"  width="6" height="14" fill="var(--skip)"/>
+            <rect x="16" y="12" width="6" height="8"  fill="var(--skip)"/>
+            <rect x="24" y="8"  width="6" height="12" fill="var(--skip)"/>
+            <rect x="32" y="2"  width="6" height="18" fill="var(--skip)" class="animated" style="animation: pulse-fill 2.1s ease-in-out infinite;"/>
+            <rect x="40" y="14" width="6" height="6"  fill="var(--skip)"/>
+            <rect x="48" y="8"  width="6" height="12" fill="var(--skip)"/>
+            <rect x="56" y="12" width="6" height="8"  fill="var(--skip)"/>
+            <rect x="64" y="6"  width="6" height="14" fill="var(--skip)"/>
+            <rect x="72" y="10" width="6" height="10" fill="var(--skip)"/>
+            <rect x="80" y="12" width="6" height="8"  fill="var(--skip)"/>
+            <rect x="88" y="8"  width="6" height="12" fill="var(--skip)"/>
+            <rect x="96" y="14" width="6" height="6"  fill="var(--skip)"/>
+          </g>
+        </g>
+        <!-- Case-fold -->
+        <g transform="translate(0,140)">
+          <rect x="0" y="0" width="120" height="60" fill="var(--case)" fill-opacity="0.10" stroke="var(--case)"/>
+          <text x="60" y="15" text-anchor="middle" fill="var(--case)" font-weight="600">Case-fold order 7</text>
+          <text x="60" y="32" text-anchor="middle" fill="var(--muted)">A–Z → a–z</text>
+          <g transform="translate(8,38)">
+            <rect x="0"  y="8"  width="6" height="12" fill="var(--case)"/>
+            <rect x="8"  y="12" width="6" height="8"  fill="var(--case)"/>
+            <rect x="16" y="6"  width="6" height="14" fill="var(--case)"/>
+            <rect x="24" y="10" width="6" height="10" fill="var(--case)"/>
+            <rect x="32" y="14" width="6" height="6"  fill="var(--case)"/>
+            <rect x="40" y="4"  width="6" height="16" fill="var(--case)" class="animated" style="animation: pulse-fill 2.2s ease-in-out infinite;"/>
+            <rect x="48" y="12" width="6" height="8"  fill="var(--case)"/>
+            <rect x="56" y="8"  width="6" height="12" fill="var(--case)"/>
+            <rect x="64" y="14" width="6" height="6"  fill="var(--case)"/>
+            <rect x="72" y="10" width="6" height="10" fill="var(--case)"/>
+            <rect x="80" y="6"  width="6" height="14" fill="var(--case)"/>
+            <rect x="88" y="12" width="6" height="8"  fill="var(--case)"/>
+            <rect x="96" y="8"  width="6" height="12" fill="var(--case)"/>
+          </g>
+        </g>
+        <!-- Match -->
+        <g transform="translate(0,210)">
+          <rect x="0" y="0" width="120" height="60" fill="var(--match)" fill-opacity="0.10" stroke="var(--match)"/>
+          <text x="60" y="15" text-anchor="middle" fill="var(--match)" font-weight="600">Match (≥4 B suffix)</text>
+          <text x="60" y="32" text-anchor="middle" fill="var(--muted)">2 KB lookback</text>
+          <g transform="translate(8,38)">
+            <rect x="0"  y="18" width="6" height="2"  fill="var(--match)"/>
+            <rect x="8"  y="18" width="6" height="2"  fill="var(--match)"/>
+            <rect x="16" y="16" width="6" height="4"  fill="var(--match)"/>
+            <rect x="24" y="18" width="6" height="2"  fill="var(--match)"/>
+            <rect x="32" y="18" width="6" height="2"  fill="var(--match)"/>
+            <rect x="40" y="0"  width="6" height="20" fill="var(--match)" class="animated" style="animation: glow 1.6s ease-in-out infinite;"/>
+            <rect x="48" y="18" width="6" height="2"  fill="var(--match)"/>
+            <rect x="56" y="18" width="6" height="2"  fill="var(--match)"/>
+            <rect x="64" y="16" width="6" height="4"  fill="var(--match)"/>
+            <rect x="72" y="18" width="6" height="2"  fill="var(--match)"/>
+            <rect x="80" y="18" width="6" height="2"  fill="var(--match)"/>
+            <rect x="88" y="16" width="6" height="4"  fill="var(--match)"/>
+            <rect x="96" y="18" width="6" height="2"  fill="var(--match)"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- Feature vector -->
+      <g transform="translate(280,20)" font-family="ui-monospace, monospace" font-size="9.5" fill="var(--fg)">
+        <text x="0" y="-4" class="stage-title">14-dim feature vector</text>
+        <rect x="0" y="0" width="120" height="270" fill="#fff" stroke="var(--line)"/>
+        <text x="60" y="14" text-anchor="middle" fill="var(--muted)">per expert: [found, logN, H, depth]</text>
+        <g transform="translate(8, 26)">
+          <text y="0" fill="var(--kn)">KN:    1.00  6.21  3.04  10</text>
+          <text y="14" fill="var(--kn)">       (matched order 10)</text>
+          <text y="36" fill="var(--skip)">Skip:  1.00  4.85  2.71   5</text>
+          <text y="50" fill="var(--skip)">       (full ctx hit)</text>
+          <text y="72" fill="var(--case)">Case:  1.00  5.43  2.94   7</text>
+          <text y="86" fill="var(--case)">       (lowercase hit)</text>
+          <text y="108" fill="var(--match)">Match: 1.00  0.00  0.78  16</text>
+          <text y="122" fill="var(--match)">       (16-byte suffix!)</text>
+          <text y="148" fill="var(--muted)">… normalized by</text>
+          <text y="162" fill="var(--muted)">held-out z-stats</text>
+        </g>
+      </g>
+
+      <!-- MLP -->
+      <g transform="translate(420,20)" font-family="ui-monospace, monospace" font-size="9.5">
+        <text x="60" y="-4" class="stage-title" text-anchor="middle">14 → 32 → 4 mixer</text>
+        <!-- input layer -->
+        <g>
+          <circle cx="0" cy="20" r="3" fill="var(--kn)"/>
+          <circle cx="0" cy="34" r="3" fill="var(--kn)"/>
+          <circle cx="0" cy="48" r="3" fill="var(--kn)"/>
+          <circle cx="0" cy="62" r="3" fill="var(--kn)"/>
+          <circle cx="0" cy="80" r="3" fill="var(--skip)"/>
+          <circle cx="0" cy="94" r="3" fill="var(--skip)"/>
+          <circle cx="0" cy="108" r="3" fill="var(--skip)"/>
+          <circle cx="0" cy="122" r="3" fill="var(--skip)"/>
+          <circle cx="0" cy="140" r="3" fill="var(--case)"/>
+          <circle cx="0" cy="154" r="3" fill="var(--case)"/>
+          <circle cx="0" cy="168" r="3" fill="var(--case)"/>
+          <circle cx="0" cy="182" r="3" fill="var(--case)"/>
+          <circle cx="0" cy="200" r="3" fill="var(--match)"/>
+          <circle cx="0" cy="214" r="3" fill="var(--match)"/>
+        </g>
+        <!-- hidden layer  -->
+        <g>
+          <g fill="var(--muted)">
+          <circle cx="60" cy="16" r="2.5"/><circle cx="60" cy="28" r="2.5"/><circle cx="60" cy="40" r="2.5"/>
+          <circle cx="60" cy="52" r="2.5"/><circle cx="60" cy="64" r="2.5"/><circle cx="60" cy="76" r="2.5"/>
+          <circle cx="60" cy="88" r="2.5"/><circle cx="60" cy="100" r="2.5"/><circle cx="60" cy="112" r="2.5"/>
+          <circle cx="60" cy="124" r="2.5"/><circle cx="60" cy="136" r="2.5"/><circle cx="60" cy="148" r="2.5"/>
+          <circle cx="60" cy="160" r="2.5"/><circle cx="60" cy="172" r="2.5"/><circle cx="60" cy="184" r="2.5"/>
+          <circle cx="60" cy="196" r="2.5"/><circle cx="60" cy="208" r="2.5"/><circle cx="60" cy="220" r="2.5"/>
+          </g>
+        </g>
+        <!-- output layer -->
+        <g>
+          <circle cx="120" cy="50" r="5" fill="var(--kn)"/>
+          <circle cx="120" cy="90" r="5" fill="var(--skip)"/>
+          <circle cx="120" cy="130" r="5" fill="var(--case)"/>
+          <circle cx="120" cy="170" r="5" fill="var(--match)"/>
+          <text x="130" y="54">w_KN</text>
+          <text x="130" y="94">w_skip</text>
+          <text x="130" y="134">w_case</text>
+          <text x="130" y="174">w_match</text>
+        </g>
+        <!-- some edges (sample) -->
+        <g stroke="var(--muted)" stroke-opacity="0.15" stroke-width="0.7">
+          <line x1="3" y1="20" x2="58" y2="16"/>
+          <line x1="3" y1="20" x2="58" y2="64"/>
+          <line x1="3" y1="80" x2="58" y2="64"/>
+          <line x1="3" y1="80" x2="58" y2="120"/>
+          <line x1="3" y1="140" x2="58" y2="148"/>
+          <line x1="3" y1="200" x2="58" y2="196"/>
+          <line x1="62" y1="64" x2="116" y2="50"/>
+          <line x1="62" y1="120" x2="116" y2="130"/>
+          <line x1="62" y1="148" x2="116" y2="90"/>
+          <line x1="62" y1="196" x2="116" y2="170"/>
+        </g>
+        <text x="60" y="248" text-anchor="middle" fill="var(--muted)">tanh hidden · softmax out</text>
+      </g>
+
+      <!-- Blend & output -->
+      <g transform="translate(640,20)" font-family="ui-monospace, monospace" font-size="9.5">
+        <text x="0" y="-4" class="stage-title">weighted blend → argmax</text>
+        <!-- four bar charts (weights) -->
+        <g>
+          <rect x="0"  y="0" width="22" height="40" fill="var(--kn)"   fill-opacity="0.8" class="animated" style="animation: bar-osc-a 4s ease-in-out infinite; transform-origin: 0px 40px;"/>
+          <rect x="26" y="0" width="22" height="40" fill="var(--skip)" fill-opacity="0.8" class="animated" style="animation: bar-osc-b 4s ease-in-out infinite; transform-origin: 26px 40px;"/>
+          <rect x="52" y="0" width="22" height="40" fill="var(--case)" fill-opacity="0.8" class="animated" style="animation: bar-osc-c 4s ease-in-out infinite; transform-origin: 52px 40px;"/>
+          <rect x="78" y="0" width="22" height="40" fill="var(--match)" fill-opacity="0.8" class="animated" style="animation: bar-osc-d 4s ease-in-out infinite; transform-origin: 78px 40px;"/>
+          <line x1="-4" y1="40" x2="104" y2="40" stroke="var(--fg)" stroke-width="0.7"/>
+          <text x="11" y="54" text-anchor="middle">KN</text>
+          <text x="37" y="54" text-anchor="middle">sk</text>
+          <text x="63" y="54" text-anchor="middle">ca</text>
+          <text x="89" y="54" text-anchor="middle">mt</text>
+          <text x="0" y="76" fill="var(--muted)">softmax weights</text>
+        </g>
+        <!-- final dist -->
+        <g transform="translate(0,100)">
+          <text x="0" y="-6" fill="var(--muted)">P(c | context)</text>
+          <rect x="0"  y="22" width="4" height="6"  fill="var(--fg)"/>
+          <rect x="6"  y="18" width="4" height="10" fill="var(--fg)"/>
+          <rect x="12" y="14" width="4" height="14" fill="var(--fg)"/>
+          <rect x="18" y="12" width="4" height="16" fill="var(--fg)"/>
+          <rect x="24" y="0"  width="4" height="28" fill="var(--accent)" class="animated" style="animation: glow 2s ease-in-out infinite;"/>
+          <rect x="30" y="16" width="4" height="12" fill="var(--fg)"/>
+          <rect x="36" y="20" width="4" height="8"  fill="var(--fg)"/>
+          <rect x="42" y="14" width="4" height="14" fill="var(--fg)"/>
+          <rect x="48" y="18" width="4" height="10" fill="var(--fg)"/>
+          <rect x="54" y="22" width="4" height="6"  fill="var(--fg)"/>
+          <rect x="60" y="16" width="4" height="12" fill="var(--fg)"/>
+          <rect x="66" y="20" width="4" height="8"  fill="var(--fg)"/>
+          <rect x="72" y="14" width="4" height="14" fill="var(--fg)"/>
+          <rect x="78" y="18" width="4" height="10" fill="var(--fg)"/>
+          <rect x="84" y="22" width="4" height="6"  fill="var(--fg)"/>
+          <line x1="0" y1="28" x2="100" y2="28" stroke="var(--fg)" stroke-width="0.5"/>
+          <text x="0" y="46" fill="var(--accent)">argmax = "o"</text>
+        </g>
+      </g>
+
+      <!-- Connecting arrows -->
+      <g fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"
+         class="animated" style="animation: flow-arrow 3s linear infinite;">
+        <path d="M 102,140 L 280,140" marker-end="url(#paq-arrow)"/>
+        <path d="M 400,140 L 420,140" marker-end="url(#paq-arrow)"/>
+        <path d="M 555,140 L 640,140" marker-end="url(#paq-arrow)"/>
+      </g>
+      <defs>
+        <marker id="paq-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <polygon points="0,0 6,3 0,6" fill="var(--muted)"/>
+        </marker>
+      </defs>
+    </svg>
+    <div class="anim-controls">
+      <button onclick="this.closest('.anim-wrap').classList.toggle('paused')">pause / resume</button>
+      <span>The four weights oscillate to illustrate context-dependent mixing — in code they are recomputed every byte from the feature vector.</span>
+    </div>
+  </div>
+
+  <h4>What the mixer is actually doing</h4>
+  <p>
+    The 14-dim feature vector encodes <i>uncertainty per expert</i>: high entropy → trust the others;
+    high <code>logN</code> → this context is well-attested; <code>depth</code> on the match model
+    is the suffix length, which is the strongest single signal the system has (longer match → near-1
+    weight on the matched continuation byte). The mixer is trained for 1,500 Adam steps on 80,000
+    held-out positions from the last 2 MB of the corpus — total mixer compute is &lt; 1 s of GPU
+    time. The bulk of the 2,333 J budget is the order-1–11 KN table build, the same sort
+    backbone as methods #1 and #2.
+  </p>
+
+  <h4>Why this is the top-5's accuracy leader (0.7248)</h4>
+  <p>
+    On char-acc, two of the experts are doing real work that pure KN cannot do: the
+    <b>match model</b> catches verbatim repetition (page titles, section headings, "==
+    References ==" markers — endemic to WikiText), and the <b>case-folded order-7 predictor</b>
+    catches word stems independent of capitalization. Skip-1 is the weakest of the four but
+    helps in syntactically rigid positions where the immediate previous character is the wrong
+    cue (after a punctuation–space gap). Adding these costs +1,000 J over <code>gpu_ngram_w31_k11</code>
+    and buys +0.02 acc — a worthwhile trade on this benchmark.
+  </p>
+</article>
+
+<!-- =========================== METHOD 4: gpu_ngram_o14_xorfix =========================== -->
+<article class="method" id="m-gpu_ngram_o14_xorfix">
+  <div class="method-head">
+    <h3>#4 · <code>gpu_ngram_o14_xorfix</code> — sign-bit XOR for unsigned GPU sort</h3>
+    <div class="method-stats"><b>3,441 J</b> · 97.6 s · 0.7184 val acc · <a href="https://github.com/gabrielnan">@gabrielnan</a></div>
+  </div>
+  <p class="method-summary">
+    Order-14 Kneser-Ney n-gram with the bug fix that mattered: at k ≥ 9 the
+    packed int64 keys carry their MSB into the sign bit, and PyTorch's signed
+    <code>torch.sort</code> scrambled the global lexicographic order. The fix is one XOR.
+  </p>
+
+  <div class="anim-wrap">
+    <svg class="anim-svg" viewBox="0 0 880 280" preserveAspectRatio="xMidYMid meet" aria-label="XOR sign-bit fix">
+
+      <!-- Stage 1: the problem -->
+      <g transform="translate(20,30)" font-family="ui-monospace, monospace" font-size="11">
+        <text class="stage-title" x="0" y="-8">① 14-byte window contains a 0x80–0xFF byte</text>
+        <g>
+          <rect x="0"   y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="9"  y="15" text-anchor="middle">b₀</text>
+          <rect x="18"  y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="27" y="15" text-anchor="middle">b₁</text>
+          <rect x="36"  y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="45" y="15" text-anchor="middle">b₂</text>
+          <rect x="54"  y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="63" y="15" text-anchor="middle">b₃</text>
+          <rect x="72"  y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="81" y="15" text-anchor="middle">b₄</text>
+          <rect x="90"  y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="99" y="15" text-anchor="middle">b₅</text>
+          <rect x="108" y="0" width="18" height="22" fill="rgba(164,48,42,0.45)" stroke="var(--bad)"/>
+          <text x="117" y="15" text-anchor="middle" fill="#fff" font-weight="600">0xAB</text>
+          <rect x="126" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/><text x="135" y="15" text-anchor="middle">b₇</text>
+          <rect x="144" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/>
+          <rect x="162" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/>
+          <rect x="180" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/>
+          <rect x="198" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/>
+          <rect x="216" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/>
+          <rect x="234" y="0" width="18" height="22" fill="#a8c9e0" stroke="var(--kn)"/>
+        </g>
+        <text class="label" x="0" y="40">MSB of int64 = sign bit → torch.sort treats this key as <tspan fill="var(--bad)" font-weight="600">negative</tspan></text>
+      </g>
+
+      <!-- Stage 2: the fix (animated XOR + move) -->
+      <g transform="translate(20,110)" font-family="ui-monospace, monospace" font-size="11">
+        <text class="stage-title" x="0" y="-8">② The fix: <tspan class="mono">sort_lo = lo ^ (1 &lt;&lt; 63)</tspan></text>
+        <g class="animated" style="animation: xor-flip 4s ease-in-out infinite;">
+          <rect x="0" y="0" width="80" height="26" stroke="var(--fg)"/>
+          <text x="40" y="18" text-anchor="middle" fill="#fff" font-weight="600">key (neg)</text>
+        </g>
+        <text x="60" y="44" fill="var(--muted)">XOR sign bit</text>
+        <text x="180" y="44" fill="var(--muted)">unsigned, sorts correctly</text>
+        <!-- legend -->
+        <g transform="translate(280,0)" font-size="10">
+          <rect x="0" y="0" width="14" height="14" fill="var(--bad)"/><text x="20" y="11">neg int64</text>
+          <rect x="0" y="18" width="14" height="14" fill="var(--warn)"/><text x="20" y="29">XOR'd</text>
+          <rect x="0" y="36" width="14" height="14" fill="var(--good)"/><text x="20" y="47">sorted right</text>
+        </g>
+        <!-- code snippet -->
+        <g transform="translate(420,0)" font-size="10.5" fill="var(--fg)">
+          <rect x="0" y="-8" width="430" height="60" fill="var(--code-bg)" rx="3"/>
+          <text x="10" y="6">sort_hi = hi ^ (1 &lt;&lt; 63)</text>
+          <text x="10" y="22">sort_lo = lo ^ (1 &lt;&lt; 63)</text>
+          <text x="10" y="38">order = torch.argsort(sort_lo)  # stable, ascending</text>
+          <text x="10" y="50" fill="var(--muted)"># then stable sort by sort_hi → unsigned lex order</text>
+        </g>
+      </g>
+
+      <!-- Stage 3: the cascade -->
+      <g transform="translate(20,200)" font-family="ui-monospace, monospace" font-size="10">
+        <text class="stage-title" x="0" y="-8">③ Backoff cascade (order 14 → 13 → … → 1)</text>
+        <g>
+          <rect x="0"   y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.85"/><text x="18" y="14" text-anchor="middle" fill="#fff">14</text>
+          <rect x="40"  y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.80"/><text x="58" y="14" text-anchor="middle" fill="#fff">13</text>
+          <rect x="80"  y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.75"/><text x="98" y="14" text-anchor="middle" fill="#fff">12</text>
+          <rect x="120" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.70"/><text x="138" y="14" text-anchor="middle" fill="#fff">11</text>
+          <rect x="160" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.65"/><text x="178" y="14" text-anchor="middle" fill="#fff">10</text>
+          <rect x="200" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.58"/><text x="218" y="14" text-anchor="middle" fill="#fff">9</text>
+          <rect x="240" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.52"/><text x="258" y="14" text-anchor="middle" fill="#fff">8</text>
+          <rect x="280" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.46"/><text x="298" y="14" text-anchor="middle" fill="#fff">7</text>
+          <rect x="320" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.40"/><text x="338" y="14" text-anchor="middle" fill="#fff">6</text>
+          <rect x="360" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.34"/><text x="378" y="14" text-anchor="middle" fill="#fff">5</text>
+          <rect x="400" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.28"/><text x="418" y="14" text-anchor="middle" fill="#fff">4</text>
+          <rect x="440" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.22"/><text x="458" y="14" text-anchor="middle" fill="#fff">3</text>
+          <rect x="480" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.16"/><text x="498" y="14" text-anchor="middle" fill="#fff">2</text>
+          <rect x="520" y="0" width="36" height="22" fill="var(--kn)" fill-opacity="0.10"/><text x="538" y="14" text-anchor="middle" fill="#fff">1</text>
+        </g>
+        <text class="label" x="0" y="40">history probe walks order k=14 first; on miss, drops a leftmost byte and tries k=13</text>
+      </g>
+    </svg>
+    <div class="anim-controls">
+      <button onclick="this.closest('.anim-wrap').classList.toggle('paused')">pause / resume</button>
+      <span>Without the XOR, the sister submission <code>gpu_ngram_o14</code> wasted ~150 s on a CPU re-sort to repair the order before predict() could use binary search.</span>
+    </div>
+  </div>
+
+  <h4>Why this is "the bug fix that mattered"</h4>
+  <p>
+    Sister submissions in this family hit a CPU re-sort step burning ~150 s of wall-clock —
+    over half the entire 300 s budget — because the GPU's signed comparator had produced a key
+    array that <code>np.searchsorted</code> could not use. XOR-ing the sign bit before the sort
+    re-maps the int64 range so the negative half (0x80–0xFF leading bytes) becomes the
+    high-positive half (0x8000000000000000…), and signed lex order becomes unsigned lex order
+    "for free". Wall-clock drops from ~250 s to 97.6 s. Energy follows.
+  </p>
+
+  <h4>Order 14 vs. order 11</h4>
+  <p>
+    Why pay 3.4 kJ for k=14 when k=11 (method #2) costs 1.3 kJ and lands the same accuracy?
+    Empirically, the answer is "it doesn't pay" on char-acc. The order-14 table is fatter (~50M
+    unique 14-grams vs. ~10M unique 11-grams) and the extra long-range context boosts log-loss but
+    char-acc moves only +0.013. So this entry is a Pareto-stuck design: the XOR fix saves it from
+    DQ, but it's still dominated on the energy axis by the lower-order siblings.
+  </p>
+</article>
+
+<!-- =========================== METHOD 5: paq_mixer_v3 =========================== -->
+<article class="method" id="m-paq_mixer_v3">
+  <div class="method-head">
+    <h3>#5 · <code>paq_mixer_v3</code> — 11 independent experts, no backoff chain</h3>
+    <div class="method-stats"><b>3,582 J</b> · 122.3 s · 0.7047 val acc · <a href="https://github.com/gabrielnan">@gabrielnan</a></div>
+  </div>
+  <p class="method-summary">
+    A PAQ-shaped mixer that <i>throws away the chained backoff</i>: each of the 11 byte n-gram
+    orders is treated as an independent expert with Witten-Bell smoothing, and a 22→32→11 MLP
+    learns soft weights from per-order [logN, entropy, found] features. Errors in one order can no
+    longer cascade into others.
+  </p>
+
+  <div class="anim-wrap">
+    <svg class="anim-svg" viewBox="0 0 880 340" preserveAspectRatio="xMidYMid meet" aria-label="paq_mixer_v3 animation">
+      <!-- 11 parallel experts -->
+      <g transform="translate(20,30)" font-family="ui-monospace, monospace" font-size="9.5">
+        <text class="stage-title" x="0" y="-8">① 11 parallel order tables (k = 1 … 11), Witten-Bell smoothed</text>
+        <g>
+          <!-- order labels and mini distributions -->
+          <g transform="translate(0,0)"   >  <text x="0" y="10" fill="var(--muted)">k=1</text>  <rect x="22" y="0" width="2" height="12" fill="var(--kn)"/><rect x="26" y="2" width="2" height="10" fill="var(--kn)"/><rect x="30" y="4" width="2" height="8" fill="var(--kn)"/><rect x="34" y="0" width="2" height="12" fill="var(--accent)"/><rect x="38" y="3" width="2" height="9" fill="var(--kn)"/></g>
+          <g transform="translate(80,0)"  >  <text x="0" y="10" fill="var(--muted)">k=2</text>  <rect x="22" y="2" width="2" height="10" fill="var(--kn)"/><rect x="26" y="4" width="2" height="8" fill="var(--kn)"/><rect x="30" y="0" width="2" height="12" fill="var(--kn)"/><rect x="34" y="1" width="2" height="11" fill="var(--accent)"/><rect x="38" y="6" width="2" height="6" fill="var(--kn)"/></g>
+          <g transform="translate(160,0)" >  <text x="0" y="10" fill="var(--muted)">k=3</text>  <rect x="22" y="5" width="2" height="7" fill="var(--kn)"/><rect x="26" y="2" width="2" height="10" fill="var(--kn)"/><rect x="30" y="1" width="2" height="11" fill="var(--kn)"/><rect x="34" y="3" width="2" height="9" fill="var(--accent)"/><rect x="38" y="0" width="2" height="12" fill="var(--kn)"/></g>
+          <g transform="translate(240,0)" >  <text x="0" y="10" fill="var(--muted)">k=4</text>  <rect x="22" y="3" width="2" height="9" fill="var(--kn)"/><rect x="26" y="6" width="2" height="6" fill="var(--kn)"/><rect x="30" y="2" width="2" height="10" fill="var(--kn)"/><rect x="34" y="0" width="2" height="12" fill="var(--accent)"/><rect x="38" y="4" width="2" height="8" fill="var(--kn)"/></g>
+          <g transform="translate(320,0)" >  <text x="0" y="10" fill="var(--muted)">k=5</text>  <rect x="22" y="0" width="2" height="12" fill="var(--kn)"/><rect x="26" y="5" width="2" height="7" fill="var(--kn)"/><rect x="30" y="2" width="2" height="10" fill="var(--kn)"/><rect x="34" y="1" width="2" height="11" fill="var(--accent)"/><rect x="38" y="6" width="2" height="6" fill="var(--kn)"/></g>
+          <g transform="translate(400,0)" >  <text x="0" y="10" fill="var(--muted)">k=6</text>  <rect x="22" y="6" width="2" height="6" fill="var(--kn)"/><rect x="26" y="2" width="2" height="10" fill="var(--kn)"/><rect x="30" y="0" width="2" height="12" fill="var(--kn)"/><rect x="34" y="3" width="2" height="9" fill="var(--accent)"/><rect x="38" y="2" width="2" height="10" fill="var(--kn)"/></g>
+          <g transform="translate(480,0)" >  <text x="0" y="10" fill="var(--muted)">k=7</text>  <rect x="22" y="4" width="2" height="8" fill="var(--kn)"/><rect x="26" y="1" width="2" height="11" fill="var(--kn)"/><rect x="30" y="6" width="2" height="6" fill="var(--kn)"/><rect x="34" y="0" width="2" height="12" fill="var(--accent)"/><rect x="38" y="3" width="2" height="9" fill="var(--kn)"/></g>
+          <g transform="translate(560,0)" >  <text x="0" y="10" fill="var(--muted)">k=8</text>  <rect x="22" y="3" width="2" height="9" fill="var(--kn)"/><rect x="26" y="0" width="2" height="12" fill="var(--kn)"/><rect x="30" y="6" width="2" height="6" fill="var(--kn)"/><rect x="34" y="2" width="2" height="10" fill="var(--accent)"/><rect x="38" y="4" width="2" height="8" fill="var(--kn)"/></g>
+          <g transform="translate(640,0)" >  <text x="0" y="10" fill="var(--muted)">k=9</text>  <rect x="22" y="5" width="2" height="7" fill="var(--kn)"/><rect x="26" y="2" width="2" height="10" fill="var(--kn)"/><rect x="30" y="0" width="2" height="12" fill="var(--kn)"/><rect x="34" y="3" width="2" height="9" fill="var(--accent)"/><rect x="38" y="6" width="2" height="6" fill="var(--kn)"/></g>
+          <g transform="translate(720,0)" >  <text x="0" y="10" fill="var(--muted)">k=10</text> <rect x="28" y="2" width="2" height="10" fill="var(--kn)"/><rect x="32" y="0" width="2" height="12" fill="var(--kn)"/><rect x="36" y="3" width="2" height="9" fill="var(--accent)"/><rect x="40" y="5" width="2" height="7" fill="var(--kn)"/></g>
+          <g transform="translate(800,0)" >  <text x="0" y="10" fill="var(--muted)">k=11</text> <rect x="28" y="3" width="2" height="9" fill="var(--kn)"/><rect x="32" y="0" width="2" height="12" fill="var(--accent)"/><rect x="36" y="5" width="2" height="7" fill="var(--kn)"/><rect x="40" y="2" width="2" height="10" fill="var(--kn)"/></g>
+        </g>
+      </g>
+
+      <!-- Contrast box: no backoff arrows -->
+      <g transform="translate(20,100)" font-family="ui-monospace, monospace" font-size="10.5">
+        <rect x="0" y="0" width="380" height="60" fill="var(--code-bg)" stroke="var(--line)" rx="3"/>
+        <text x="10" y="18" fill="var(--fg)" font-weight="600">key contrast with paq8_gpu / KN cascade:</text>
+        <text x="10" y="34" fill="var(--muted)">canonical: k=11 misses → fall back to k=10 → 9 → … (errors couple)</text>
+        <text x="10" y="48" fill="var(--accent)">v3: all 11 distributions enter the mixer in parallel (errors stay isolated)</text>
+      </g>
+
+      <!-- 22-dim feature vector -->
+      <g transform="translate(410,100)" font-family="ui-monospace, monospace" font-size="10">
+        <rect x="0" y="0" width="170" height="60" fill="#fff" stroke="var(--line)" rx="3"/>
+        <text x="85" y="14" text-anchor="middle" class="stage-title">② 22-d feature vec</text>
+        <text x="85" y="30" text-anchor="middle" fill="var(--muted)">[logN, H, found] × 11 orders</text>
+        <text x="85" y="46" text-anchor="middle" fill="var(--muted)">+ 1 bias  · z-normalized</text>
+      </g>
+
+      <!-- mixer -->
+      <g transform="translate(600,80)" font-family="ui-monospace, monospace" font-size="9.5">
+        <text x="80" y="-2" text-anchor="middle" class="stage-title">③ 22 → 32 → 11 MLP (tanh, softmax)</text>
+        <!-- 22 input dots, 32 hidden, 11 output -->
+        <g>
+          <g transform="translate(0,10)">
+            <g fill="var(--muted)">
+              <circle cx="0" cy="0" r="2"/><circle cx="0" cy="6" r="2"/><circle cx="0" cy="12" r="2"/><circle cx="0" cy="18" r="2"/>
+              <circle cx="0" cy="24" r="2"/><circle cx="0" cy="30" r="2"/><circle cx="0" cy="36" r="2"/><circle cx="0" cy="42" r="2"/>
+              <circle cx="0" cy="48" r="2"/><circle cx="0" cy="54" r="2"/><circle cx="0" cy="60" r="2"/><circle cx="0" cy="66" r="2"/>
+              <circle cx="0" cy="72" r="2"/><circle cx="0" cy="78" r="2"/><circle cx="0" cy="84" r="2"/><circle cx="0" cy="90" r="2"/>
+              <circle cx="0" cy="96" r="2"/><circle cx="0" cy="102" r="2"/><circle cx="0" cy="108" r="2"/><circle cx="0" cy="114" r="2"/>
+              <circle cx="0" cy="120" r="2"/><circle cx="0" cy="126" r="2"/>
+            </g>
+          </g>
+          <g transform="translate(70,12)">
+            <g fill="var(--accent)" fill-opacity="0.6">
+              <circle cx="0" cy="0"  r="2.5"/><circle cx="0" cy="8"  r="2.5"/><circle cx="0" cy="16" r="2.5"/><circle cx="0" cy="24" r="2.5"/>
+              <circle cx="0" cy="32" r="2.5"/><circle cx="0" cy="40" r="2.5"/><circle cx="0" cy="48" r="2.5"/><circle cx="0" cy="56" r="2.5"/>
+              <circle cx="0" cy="64" r="2.5"/><circle cx="0" cy="72" r="2.5"/><circle cx="0" cy="80" r="2.5"/><circle cx="0" cy="88" r="2.5"/>
+              <circle cx="0" cy="96" r="2.5"/><circle cx="0" cy="104" r="2.5"/><circle cx="0" cy="112" r="2.5"/><circle cx="0" cy="120" r="2.5"/>
+            </g>
+          </g>
+          <g transform="translate(140,20)">
+            <g fill="var(--kn)">
+              <circle cx="0" cy="0"  r="3.5"/><circle cx="0" cy="10" r="3.5"/><circle cx="0" cy="20" r="3.5"/>
+              <circle cx="0" cy="30" r="3.5"/><circle cx="0" cy="40" r="3.5"/><circle cx="0" cy="50" r="3.5"/>
+              <circle cx="0" cy="60" r="3.5"/><circle cx="0" cy="70" r="3.5"/><circle cx="0" cy="80" r="3.5"/>
+              <circle cx="0" cy="90" r="3.5"/><circle cx="0" cy="100" r="3.5"/>
+            </g>
+          </g>
+          <!-- edges -->
+          <g stroke="var(--muted)" stroke-opacity="0.18" stroke-width="0.6">
+            <line x1="2" y1="20" x2="68" y2="14"/>
+            <line x1="2" y1="40" x2="68" y2="40"/>
+            <line x1="2" y1="60" x2="68" y2="60"/>
+            <line x1="2" y1="80" x2="68" y2="68"/>
+            <line x1="2" y1="100" x2="68" y2="100"/>
+            <line x1="2" y1="120" x2="68" y2="120"/>
+            <line x1="72" y1="20" x2="138" y2="30"/>
+            <line x1="72" y1="50" x2="138" y2="60"/>
+            <line x1="72" y1="80" x2="138" y2="90"/>
+            <line x1="72" y1="120" x2="138" y2="120"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- Stage 4: 11 weights -->
+      <g transform="translate(20,230)" font-family="ui-monospace, monospace" font-size="9.5">
+        <text class="stage-title" x="0" y="-8">④ softmax weights — one per order — change every byte</text>
+        <g>
+          <rect x="0"   y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-a 5s ease-in-out infinite; transform-origin: 0 50px;"/>
+          <rect x="18"  y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-b 5s ease-in-out infinite 0.4s; transform-origin: 18px 50px;"/>
+          <rect x="36"  y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-c 5s ease-in-out infinite 0.8s; transform-origin: 36px 50px;"/>
+          <rect x="54"  y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-d 5s ease-in-out infinite 1.2s; transform-origin: 54px 50px;"/>
+          <rect x="72"  y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-a 5s ease-in-out infinite 1.6s; transform-origin: 72px 50px;"/>
+          <rect x="90"  y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-b 5s ease-in-out infinite 2.0s; transform-origin: 90px 50px;"/>
+          <rect x="108" y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-c 5s ease-in-out infinite 2.4s; transform-origin: 108px 50px;"/>
+          <rect x="126" y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-d 5s ease-in-out infinite 2.8s; transform-origin: 126px 50px;"/>
+          <rect x="144" y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-a 5s ease-in-out infinite 3.2s; transform-origin: 144px 50px;"/>
+          <rect x="162" y="0" width="14" height="50" fill="var(--kn)" fill-opacity="0.85" class="animated" style="animation: bar-osc-b 5s ease-in-out infinite 3.6s; transform-origin: 162px 50px;"/>
+          <rect x="180" y="0" width="14" height="50" fill="var(--accent)" fill-opacity="0.95" class="animated" style="animation: glow 4s ease-in-out infinite; transform-origin: 180px 50px;"/>
+          <line x1="-4" y1="50" x2="200" y2="50" stroke="var(--fg)" stroke-width="0.7"/>
+          <text x="7"   y="64" text-anchor="middle">1</text>
+          <text x="25"  y="64" text-anchor="middle">2</text>
+          <text x="43"  y="64" text-anchor="middle">3</text>
+          <text x="61"  y="64" text-anchor="middle">4</text>
+          <text x="79"  y="64" text-anchor="middle">5</text>
+          <text x="97"  y="64" text-anchor="middle">6</text>
+          <text x="115" y="64" text-anchor="middle">7</text>
+          <text x="133" y="64" text-anchor="middle">8</text>
+          <text x="151" y="64" text-anchor="middle">9</text>
+          <text x="169" y="64" text-anchor="middle">10</text>
+          <text x="187" y="64" text-anchor="middle" fill="var(--accent)" font-weight="600">11</text>
+          <text x="0"   y="80" fill="var(--muted)">when k=11 misses, others fill in (no chained miss)</text>
+        </g>
+
+        <!-- output dist -->
+        <g transform="translate(280,0)">
+          <text x="0" y="-8" class="stage-title">⑤ mixed P(c)</text>
+          <rect x="0"  y="34" width="6" height="14" fill="var(--fg)"/>
+          <rect x="8"  y="28" width="6" height="20" fill="var(--fg)"/>
+          <rect x="16" y="22" width="6" height="26" fill="var(--fg)"/>
+          <rect x="24" y="18" width="6" height="30" fill="var(--fg)"/>
+          <rect x="32" y="12" width="6" height="36" fill="var(--accent)" class="animated" style="animation: glow 2.5s ease-in-out infinite;"/>
+          <rect x="40" y="24" width="6" height="24" fill="var(--fg)"/>
+          <rect x="48" y="32" width="6" height="16" fill="var(--fg)"/>
+          <rect x="56" y="26" width="6" height="22" fill="var(--fg)"/>
+          <rect x="64" y="36" width="6" height="12" fill="var(--fg)"/>
+          <rect x="72" y="30" width="6" height="18" fill="var(--fg)"/>
+          <rect x="80" y="34" width="6" height="14" fill="var(--fg)"/>
+          <rect x="88" y="28" width="6" height="20" fill="var(--fg)"/>
+          <rect x="96" y="36" width="6" height="12" fill="var(--fg)"/>
+          <line x1="0" y1="48" x2="105" y2="48" stroke="var(--fg)" stroke-width="0.5"/>
+          <text x="0" y="68" fill="var(--accent)">argmax = "e"</text>
+        </g>
+      </g>
+    </svg>
+    <div class="anim-controls">
+      <button onclick="this.closest('.anim-wrap').classList.toggle('paused')">pause / resume</button>
+      <span>Mixer trains with cross-entropy on the true next byte: <code>L = −log Σ_k softmax(w)_k · p_k(c*|h)</code>.</span>
+    </div>
+  </div>
+
+  <h4>What this design buys</h4>
+  <p>
+    Decoupling the orders means the mixer can attribute high entropy to a single bad expert
+    without polluting the others, where canonical KN backoff would have to walk all the way down.
+    The cost is that you're <i>always</i> evaluating all 11 distributions at predict time;
+    this is why the train wall-clock is 122 s vs. 33 s for the plain order-11 sibling — the
+    extra work is the mixer-training step (1,500 Adam steps on 200K positions sampled from
+    a held-out 2 MB slice).
+  </p>
+
+  <h4>Why it lands below paq8_gpu (0.7047 vs. 0.7248)</h4>
+  <p>
+    Heterogeneity beats parallelism here. <code>paq8_gpu</code> mixes four <i>different
+    kinds</i> of context (regular KN, skip-1, case-fold, match) while v3 mixes eleven
+    <i>copies of the same idea</i> at different orders. The match model on its own catches
+    high-mass repetition that no order-k n-gram can; the case-fold model decouples
+    capitalization. Stacking more orders of the same family has hit diminishing returns by k=8.
+  </p>
+</article>
+
+<h2>4 · Cross-cutting patterns</h2>
+
+<h3>4.1 · The five winners share one tool: GPU sort as the training algorithm</h3>
+<p>
+  All five use <code>torch.argsort</code> on packed byte windows as the workhorse step. None
+  uses backprop on the n-gram tables themselves. The only learned-by-gradient component on the
+  entire leaderboard is the ≤1,100-parameter mixer in methods #3 and #5 — and even those train
+  for under 2 s of GPU time, well below the 300 s budget. <b>Where the energy goes</b>: GPU sort
+  on N ≈ 400 M-byte sequences, repeated 11–14 times for the order cascade. <b>Where it does
+  not go</b>: anywhere near a transformer's parameter gradient buffer.
+</p>
+
+<h3>4.2 · Smoothing choice barely moves the needle in this energy range</h3>
+<p>
+  Compare the three pure-KN entries:
+</p>
+<table>
+  <thead><tr>
+    <th>Submission</th><th>Smoothing</th><th class="num">Order</th>
+    <th class="num">Energy (J)</th><th class="num">Val acc</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><code>gpu_ngram_w31_k11</code></td><td>KN, scalar D = 0.5</td><td class="num">11</td><td class="num">1,333</td><td class="num">0.7050</td></tr>
+    <tr><td><code>subset_70_mkn</code></td><td>MKN, D₁/D₂/D₃ per count</td><td class="num">11</td><td class="num">1,065</td><td class="num">0.7031</td></tr>
+    <tr><td><code>gpu_ngram_o14_xorfix</code></td><td>KN, scalar D = 0.5</td><td class="num">14</td><td class="num">3,441</td><td class="num">0.7184</td></tr>
+  </tbody>
+</table>
+<p>
+  Three "knobs" — scalar D, per-count discounts, going from k=11 to k=14 — together account for
+  ±0.015 acc and a 3× spread in energy. <i>The smoothing choice is overshadowed by the size
+  of the count tables you need to build.</i> 0.70 is "cheap" in this design space; pushing
+  toward 0.74 (where the modded-nanogpt baseline sits) is what costs you.
+</p>
+
+<h3>4.3 · Mixing heterogeneous experts beats mixing more-of-the-same</h3>
+<p>
+  <code>paq8_gpu</code> (4 different experts) beats <code>paq_mixer_v3</code> (11 same-family
+  experts) by +0.02 val acc at lower energy. The heterogeneity supplies signal the n-gram
+  cascade cannot — primarily the <b>match model</b>, which exploits WikiText's verbatim
+  reuse of section markers, page titles, and citation templates. This generalizes a long-known
+  PAQ-family lesson: the lift comes from <i>diversity of contexts</i>, not <i>diversity of
+  smoothing</i>.
+</p>
+
+<h3>4.4 · The benchmark's char-acc metric rewards format prediction</h3>
+<p>
+  All five winners cluster at 0.700–0.725 val acc. The neural baseline (modded-nanogpt) reaches
+  0.7374 at ~50× the energy. The gap is small because the char-acc metric, computed on the first
+  60K chars of validation, weights heavily on short-range format/repetition (whitespace, section
+  markers, capitalization patterns). A model that nails these wins on char-acc without ever
+  needing the long-range semantic abstractions that justify deep nets. <i>If the benchmark were
+  log-loss or BPB, the picture would be very different.</i>
+</p>
+
+<h2>5 · Source files</h2>
+<ul>
+  <li><code>/home/seneca/wikitext/submissions/subset_70_mkn/submission.py</code></li>
+  <li><code>/home/seneca/wikitext/submissions/gpu_ngram_w31_k11/submission.py</code></li>
+  <li><code>/home/seneca/wikitext/submissions/paq8_gpu/submission.py</code></li>
+  <li><code>/home/seneca/wikitext/submissions/gpu_ngram_o14_xorfix/submission.py</code></li>
+  <li><code>/home/seneca/wikitext/submissions/paq_mixer_v3/submission.py</code></li>
+</ul>
+
+<hr>
+<p class="small">
+  Generated 2026-05-26 from branch <code>gradfree-methods-v2</code>. Results read from each
+  submission's <code>result.json</code>. Mechanism descriptions distilled from the corresponding
+  <code>submission.py</code> and <code>README.md</code>. Animations are pure CSS keyframes over
+  inline SVG; nothing in this page is fetched from the network.
+</p>
+
+<script>
+  // ============ Scatter plot ============
+  (function () {
+    const svg = document.getElementById('scatter-svg');
+    const tip = document.getElementById('tooltip');
+    const wrap = document.getElementById('scatter-wrap');
+
+    // Data: all submissions from this branch (energy J, val char-acc, name, status)
+    // status: 'top' (top-5), 'pass' (>=0.70 but not top-5), 'fail' (<0.70 or DQ)
+    const pts = [
+      {e:100,    a:0.3634, n:'krr_ngram',              s:'fail'},
+      {e:575,    a:0.0000, n:'eqprop_hopfield_v1',     s:'fail'},
+      {e:716,    a:0.4752, n:'ctw_d24',                s:'fail'},
+      {e:878,    a:0.6975, n:'gpu_ngram_w31_k10',      s:'fail'},
+      {e:1065,   a:0.7031, n:'subset_70_mkn',          s:'top'},
+      {e:1305,   a:0.2057, n:'ttt_hebbian_frozen_v1',  s:'fail'},
+      {e:1333,   a:0.7050, n:'gpu_ngram_w31_k11',      s:'top'},
+      {e:2333,   a:0.7248, n:'paq8_gpu',               s:'top'},
+      {e:2522,   a:0.3085, n:'poly_tensorsketch_ridge',s:'fail'},
+      {e:2565,   a:0.3641, n:'rff_ridge_v1',           s:'fail'},
+      {e:3441,   a:0.7184, n:'gpu_ngram_o14_xorfix',   s:'top'},
+      {e:3582,   a:0.7047, n:'paq_mixer_v3',           s:'top'},
+      {e:4789,   a:0.0000, n:'deep_backoff_kn',        s:'fail'},
+      {e:5918,   a:0.7057, n:'chunker_phase1_v1',      s:'pass'},
+      {e:13174,  a:0.7382, n:'lwta_k4_alpha_065',      s:'pass'},
+      {e:13936,  a:0.5621, n:'chunker_phase1_v2',      s:'fail'},
+      {e:14663,  a:0.2491, n:'umps_born_d128',         s:'fail'},
+      {e:14732,  a:0.7405, n:'alpha_06',               s:'pass'},
+      {e:22203,  a:0.7010, n:'hebbian_fw_block_v2',    s:'pass'},
+      {e:24417,  a:0.3973, n:'bpe_internal_nn_v2',     s:'fail'},
+      {e:31544,  a:0.2241, n:'pcn_byte_lm',            s:'fail'},
+      {e:32396,  a:0.2999, n:'nystrom_krr_hybrid',     s:'fail'},
+      {e:34921,  a:0.7306, n:'mha_alpha00',            s:'pass'},
+      {e:37345,  a:0.4915, n:'mono_forward_no_grad',   s:'fail'},
+      {e:40158,  a:0.7292, n:'hopfield_layer',         s:'pass'},
+      {e:40783,  a:0.0000, n:'dfa_v1',                 s:'fail'},
+      {e:40898,  a:0.7323, n:'hebbian_fw_block',       s:'pass'},
+      {e:41071,  a:0.7061, n:'adamw_lr3e3_wd0_long',   s:'pass'},
+      {e:46132,  a:0.7146, n:'lwta_k2',                s:'pass'},
+      {e:46222,  a:0.7238, n:'lwta_k4',                s:'pass'},
+      {e:46249,  a:0.7346, n:'mono_forward_v2',        s:'pass'},
+      {e:48194,  a:0.7293, n:'ff_pretrain_then_sgd',   s:'pass'},
+      {e:48908,  a:0.7345, n:'rf_mlp_block2',          s:'pass'},
+      {e:51704,  a:0.7374, n:'modded_nanogpt',         s:'pass', baseline:true},
+      {e:52319,  a:0.7189, n:'mha_alpha07',            s:'pass'},
+      {e:53319,  a:0.7299, n:'mha_alpha03',            s:'pass'},
+      {e:56763,  a:0.7270, n:'mha_alpha05',            s:'pass'},
+      {e:60864,  a:0.0000, n:'mamba_byte',             s:'fail'},
+      {e:61868,  a:0.5878, n:'rff_linear_head',        s:'fail'},
+      {e:66765,  a:0.0000, n:'noprop_etf_v2',          s:'fail'},
+      {e:70742,  a:0.0000, n:'performer_favor',        s:'fail'},
+    ];
+
+    const W = 880, H = 520;
+    const PAD = {l: 60, r: 30, t: 30, b: 60};
+    const xMin = Math.log10(80), xMax = Math.log10(90000);
+    const yMin = 0,              yMax = 0.78;
+
+    const xScale = e => PAD.l + (Math.log10(e) - xMin) * (W - PAD.l - PAD.r) / (xMax - xMin);
+    const yScale = a => H - PAD.b - (a - yMin) * (H - PAD.t - PAD.b) / (yMax - yMin);
+
+    let html = '';
+
+    // grid
+    const xTicks = [100, 300, 1000, 3000, 10000, 30000, 100000];
+    const yTicks = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75];
+    xTicks.forEach(t => {
+      const x = xScale(t);
+      html += `<line class="grid" x1="${x}" y1="${PAD.t}" x2="${x}" y2="${H - PAD.b}"/>`;
+      const lbl = t >= 1000 ? (t/1000) + 'k J' : t + ' J';
+      html += `<text class="tick" x="${x}" y="${H - PAD.b + 16}" text-anchor="middle">${lbl}</text>`;
+    });
+    yTicks.forEach(t => {
+      const y = yScale(t);
+      html += `<line class="grid" x1="${PAD.l}" y1="${y}" x2="${W - PAD.r}" y2="${y}"/>`;
+      html += `<text class="tick" x="${PAD.l - 8}" y="${y + 3}" text-anchor="end">${t.toFixed(2)}</text>`;
+    });
+
+    // axes
+    html += `<line class="axis" x1="${PAD.l}" y1="${PAD.t}" x2="${PAD.l}" y2="${H - PAD.b}"/>`;
+    html += `<line class="axis" x1="${PAD.l}" y1="${H - PAD.b}" x2="${W - PAD.r}" y2="${H - PAD.b}"/>`;
+
+    // axis labels
+    html += `<text class="axis-label" x="${(PAD.l + W - PAD.r)/2}" y="${H - 18}" text-anchor="middle">training energy (joules, log scale)</text>`;
+    html += `<text class="axis-label" x="${-(PAD.t + H - PAD.b)/2}" y="18" transform="rotate(-90)" text-anchor="middle">val char-acc (60 K chars)</text>`;
+
+    // threshold line
+    const yThr = yScale(0.70);
+    html += `<line class="threshold" x1="${PAD.l}" y1="${yThr}" x2="${W - PAD.r}" y2="${yThr}"/>`;
+    html += `<text class="threshold-label" x="${W - PAD.r - 6}" y="${yThr - 4}" text-anchor="end">qualifying floor · 0.70</text>`;
+
+    // points (DQs first, top last so it renders on top)
+    const order = pts.slice().sort((a,b) => ({fail:0, pass:1, top:2})[a.s] - ({fail:0, pass:1, top:2})[b.s]);
+    order.forEach(p => {
+      const cx = xScale(p.e);
+      const cy = yScale(p.a);
+      const cls = p.s === 'top' ? 'pt-top' : (p.s === 'pass' ? 'pt-pass' : 'pt-fail');
+      const r = p.s === 'top' ? 7 : (p.s === 'pass' ? 5 : 4);
+      const meta = JSON.stringify({n: p.n, e: p.e, a: p.a, s: p.s, b: !!p.baseline});
+      html += `<circle class="point ${cls}" cx="${cx}" cy="${cy}" r="${r}" data-meta='${meta}'></circle>`;
+    });
+
+    // labels for top-5
+    pts.filter(p => p.s === 'top').forEach((p, i) => {
+      const cx = xScale(p.e), cy = yScale(p.a);
+      const dx = (i % 2 === 0) ? 12 : -12;
+      const dy = (i === 0) ? -10 : (i === 1) ? -22 : (i === 2) ? -10 : (i === 3) ? -22 : -10;
+      const anc = dx > 0 ? 'start' : 'end';
+      html += `<text class="top-label" x="${cx + dx}" y="${cy + dy}" text-anchor="${anc}">${p.n}</text>`;
+      html += `<line stroke="var(--accent)" stroke-width="0.8" x1="${cx}" y1="${cy}" x2="${cx + dx*0.7}" y2="${cy + dy + 4}"/>`;
+    });
+
+    // baseline annotation
+    const baseline = pts.find(p => p.baseline);
+    const bx = xScale(baseline.e), by = yScale(baseline.a);
+    html += `<text class="tick" x="${bx - 12}" y="${by - 8}" text-anchor="end" fill="var(--muted)">modded_nanogpt (baseline)</text>`;
+    html += `<line stroke="var(--muted)" stroke-width="0.8" stroke-dasharray="2 2" x1="${bx}" y1="${by}" x2="${bx - 6}" y2="${by - 4}"/>`;
+
+    // legend (bottom-right)
+    html += `<g transform="translate(${W - PAD.r - 228}, ${H - PAD.b - 88})" font-size="11" font-family="ui-sans-serif, system-ui">`;
+    html += `<rect x="0" y="0" width="220" height="80" fill="rgba(255,255,255,0.92)" stroke="var(--line)" rx="3"/>`;
+    html += `<circle cx="14" cy="18" r="6.5" class="pt-top"/><text x="28" y="22" fill="var(--fg)">top-5 lowest-energy passing</text>`;
+    html += `<circle cx="14" cy="38" r="5" class="pt-pass"/><text x="28" y="42" fill="var(--fg)">other passing (≥ 0.70)</text>`;
+    html += `<circle cx="14" cy="58" r="4" class="pt-fail"/><text x="28" y="62" fill="var(--fg)">DQ (acc &lt; 0.70 or t &gt; 300 s)</text>`;
+    html += `</g>`;
+
+    svg.innerHTML = html;
+
+    // tooltip handlers
+    svg.querySelectorAll('.point').forEach(c => {
+      c.addEventListener('mouseenter', ev => {
+        const m = JSON.parse(c.getAttribute('data-meta'));
+        const status = m.s === 'top' ? 'TOP-5' : (m.s === 'pass' ? 'pass' : 'DQ');
+        tip.innerHTML = `<b>${m.n}</b>${m.b ? ' (baseline)' : ''}<br>` +
+                        `energy: ${m.e.toLocaleString()} J<br>` +
+                        `val acc: ${m.a.toFixed(4)}<br>` +
+                        `status: ${status}`;
+        tip.style.opacity = 1;
+      });
+      c.addEventListener('mousemove', ev => {
+        const r = wrap.getBoundingClientRect();
+        tip.style.left = (ev.clientX - r.left + 12) + 'px';
+        tip.style.top  = (ev.clientY - r.top - 12) + 'px';
+      });
+      c.addEventListener('mouseleave', () => { tip.style.opacity = 0; });
+    });
+  })();
+</script>
+
+</body></html>

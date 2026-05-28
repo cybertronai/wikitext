@@ -1,0 +1,21 @@
+{
+  "submission": "hebbian_fw_block_v2",
+  "training_energy_J": 22202.696456150003,
+  "training_duration_s": 138.641910877,
+  "val_char_accuracy": 0.7010166666666666,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-25T19:15:17Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 63.32538983050846,
+    "stress_watts_avg": 342.13492572453515,
+    "stress_energy_joules": 12554.535,
+    "stress_duration_s": 36.69468989,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

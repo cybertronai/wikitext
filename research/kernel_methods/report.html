@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kernel Methods for Char-LM — Portfolio Status &amp; Analysis</title>
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --line: #d8d4c8;
+    --accent: #b54a2a;
+    --good: #2c6e3a;
+    --warn: #8a6d00;
+    --bad:  #a4302a;
+    --code-bg: #f0ece2;
+  }
+  html { background: var(--bg); color: var(--fg); }
+  body {
+    max-width: 880px;
+    margin: 2.5rem auto 5rem;
+    padding: 0 1.25rem;
+    font: 15.5px/1.55 ui-serif, Georgia, "Charter", serif;
+  }
+  h1 { font-size: 1.7rem; margin: 0 0 0.25rem; }
+  h2 { font-size: 1.2rem; margin: 2.2rem 0 0.6rem; border-bottom: 1px solid var(--line); padding-bottom: 0.25rem; }
+  h3 { font-size: 1.02rem; margin: 1.5rem 0 0.4rem; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+  code, pre, .mono { font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace; font-size: 0.92em; }
+  code { background: var(--code-bg); padding: 0.05em 0.3em; border-radius: 3px; }
+  table { border-collapse: collapse; width: 100%; margin: 0.5rem 0 1rem; font-size: 0.93rem; }
+  th, td { border-bottom: 1px solid var(--line); padding: 0.45rem 0.55rem; text-align: left; vertical-align: top; }
+  th { font-weight: 600; background: var(--code-bg); }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .pass { color: var(--good); font-weight: 600; }
+  .fail { color: var(--bad); font-weight: 600; }
+  .warn { color: var(--warn); font-weight: 600; }
+  .pill {
+    display: inline-block; padding: 0.05rem 0.45rem; border-radius: 999px;
+    font-size: 0.78rem; font-weight: 600; vertical-align: 0.05em;
+    border: 1px solid currentColor;
+  }
+  .pill.pass { color: var(--good); background: rgba(44, 110, 58, 0.08); }
+  .pill.fail { color: var(--bad); background: rgba(164, 48, 42, 0.08); }
+  .pill.warn { color: var(--warn); background: rgba(138, 109, 0, 0.08); }
+  .pill.todo { color: var(--muted); background: rgba(0, 0, 0, 0.03); }
+  blockquote {
+    margin: 0.5rem 0; padding: 0.5rem 1rem;
+    border-left: 3px solid var(--accent); background: var(--code-bg);
+    font-style: normal;
+  }
+  ul { padding-left: 1.4rem; }
+  li { margin: 0.2rem 0; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 1rem; margin: 0.6rem 0; font-size: 0.95rem; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+  hr { border: none; border-top: 1px solid var(--line); margin: 2rem 0; }
+  .highlight { background: rgba(181, 74, 42, 0.08); padding: 0.5rem 0.8rem; border-radius: 4px; border-left: 3px solid var(--accent); }
+  .small { font-size: 0.86rem; color: var(--muted); }
+  .legend { font-size: 0.85rem; color: var(--muted); margin-top: -0.5rem; }
+</style>
+</head>
+<body>
+
+<h1>Kernel Methods for Char-LM — Portfolio Status &amp; Analysis</h1>
+<div class="meta">
+  WikiText-103 char-level benchmark · A100-80GB · 300 s train budget · ACC_MIN 0.70 ·
+  Baseline modded-nanogpt = <b>51,704 J</b> @ 0.7374 val char-acc · Report generated 2026-05-25
+</div>
+
+<div class="highlight">
+  <b>Headline result.</b> Of 12 proposed kernel-methods experiments, 5 have been executed.
+  <b>Exp 11 (Hopfield retrieval layer) cleared the 0.70 floor at 40,158 J / 0.7293</b> — a
+  <b>22 % energy reduction vs. baseline</b> and a new entry on the leaderboard. The other four
+  executed runs failed the val floor, and the pattern of failures empirically confirms the
+  pre-registered "paradigm-A vs. paradigm-B" split: kernel-machine-as-readout (paradigms A
+  and hybrids) loses representation power; kernel-as-component-of-transformer (paradigm B)
+  wins when it doesn't blow the training budget.
+</div>
+
+<h2>1 · Executed experiments</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Submission</th>
+      <th>Paradigm</th>
+      <th class="num">Energy (J)</th>
+      <th class="num">Train (s)</th>
+      <th class="num">Val acc</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>01</td>
+      <td><code>krr_ngram</code> — closed-form KRR on hashed byte n-grams</td>
+      <td>A</td>
+      <td class="num">100</td>
+      <td class="num">3.1</td>
+      <td class="num">0.363</td>
+      <td><span class="pill fail">DQ — floor</span></td>
+    </tr>
+    <tr>
+      <td>02</td>
+      <td><code>rff_linear_head</code> — embed + conv + RFF + linear</td>
+      <td>A/B</td>
+      <td class="num">61,868</td>
+      <td class="num">254.5</td>
+      <td class="num">0.588</td>
+      <td><span class="pill fail">DQ — floor</span></td>
+    </tr>
+    <tr>
+      <td>03</td>
+      <td><code>performer_favor</code> — FAVOR+ drop-in for attention</td>
+      <td>B</td>
+      <td class="num">71,806</td>
+      <td class="num">300.3</td>
+      <td class="num">—</td>
+      <td><span class="pill fail">DQ — time</span></td>
+    </tr>
+    <tr>
+      <td>07</td>
+      <td><code>nystrom_krr_hybrid</code> — NN encoder + Nyström KRR readout</td>
+      <td>A+B</td>
+      <td class="num">32,396</td>
+      <td class="num">139.6</td>
+      <td class="num">0.300</td>
+      <td><span class="pill fail">DQ — floor</span></td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><code>hopfield_layer</code> — modern Hopfield retrieval over frozen memory</td>
+      <td>B</td>
+      <td class="num">40,158</td>
+      <td class="num">184.5</td>
+      <td class="num">0.7293</td>
+      <td><span class="pill pass">PASS · −22% vs. baseline</span></td>
+    </tr>
+  </tbody>
+</table>
+<div class="legend">
+  <b>Paradigm:</b>
+  <i>A</i> = kernel machine replaces the model (gradient-free training, weak representation learning);
+  <i>B</i> = kernel approximates a component of a transformer;
+  <i>A+B</i> = NN body + kernel readout (deep kernel learning).
+</div>
+
+<h3>Kernel-adjacent submissions not in this portfolio</h3>
+<p class="small">
+  Three other 2026-05-25 submissions were posted from the parallel <code>research/non_nn_methods/</code> track and overlap in spirit:
+</p>
+<table>
+  <thead><tr>
+    <th>Submission</th><th class="num">Energy (J)</th><th class="num">Train (s)</th><th class="num">Val acc</th><th>Status</th>
+  </tr></thead>
+  <tbody>
+    <tr><td><code>rff_ridge_v1</code> — RFF + closed-form ridge readout</td><td class="num">2,565</td><td class="num">11.8</td><td class="num">0.364</td><td><span class="pill fail">DQ</span></td></tr>
+    <tr><td><code>poly_tensorsketch_ridge</code> — polynomial-kernel tensor sketch + ridge</td><td class="num">2,522</td><td class="num">14.7</td><td class="num">0.309</td><td><span class="pill fail">DQ</span></td></tr>
+    <tr><td><code>ctw_d24</code> — Context-Tree Weighting depth 24</td><td class="num">2,922</td><td class="num">282.4</td><td class="num">0.000</td><td><span class="pill fail">DQ</span></td></tr>
+  </tbody>
+</table>
+
+<h2>2 · Untested experiments (proposed, not yet run)</h2>
+<table>
+  <thead>
+    <tr>
+      <th>#</th><th>Title</th><th>Paradigm</th><th>Why it&rsquo;s worth running</th><th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>04</td><td><code>linear_tx_elu</code> — Katharopoulos elu+1 linear attention</td>
+      <td>B</td>
+      <td>Cleanest deterministic feature map; direct A/B vs. exp 03 isolates random-features cost.</td>
+      <td><span class="pill todo">TODO</span></td>
+    </tr>
+    <tr>
+      <td>05</td><td><code>deltanet</code> — chunkwise delta-rule linear attention</td>
+      <td>B</td>
+      <td>Strongest 2024 paradigm-B claim (Yang et al. NeurIPS). Spec rewritten 2026-05-25 to lead with the hand-rolled chunkwise impl in pure torch.</td>
+      <td><span class="pill todo">TODO</span></td>
+    </tr>
+    <tr>
+      <td>06</td><td><code>nystromformer</code> — Nyström landmarks in place of softmax attention</td>
+      <td>B</td>
+      <td>Non-random-feature kernel approximation; hedge against the exp 03 train-time failure.</td>
+      <td><span class="pill todo">TODO</span></td>
+    </tr>
+    <tr>
+      <td>08</td><td><code>parzen_kde</code> — Parzen-window / kNN-LM over frozen memory</td>
+      <td>A</td>
+      <td>Zero-training capability demo; per-byte eval cost has to be watched.</td>
+      <td><span class="pill todo">TODO</span></td>
+    </tr>
+    <tr>
+      <td>09</td><td><code>arc_cosine_head</code> — arc-cosine kernel ridge head on partly-trained body</td>
+      <td>A+B</td>
+      <td>Tests whether replacing the last 20 % of SGD with a closed-form arc-cosine solve saves energy without losing acc.</td>
+      <td><span class="pill todo">TODO</span></td>
+    </tr>
+    <tr>
+      <td>10</td><td><code>lwta_kernel_head</code> — LWTA body × arc-cosine KRR head</td>
+      <td>A+B</td>
+      <td>Cross-pollination of two gradient-free mechanisms; the highest-EV remaining design given the existing 46.2 kJ <code>lwta_k4</code> result.</td>
+      <td><span class="pill todo">TODO</span></td>
+    </tr>
+    <tr>
+      <td>12</td><td><code>kernel_choice_ablation</code> — sweep kernel family on the best parent</td>
+      <td>—</td>
+      <td>Verifies-or-refutes the "kernel choice is second-order on learned embeddings" prediction; only worth running once a parent passes the floor.</td>
+      <td><span class="pill todo">TODO</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>3 · What the executed runs actually tell us</h2>
+
+<h3>3.1 · Pure paradigm-A loses on representation, not on solver</h3>
+<p>
+  Three closed-form paradigm-A submissions <code>krr_ngram</code> / <code>rff_ridge_v1</code> /
+  <code>poly_tensorsketch_ridge</code> all landed at <b>0.30 – 0.37 val acc</b> at <b>100 – 2,565 J</b>.
+  The energies are remarkable (≈100× cheaper than baseline), but accuracy bottoms out far below 0.70 regardless of which fixed feature space is used (n-grams / RFF / polynomial tensor sketch). The solver isn&rsquo;t the problem — the inability to learn task-adapted features is. This empirically confirms the
+  <code>finding_kernel_two_paradigms.md</code> prediction: paradigm A cannot clear the floor on its own.
+</p>
+
+<h3>3.2 · The naive paradigm-A + paradigm-B hybrid also loses</h3>
+<p>
+  <code>nystrom_krr_hybrid</code> (exp 07) trained a 4-layer encoder for ~140 s and then closed-form solved a Nyström KRR readout. Result: <b>32 kJ / 0.300 val acc</b> — <i>worse</i> than the encoder + linear head of exp 02 (0.588) at half the energy. The diagnosis is in the spec&rsquo;s pre-registered Failure Modes:
+</p>
+<blockquote>
+  &ldquo;Phase 1 encoder collapses without an output head being trained jointly: train phase 1 with an output head (standard LM loss), then discard the head.&rdquo;
+</blockquote>
+<p>
+  That's likely what happened — the embedding geometry the encoder learned wasn&rsquo;t aligned to the next-byte target the way the joint output head would align it. <b>Next step:</b> rerun with the discarded-head protocol the spec already specifies before adjudicating deep kernel learning on this benchmark.
+</p>
+
+<h3>3.3 · Paradigm B works — when training fits in the budget</h3>
+<p>
+  Two pure paradigm-B submissions ran:
+</p>
+<ul>
+  <li><code>performer_favor</code> (exp 03): hit the <b>300 s train cap</b> — FAVOR+ random-feature attention has a higher per-step constant factor than softmax attention at <code>T = 1024</code>, where the T² attention matrix that FAVOR+ avoids isn't yet the bottleneck. The "free linear-attention" framing assumes long context. <b>Predicted by the memory-movement analysis</b> in the spec (lower HBM only pays at long T), but observed only now.</li>
+  <li><code>hopfield_layer</code> (exp 11): a single attention-over-frozen-memory layer added to a smaller transformer. Trained in <b>184 s</b> (well under cap), <b>40,158 J / 0.7293</b> val acc → <b>passes the floor and beats baseline by 22 %</b>. This is the one win in the portfolio so far.</li>
+</ul>
+
+<h3>3.4 · The Hopfield result is the empirical confirmation of the "kernel-as-component" thesis</h3>
+<p>
+  The Hopfield layer is mathematically softmax-attention over a fixed external memory bank (Ramsauer et al. 2020). It is the cleanest possible test of <i>kernel density retrieval as a model component</i>, sitting inside an otherwise standard transformer. The fact that this works while the pure kernel-machine paradigm-A submissions fail, and the deep-kernel hybrid fails too, is consistent with the strongest interpretation of the survey&rsquo;s pre-registered framing: <b>kernels help language modeling when they are a building block, not a replacement</b>.
+</p>
+
+<h2>4 · GPU-parallelization profile, revisited against actual runs</h2>
+<table>
+  <thead><tr>
+    <th>#</th><th>Submission</th><th>Train util</th><th>Eval util</th><th>Observed</th>
+  </tr></thead>
+  <tbody>
+    <tr><td>01</td><td><code>krr_ngram</code></td><td>Low — CPU-style hashing + small Cholesky</td><td>Lookup-only</td><td>3.1 s total — under-uses A100; expected, fine.</td></tr>
+    <tr><td>02</td><td><code>rff_linear_head</code></td><td>High — batched matmul over RFF features</td><td>O(state) per byte</td><td>Used full 254 s; accuracy was the bottleneck, not throughput.</td></tr>
+    <tr><td>03</td><td><code>performer_favor</code></td><td>High but per-step expensive</td><td>—</td><td>Hit 300 s wall; per-step constant factor exceeded baseline despite linear-in-T.</td></tr>
+    <tr><td>07</td><td><code>nystrom_krr_hybrid</code></td><td>Two-tier (high phase 1, low phase 2)</td><td>encoder + small matmul</td><td>140 s total — Cholesky phase was a sub-second blip as predicted.</td></tr>
+    <tr><td>11</td><td><code>hopfield_layer</code></td><td>High — extra layer is just attention-shape</td><td>same as baseline + bank read</td><td>184 s — extra layer cost ≈ +5 % wall, well-amortized by the depth saved.</td></tr>
+  </tbody>
+</table>
+<p>
+  The "structural ceiling" of the benchmark (byte-by-byte <code>predict()</code> at eval prevents cross-byte parallelism) was felt by all five runs equally; it didn&rsquo;t single any kernel approach out.
+  Where the kernel-methods family <i>does</i> consume parallelism differently from the baseline is at training time:
+</p>
+<ul>
+  <li><b>FAVOR+ and DeltaNet</b> trade matmul fan-out for either random-feature arithmetic (FAVOR+) or chunkwise sequential dependency (DeltaNet). Both pay a per-step constant-factor tax that only amortizes at longer T than this benchmark uses.</li>
+  <li><b>Hopfield retrieval</b> is the opposite: it&rsquo;s pure additional attention matmuls against a frozen memory bank — fully parallel, tensor-core friendly, no recurrence, no random features. Cheapest parallelism path of any kernel method tested, and (not coincidentally) the only one that wins.</li>
+</ul>
+
+<h2>5 · What this means for the remaining seven experiments</h2>
+<dl class="kv">
+  <dt><b>Promote</b></dt>
+  <dd>
+    Exp 11 follow-ups: memory-bank size ablation, learned-memory vs. frozen-memory A/B, two-Hopfield-layers variant. These are <i>not yet in the portfolio</i> but are the obvious extension of the only working direction.
+  </dd>
+  <dt><b>Run next, as written</b></dt>
+  <dd>
+    Exp 06 (Nyströmformer) — non-random-feature paradigm-B; sidesteps the per-step-cost failure mode of FAVOR+.
+    Exp 04 (linear-tx elu+1) — cheapest paradigm-B variant; if it also blows the budget like FAVOR+, the budget itself (not the random features) is the issue.
+  </dd>
+  <dt><b>Re-spec before running</b></dt>
+  <dd>
+    Exp 07 should be re-run with the train-with-head-then-discard protocol the spec lists under Failure Modes (the current implementation likely skipped that step).
+  </dd>
+  <dt><b>Keep but de-prioritize</b></dt>
+  <dd>
+    Exp 05 (DeltaNet) — high effort (~200 LoC hand-roll), and the FAVOR+ result suggests linear-attention variants pay a per-step tax that doesn&rsquo;t amortize at T=1024.
+    Exp 08 (Parzen-KDE) — pure paradigm A; the three executed paradigm-A submissions all bottom out at ≈0.36. Unlikely to clear 0.50 without a learned encoder, in which case it&rsquo;s closer to exp 11 anyway.
+  </dd>
+  <dt><b>Cross-pollination still worth a shot</b></dt>
+  <dd>
+    Exp 10 (LWTA × arc-cosine head): two cheap gradient-free mechanisms composed; small absolute cost; high information value either way.
+  </dd>
+</dl>
+
+<h2>6 · Open questions surfaced by the executed runs</h2>
+<ul>
+  <li><b>Why did <code>performer_favor</code> miss 300 s while <code>hopfield_layer</code> hit 184 s?</b> Both replace/augment attention; the Hopfield extra layer is "another attention block" while FAVOR+ is "different attention". The per-step cost ordering FAVOR+ &gt; softmax &gt; (softmax + Hopfield-against-4k-memory) deserves a profiled comparison.</li>
+  <li><b>What's the smallest memory bank that still beats baseline?</b> The Hopfield spec used M = 4096; if M = 1024 still passes, the energy headroom is even larger.</li>
+  <li><b>Does the Hopfield win survive learned memory?</b> Currently the bank is frozen patterns from training data. If learned-memory equals or beats frozen, this collapses into "yet another transformer layer with extra tied weights" and the kernel-density framing is decorative.</li>
+  <li><b>Did <code>nystrom_krr_hybrid</code> actually follow the train-with-head-then-discard protocol from the spec?</b> Worth checking the submission code before treating 0.300 as a refutation of deep kernel learning.</li>
+</ul>
+
+<hr>
+<p class="small">
+  Generated 2026-05-25. Source experiments under <code>/home/seneca/wikitext/experiments/kernel_methods/</code>. Submissions under <code>/home/seneca/wikitext/submissions/</code>. Baseline + leaderboard in <code>/home/seneca/wikitext/README.md</code>.
+</p>
+</body>
+</html>

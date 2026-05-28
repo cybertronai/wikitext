@@ -1,0 +1,144 @@
+# wikitext submit.py log — hopfield_layer — 2026-05-25T16:18:12+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-BqA5XxJvGuP9w0ZuWKSTAO
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 55.3 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.4 s
+  energy delta:   8,658.8 J
+  avg power:      231.8 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 55.267933333333325, "stress_watts_avg": 231.7766299170898, "stress_energy_joules": 8658.849, "stress_duration_s": 37.358593932, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/hopfield_layer.py ...
+[hopfield] memory bank built: K_mem (4096, 384)  V_mem (4096, 384)  K|mean|=0.794  V|mean|=0.801
+[hopfield] 7.29M params  3.15M buffer-elems  cfg=TrainConfig(d=384 L=4 H=6 bs=32 T=1024 steps=2150 hopM=4096)
+[hopfield] step     0/2150  loss 5.5452  elapsed 1s
+[hopfield] step   100/2150  loss 1.6817  elapsed 9s
+[hopfield] step   200/2150  loss 1.4542  elapsed 17s
+[hopfield] step   300/2150  loss 1.3454  elapsed 26s
+[hopfield] step   400/2150  loss 1.2991  elapsed 34s
+[hopfield] step   500/2150  loss 1.3127  elapsed 42s
+[hopfield] step   600/2150  loss 1.2400  elapsed 51s
+[hopfield] step   700/2150  loss 1.1979  elapsed 59s
+[hopfield] step   800/2150  loss 1.1694  elapsed 67s
+[hopfield] step   900/2150  loss 1.1666  elapsed 76s
+[hopfield] step  1000/2150  loss 1.1192  elapsed 84s
+[hopfield] step  1100/2150  loss 1.0969  elapsed 93s
+[hopfield] step  1200/2150  loss 1.0925  elapsed 101s
+[hopfield] step  1300/2150  loss 1.0587  elapsed 109s
+[hopfield] step  1400/2150  loss 1.0579  elapsed 118s
+[hopfield] step  1500/2150  loss 1.0684  elapsed 126s
+[hopfield] step  1600/2150  loss 1.0312  elapsed 135s
+[hopfield] step  1700/2150  loss 1.0145  elapsed 143s
+[hopfield] step  1800/2150  loss 1.0009  elapsed 151s
+[hopfield] step  1900/2150  loss 1.0003  elapsed 160s
+[hopfield] step  2000/2150  loss 0.9614  elapsed 168s
+[hopfield] step  2100/2150  loss 1.0089  elapsed 176s
+[hopfield] step  2149/2150  loss 0.9987  elapsed 180s
+training: 40,158.1 J   duration=184.5s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7242      165 char/s  eta=   357s
+  eval      2,400/60,000 (  4.0%)  acc=0.7117      165 char/s  eta=   349s
+  eval      3,600/60,000 (  6.0%)  acc=0.7122      165 char/s  eta=   342s
+  eval      4,800/60,000 (  8.0%)  acc=0.7223      165 char/s  eta=   335s
+  eval      6,000/60,000 ( 10.0%)  acc=0.7115      165 char/s  eta=   327s
+  eval      7,200/60,000 ( 12.0%)  acc=0.7101      165 char/s  eta=   320s
+  eval      8,400/60,000 ( 14.0%)  acc=0.7076      165 char/s  eta=   313s
+  eval      9,600/60,000 ( 16.0%)  acc=0.7114      165 char/s  eta=   306s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7130      165 char/s  eta=   299s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7149      165 char/s  eta=   291s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7196      165 char/s  eta=   284s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7210      165 char/s  eta=   276s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7237      165 char/s  eta=   269s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7260      165 char/s  eta=   262s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7240      165 char/s  eta=   254s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7259      165 char/s  eta=   247s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7273      165 char/s  eta=   240s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7266      165 char/s  eta=   233s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7269      165 char/s  eta=   225s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7272      165 char/s  eta=   218s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7287      165 char/s  eta=   210s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7294      165 char/s  eta=   203s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7305      165 char/s  eta=   196s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7314      165 char/s  eta=   189s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7303      165 char/s  eta=   181s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7281      165 char/s  eta=   174s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7276      165 char/s  eta=   167s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7252      165 char/s  eta=   160s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7246      165 char/s  eta=   152s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7237      165 char/s  eta=   145s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7240      165 char/s  eta=   138s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7244      165 char/s  eta=   131s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7241      165 char/s  eta=   123s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7238      165 char/s  eta=   116s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7236      165 char/s  eta=   109s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7242      165 char/s  eta=   102s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7239      165 char/s  eta=    94s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7238      165 char/s  eta=    87s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7236      165 char/s  eta=    80s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7242      165 char/s  eta=    73s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7248      165 char/s  eta=    65s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7263      165 char/s  eta=    58s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7269      165 char/s  eta=    51s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7280      166 char/s  eta=    44s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7284      166 char/s  eta=    36s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7279      166 char/s  eta=    29s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7286      166 char/s  eta=    22s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7288      166 char/s  eta=    14s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7294      166 char/s  eta=     7s
+  eval     60,000/60,000 (100.0%)  acc=0.7292      166 char/s  eta=     0s
+chars=60,000  acc=0.7292  eval_duration=361.9s
+---
+submission         : hopfield_layer
+training energy (J): 40,158.1
+training duration  : 184.5s
+val  char-accuracy : 0.7292
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-BqA5XxJvGuP9w0ZuWKSTAO
+
+# final result
+{
+  "submission": "hopfield_layer",
+  "training_energy_J": 40158.09993465,
+  "training_duration_s": 184.474681307,
+  "val_char_accuracy": 0.72925,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-25T16:28:12Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 55.267933333333325,
+    "stress_watts_avg": 231.7766299170898,
+    "stress_energy_joules": 8658.849,
+    "stress_duration_s": 37.358593932,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

@@ -1,0 +1,56 @@
+╭─ Modal A100-80GB wikitext submission ───────
+│  submission:    /home/seneca/wikitext/submissions/performer_favor
+│  est. runtime:  ~15 min  (cold start + train + eval)
+│  est. cost:     ~$0.62  (@ $2.50/hr)
+╰───────────────────────────────────────────────
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-dZyEEeMVKwc7z1I8shaR9C
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 57.2 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       39.8 s
+  energy delta:   8,858.4 J
+  avg power:      222.4 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 57.17194915254239, "stress_watts_avg": 222.35639614214122, "stress_energy_joules": 8858.429, "stress_duration_s": 39.838876478, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/performer_favor.py ...
+[performer_favor] 10.84M params  cfg=TrainConfig(d=384 L=6 H=6 bs=32 T=1024 steps=2500)
+[performer_favor] step     0/2500  loss 5.5452  elapsed 2s
+[performer_favor] step   100/2500  loss 2.4011  elapsed 92s
+[performer_favor] step   200/2500  loss 2.3211  elapsed 183s
+[performer_favor] step   300/2500  loss 2.0923  elapsed 274s
+---
+DISQUALIFIED: training wall-clock budget exceeded (300.0 s)
+submission         : performer_favor
+training duration  : 300.3s
+training energy (J): 71,805.6  (at kill)
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-dZyEEeMVKwc7z1I8shaR9C
+[done] DISQUALIFIED — train_time_exceeded
+       cap      = 300 s
+       at_kill  = 300.3 s
+       energy   = 71,806 J
+       result   = /home/seneca/wikitext/submissions/performer_favor/result.json

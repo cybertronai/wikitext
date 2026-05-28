@@ -1,0 +1,194 @@
+# wikitext submit.py log — nystrom_krr_hybrid — 2026-05-25T16:18:24+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-O5G29lgKVogOeKzKYNK9iI
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 62.1 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.1 s
+  energy delta:   12,637.8 J
+  avg power:      340.2 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 62.13486666666672, "stress_watts_avg": 340.188553671326, "stress_energy_joules": 12637.792, "stress_duration_s": 37.149374556, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/nystrom_krr_hybrid.py ...
+[nystrom_krr] phase1 3.29M params  cfg=TrainConfig(d=256 L=4 H=4 bs=64 T=512 phase1=120s)
+[nystrom_krr] phase1 step     0  loss 5.5452  elapsed 0.0s  lr_eta 1.000
+[nystrom_krr] phase1 step    50  loss 2.4402  elapsed 3.0s  lr_eta 1.000
+[nystrom_krr] phase1 step   100  loss 2.1815  elapsed 4.9s  lr_eta 1.000
+[nystrom_krr] phase1 step   150  loss 1.9172  elapsed 6.8s  lr_eta 1.000
+[nystrom_krr] phase1 step   200  loss 1.7318  elapsed 8.6s  lr_eta 1.000
+[nystrom_krr] phase1 step   250  loss 1.6046  elapsed 10.5s  lr_eta 1.000
+[nystrom_krr] phase1 step   300  loss 1.5235  elapsed 12.4s  lr_eta 1.000
+[nystrom_krr] phase1 step   350  loss 1.4836  elapsed 14.3s  lr_eta 1.000
+[nystrom_krr] phase1 step   400  loss 1.4572  elapsed 16.1s  lr_eta 1.000
+[nystrom_krr] phase1 step   450  loss 1.4487  elapsed 18.0s  lr_eta 1.000
+[nystrom_krr] phase1 step   500  loss 1.3833  elapsed 19.9s  lr_eta 1.000
+[nystrom_krr] phase1 step   550  loss 1.3723  elapsed 21.8s  lr_eta 1.000
+[nystrom_krr] phase1 step   600  loss 1.4409  elapsed 23.6s  lr_eta 1.000
+[nystrom_krr] phase1 step   650  loss 1.3588  elapsed 25.5s  lr_eta 1.000
+[nystrom_krr] phase1 step   700  loss 1.3584  elapsed 27.4s  lr_eta 1.000
+[nystrom_krr] phase1 step   750  loss 1.3525  elapsed 29.3s  lr_eta 1.000
+[nystrom_krr] phase1 step   800  loss 1.3489  elapsed 31.2s  lr_eta 1.000
+[nystrom_krr] phase1 step   850  loss 1.3234  elapsed 33.0s  lr_eta 1.000
+[nystrom_krr] phase1 step   900  loss 1.3212  elapsed 34.9s  lr_eta 1.000
+[nystrom_krr] phase1 step   950  loss 1.3096  elapsed 36.8s  lr_eta 1.000
+[nystrom_krr] phase1 step  1000  loss 1.2932  elapsed 38.7s  lr_eta 1.000
+[nystrom_krr] phase1 step  1050  loss 1.2956  elapsed 40.6s  lr_eta 1.000
+[nystrom_krr] phase1 step  1100  loss 1.2863  elapsed 42.4s  lr_eta 1.000
+[nystrom_krr] phase1 step  1150  loss 1.2952  elapsed 44.3s  lr_eta 1.000
+[nystrom_krr] phase1 step  1200  loss 1.2586  elapsed 46.2s  lr_eta 1.000
+[nystrom_krr] phase1 step  1250  loss 1.2694  elapsed 48.1s  lr_eta 1.000
+[nystrom_krr] phase1 step  1300  loss 1.2227  elapsed 50.0s  lr_eta 1.000
+[nystrom_krr] phase1 step  1350  loss 1.2179  elapsed 51.8s  lr_eta 1.000
+[nystrom_krr] phase1 step  1400  loss 1.2096  elapsed 53.7s  lr_eta 1.000
+[nystrom_krr] phase1 step  1450  loss 1.2455  elapsed 55.6s  lr_eta 1.000
+[nystrom_krr] phase1 step  1500  loss 1.1689  elapsed 57.5s  lr_eta 1.000
+[nystrom_krr] phase1 step  1550  loss 1.1986  elapsed 59.3s  lr_eta 1.000
+[nystrom_krr] phase1 step  1600  loss 1.2400  elapsed 61.2s  lr_eta 1.000
+[nystrom_krr] phase1 step  1650  loss 1.1821  elapsed 63.1s  lr_eta 1.000
+[nystrom_krr] phase1 step  1700  loss 1.1831  elapsed 65.0s  lr_eta 1.000
+[nystrom_krr] phase1 step  1750  loss 1.1825  elapsed 66.9s  lr_eta 1.000
+[nystrom_krr] phase1 step  1800  loss 1.1911  elapsed 68.7s  lr_eta 1.000
+[nystrom_krr] phase1 step  1850  loss 1.1970  elapsed 70.6s  lr_eta 1.000
+[nystrom_krr] phase1 step  1900  loss 1.1884  elapsed 72.5s  lr_eta 0.989
+[nystrom_krr] phase1 step  1950  loss 1.1972  elapsed 74.4s  lr_eta 0.950
+[nystrom_krr] phase1 step  2000  loss 1.2109  elapsed 76.3s  lr_eta 0.911
+[nystrom_krr] phase1 step  2050  loss 1.1679  elapsed 78.1s  lr_eta 0.872
+[nystrom_krr] phase1 step  2100  loss 1.1601  elapsed 80.0s  lr_eta 0.833
+[nystrom_krr] phase1 step  2150  loss 1.1640  elapsed 81.9s  lr_eta 0.794
+[nystrom_krr] phase1 step  2200  loss 1.1657  elapsed 83.8s  lr_eta 0.754
+[nystrom_krr] phase1 step  2250  loss 1.1499  elapsed 85.7s  lr_eta 0.715
+[nystrom_krr] phase1 step  2300  loss 1.1820  elapsed 87.5s  lr_eta 0.676
+[nystrom_krr] phase1 step  2350  loss 1.1748  elapsed 89.4s  lr_eta 0.637
+[nystrom_krr] phase1 step  2400  loss 1.1188  elapsed 91.3s  lr_eta 0.598
+[nystrom_krr] phase1 step  2450  loss 1.1435  elapsed 93.2s  lr_eta 0.559
+[nystrom_krr] phase1 step  2500  loss 1.1355  elapsed 95.1s  lr_eta 0.520
+[nystrom_krr] phase1 step  2550  loss 1.1066  elapsed 96.9s  lr_eta 0.480
+[nystrom_krr] phase1 step  2600  loss 1.1214  elapsed 98.8s  lr_eta 0.441
+[nystrom_krr] phase1 step  2650  loss 1.1213  elapsed 100.7s  lr_eta 0.402
+[nystrom_krr] phase1 step  2700  loss 1.1400  elapsed 102.6s  lr_eta 0.363
+[nystrom_krr] phase1 step  2750  loss 1.1218  elapsed 104.5s  lr_eta 0.324
+[nystrom_krr] phase1 step  2800  loss 1.1241  elapsed 106.3s  lr_eta 0.285
+[nystrom_krr] phase1 step  2850  loss 1.1241  elapsed 108.2s  lr_eta 0.246
+[nystrom_krr] phase1 step  2900  loss 1.1321  elapsed 110.1s  lr_eta 0.206
+[nystrom_krr] phase1 step  2950  loss 1.1356  elapsed 112.0s  lr_eta 0.167
+[nystrom_krr] phase1 step  3000  loss 1.1108  elapsed 113.9s  lr_eta 0.128
+[nystrom_krr] phase1 step  3050  loss 1.0975  elapsed 115.7s  lr_eta 0.089
+[nystrom_krr] phase1 step  3100  loss 1.1311  elapsed 117.6s  lr_eta 0.050
+[nystrom_krr] phase1 step  3150  loss 1.0993  elapsed 119.5s  lr_eta 0.011
+[nystrom_krr] phase1 done: 3164 steps in 120.0s
+[nystrom_krr] PHASE1 WALL: 122.0s
+[nystrom_krr] features: N=100000 d=256 in 15.8s
+[nystrom_krr] E: (100000, 256)  Y: (100000, 256)  E mean-norm=1.0000
+[krr] cholesky failed (linalg.cholesky: The factorization could not be completed because the input is not positive-definite (the leading minor of order 307 is not positive-definite).); falling back to solve
+[nystrom_krr] solve: Z=(1024, 256) alpha=(1024, 256) in 0.21s
+[nystrom_krr] PHASE2 WALL: 16.0s
+[nystrom_krr] TOTAL TRAIN WALL: 138.0s (phase1=122.0s, phase2=16.0s)
+training: 32,396.1 J   duration=139.6s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.2992      207 char/s  eta=   285s
+  eval      2,400/60,000 (  4.0%)  acc=0.3133      209 char/s  eta=   276s
+  eval      3,600/60,000 (  6.0%)  acc=0.3203      209 char/s  eta=   270s
+  eval      4,800/60,000 (  8.0%)  acc=0.3181      210 char/s  eta=   263s
+  eval      6,000/60,000 ( 10.0%)  acc=0.3142      210 char/s  eta=   257s
+  eval      7,200/60,000 ( 12.0%)  acc=0.3137      210 char/s  eta=   251s
+  eval      8,400/60,000 ( 14.0%)  acc=0.3094      210 char/s  eta=   245s
+  eval      9,600/60,000 ( 16.0%)  acc=0.3058      210 char/s  eta=   240s
+  eval     10,800/60,000 ( 18.0%)  acc=0.3038      208 char/s  eta=   236s
+  eval     12,000/60,000 ( 20.0%)  acc=0.3014      207 char/s  eta=   232s
+  eval     13,200/60,000 ( 22.0%)  acc=0.2998      205 char/s  eta=   228s
+  eval     14,400/60,000 ( 24.0%)  acc=0.2985      205 char/s  eta=   222s
+  eval     15,600/60,000 ( 26.0%)  acc=0.2979      205 char/s  eta=   216s
+  eval     16,800/60,000 ( 28.0%)  acc=0.2960      206 char/s  eta=   210s
+  eval     18,000/60,000 ( 30.0%)  acc=0.2936      206 char/s  eta=   204s
+  eval     19,200/60,000 ( 32.0%)  acc=0.2930      206 char/s  eta=   198s
+  eval     20,400/60,000 ( 34.0%)  acc=0.2930      206 char/s  eta=   192s
+  eval     21,600/60,000 ( 36.0%)  acc=0.2921      206 char/s  eta=   186s
+  eval     22,800/60,000 ( 38.0%)  acc=0.2926      206 char/s  eta=   180s
+  eval     24,000/60,000 ( 40.0%)  acc=0.2938      206 char/s  eta=   175s
+  eval     25,200/60,000 ( 42.0%)  acc=0.2948      206 char/s  eta=   169s
+  eval     26,400/60,000 ( 44.0%)  acc=0.2957      206 char/s  eta=   163s
+  eval     27,600/60,000 ( 46.0%)  acc=0.2963      207 char/s  eta=   157s
+  eval     28,800/60,000 ( 48.0%)  acc=0.2957      207 char/s  eta=   151s
+  eval     30,000/60,000 ( 50.0%)  acc=0.2958      207 char/s  eta=   145s
+  eval     31,200/60,000 ( 52.0%)  acc=0.2964      206 char/s  eta=   140s
+  eval     32,400/60,000 ( 54.0%)  acc=0.2965      206 char/s  eta=   134s
+  eval     33,600/60,000 ( 56.0%)  acc=0.2968      206 char/s  eta=   128s
+  eval     34,800/60,000 ( 58.0%)  acc=0.2960      206 char/s  eta=   123s
+  eval     36,000/60,000 ( 60.0%)  acc=0.2964      205 char/s  eta=   117s
+  eval     37,200/60,000 ( 62.0%)  acc=0.2968      205 char/s  eta=   111s
+  eval     38,400/60,000 ( 64.0%)  acc=0.2969      205 char/s  eta=   105s
+  eval     39,600/60,000 ( 66.0%)  acc=0.2971      205 char/s  eta=    99s
+  eval     40,800/60,000 ( 68.0%)  acc=0.2968      205 char/s  eta=    94s
+  eval     42,000/60,000 ( 70.0%)  acc=0.2980      205 char/s  eta=    88s
+  eval     43,200/60,000 ( 72.0%)  acc=0.2983      205 char/s  eta=    82s
+  eval     44,400/60,000 ( 74.0%)  acc=0.2985      205 char/s  eta=    76s
+  eval     45,600/60,000 ( 76.0%)  acc=0.2985      205 char/s  eta=    70s
+  eval     46,800/60,000 ( 78.0%)  acc=0.2985      205 char/s  eta=    64s
+  eval     48,000/60,000 ( 80.0%)  acc=0.2985      205 char/s  eta=    59s
+  eval     49,200/60,000 ( 82.0%)  acc=0.2982      205 char/s  eta=    53s
+  eval     50,400/60,000 ( 84.0%)  acc=0.2986      205 char/s  eta=    47s
+  eval     51,600/60,000 ( 86.0%)  acc=0.2984      205 char/s  eta=    41s
+  eval     52,800/60,000 ( 88.0%)  acc=0.2980      205 char/s  eta=    35s
+  eval     54,000/60,000 ( 90.0%)  acc=0.2982      205 char/s  eta=    29s
+  eval     55,200/60,000 ( 92.0%)  acc=0.2983      205 char/s  eta=    23s
+  eval     56,400/60,000 ( 94.0%)  acc=0.2982      205 char/s  eta=    18s
+  eval     57,600/60,000 ( 96.0%)  acc=0.2985      205 char/s  eta=    12s
+  eval     58,800/60,000 ( 98.0%)  acc=0.2990      205 char/s  eta=     6s
+  eval     60,000/60,000 (100.0%)  acc=0.2999      206 char/s  eta=     0s
+chars=60,000  acc=0.2999  eval_duration=291.9s
+---
+DISQUALIFIED: val accuracy 0.2999 below floor 0.7000
+submission         : nystrom_krr_hybrid
+training energy (J): 32,396.1
+training duration  : 139.6s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-O5G29lgKVogOeKzKYNK9iI
+
+# final result
+{
+  "submission": "nystrom_krr_hybrid",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.2999,
+  "val_chars": 60000,
+  "training_energy_J": 32396.051357599998,
+  "training_duration_s": 139.590932848,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-25T16:26:28Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 62.13486666666672,
+    "stress_watts_avg": 340.188553671326,
+    "stress_energy_joules": 12637.792,
+    "stress_duration_s": 37.149374556,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

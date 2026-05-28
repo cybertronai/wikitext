@@ -1,0 +1,143 @@
+# wikitext submit.py log — hebbian_fw_block_v2 — 2026-05-25T19:05:00+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-byZtRU8jiYjSbnLADskhtE
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 63.3 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       36.7 s
+  energy delta:   12,554.5 J
+  avg power:      342.1 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 63.32538983050846, "stress_watts_avg": 342.13492572453515, "stress_energy_joules": 12554.535, "stress_duration_s": 36.69468989, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/hebbian_fw_block_v2.py ...
+[hebbian_fw_v2] 9.07M params  cfg=TrainConfig(d=384 L_std=4+1fw H=6 bs=32 T=512 steps=2150 fw_chunk=64)
+[hebbian_fw_v2] step     0/2150  loss 5.5452  elapsed 2s
+[hebbian_fw_v2] step   100/2150  loss 1.6390  elapsed 8s
+[hebbian_fw_v2] step   200/2150  loss 1.4476  elapsed 14s
+[hebbian_fw_v2] step   300/2150  loss 1.4102  elapsed 21s
+[hebbian_fw_v2] step   400/2150  loss 1.3430  elapsed 27s
+[hebbian_fw_v2] step   500/2150  loss 1.3190  elapsed 33s
+[hebbian_fw_v2] step   600/2150  loss 1.3697  elapsed 39s
+[hebbian_fw_v2] step   700/2150  loss 1.2900  elapsed 45s
+[hebbian_fw_v2] step   800/2150  loss 1.2243  elapsed 51s
+[hebbian_fw_v2] step   900/2150  loss 1.2538  elapsed 58s
+[hebbian_fw_v2] step  1000/2150  loss 1.1958  elapsed 64s
+[hebbian_fw_v2] step  1100/2150  loss 1.1578  elapsed 70s
+[hebbian_fw_v2] step  1200/2150  loss 1.2100  elapsed 76s
+[hebbian_fw_v2] step  1300/2150  loss 1.1599  elapsed 82s
+[hebbian_fw_v2] step  1400/2150  loss 1.1085  elapsed 88s
+[hebbian_fw_v2] step  1500/2150  loss 1.0836  elapsed 94s
+[hebbian_fw_v2] step  1600/2150  loss 1.0884  elapsed 100s
+[hebbian_fw_v2] step  1700/2150  loss 1.0739  elapsed 106s
+[hebbian_fw_v2] step  1800/2150  loss 1.1125  elapsed 112s
+[hebbian_fw_v2] step  1900/2150  loss 1.0910  elapsed 118s
+[hebbian_fw_v2] step  2000/2150  loss 1.0574  elapsed 124s
+[hebbian_fw_v2] step  2100/2150  loss 1.0943  elapsed 131s
+[hebbian_fw_v2] step  2149/2150  loss 1.0560  elapsed 135s
+training: 22,202.7 J   duration=138.6s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7033      125 char/s  eta=   470s
+  eval      2,400/60,000 (  4.0%)  acc=0.6871      124 char/s  eta=   464s
+  eval      3,600/60,000 (  6.0%)  acc=0.6919      129 char/s  eta=   439s
+  eval      4,800/60,000 (  8.0%)  acc=0.6981      132 char/s  eta=   418s
+  eval      6,000/60,000 ( 10.0%)  acc=0.6880      132 char/s  eta=   408s
+  eval      7,200/60,000 ( 12.0%)  acc=0.6858      133 char/s  eta=   398s
+  eval      8,400/60,000 ( 14.0%)  acc=0.6855      134 char/s  eta=   386s
+  eval      9,600/60,000 ( 16.0%)  acc=0.6896      135 char/s  eta=   373s
+  eval     10,800/60,000 ( 18.0%)  acc=0.6897      136 char/s  eta=   361s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6915      137 char/s  eta=   350s
+  eval     13,200/60,000 ( 22.0%)  acc=0.6964      138 char/s  eta=   339s
+  eval     14,400/60,000 ( 24.0%)  acc=0.6975      139 char/s  eta=   329s
+  eval     15,600/60,000 ( 26.0%)  acc=0.6991      139 char/s  eta=   319s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7020      140 char/s  eta=   309s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6996      140 char/s  eta=   300s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7009      141 char/s  eta=   290s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7014      141 char/s  eta=   281s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7009      141 char/s  eta=   272s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7019      142 char/s  eta=   263s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7025      142 char/s  eta=   254s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7036      142 char/s  eta=   245s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7039      142 char/s  eta=   237s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7055      142 char/s  eta=   228s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7062      142 char/s  eta=   219s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7054      143 char/s  eta=   210s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7038      143 char/s  eta=   202s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7031      143 char/s  eta=   193s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7013      143 char/s  eta=   185s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7002      143 char/s  eta=   177s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6993      143 char/s  eta=   168s
+  eval     37,200/60,000 ( 62.0%)  acc=0.6988      143 char/s  eta=   160s
+  eval     38,400/60,000 ( 64.0%)  acc=0.6991      143 char/s  eta=   151s
+  eval     39,600/60,000 ( 66.0%)  acc=0.6984      143 char/s  eta=   143s
+  eval     40,800/60,000 ( 68.0%)  acc=0.6978      143 char/s  eta=   134s
+  eval     42,000/60,000 ( 70.0%)  acc=0.6975      143 char/s  eta=   126s
+  eval     43,200/60,000 ( 72.0%)  acc=0.6982      143 char/s  eta=   117s
+  eval     44,400/60,000 ( 74.0%)  acc=0.6980      144 char/s  eta=   109s
+  eval     45,600/60,000 ( 76.0%)  acc=0.6980      144 char/s  eta=   100s
+  eval     46,800/60,000 ( 78.0%)  acc=0.6975      144 char/s  eta=    92s
+  eval     48,000/60,000 ( 80.0%)  acc=0.6976      144 char/s  eta=    83s
+  eval     49,200/60,000 ( 82.0%)  acc=0.6977      144 char/s  eta=    75s
+  eval     50,400/60,000 ( 84.0%)  acc=0.6991      144 char/s  eta=    67s
+  eval     51,600/60,000 ( 86.0%)  acc=0.6995      144 char/s  eta=    58s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7004      144 char/s  eta=    50s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7005      144 char/s  eta=    42s
+  eval     55,200/60,000 ( 92.0%)  acc=0.6999      144 char/s  eta=    33s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7001      144 char/s  eta=    25s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7007      144 char/s  eta=    17s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7012      144 char/s  eta=     8s
+  eval     60,000/60,000 (100.0%)  acc=0.7010      144 char/s  eta=     0s
+chars=60,000  acc=0.7010  eval_duration=416.6s
+---
+submission         : hebbian_fw_block_v2
+training energy (J): 22,202.7
+training duration  : 138.6s
+val  char-accuracy : 0.7010
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-byZtRU8jiYjSbnLADskhtE
+
+# final result
+{
+  "submission": "hebbian_fw_block_v2",
+  "training_energy_J": 22202.696456150003,
+  "training_duration_s": 138.641910877,
+  "val_char_accuracy": 0.7010166666666666,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-25T19:15:17Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 63.32538983050846,
+    "stress_watts_avg": 342.13492572453515,
+    "stress_energy_joules": 12554.535,
+    "stress_duration_s": 36.69468989,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

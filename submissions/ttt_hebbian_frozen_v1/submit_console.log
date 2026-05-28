@@ -1,0 +1,115 @@
+╭─ Modal A100-80GB wikitext submission ───────
+│  submission:    /home/seneca/wikitext/submissions/ttt_hebbian_frozen_v1
+│  est. runtime:  ~15 min  (cold start + train + eval)
+│  est. cost:     ~$0.62  (@ $2.50/hr)
+╰───────────────────────────────────────────────
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-o5JzWqDrtmQvmWi9aSb9mD
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 59.8 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       62.0 s
+  energy delta:   14,217.6 J
+  avg power:      229.4 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 59.81350000000005, "stress_watts_avg": 229.40235447013356, "stress_energy_joules": 14217.621, "stress_duration_s": 61.976787609, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/ttt_hebbian_frozen_v1.py ...
+[ttt_hebbian] device=cuda  d=512  K=64  eta=0.1  B=128  T=512  n_pairs=200000  lambdas=(0.01, 1.0, 100.0)  seed=0
+[ttt_hebbian] train bytes: 541,096,898
+[ttt_hebbian] frozen proj: R_phi (512, 64, 256)  E_targ (256, 512)
+[ttt_hebbian] phase A done: 201,889 pairs in 6.8s (18 scans)
+[ttt_hebbian] phase B: ridge solve on X(201889, 512) Y(201889,)
+[ttt_hebbian] ridge lam=1.00e-02  solve=0.19s  heldout_acc=0.1881
+[ttt_hebbian] ridge lam=1.00e+00  solve=0.00s  heldout_acc=0.1873
+[ttt_hebbian] ridge lam=1.00e+02  solve=0.00s  heldout_acc=0.1891
+[ttt_hebbian] phase B done in 0.2s  best_lambda=100  heldout_acc=0.1891
+[ttt_hebbian] total train time: 8.6s
+training: 1,305.0 J   duration=8.6s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.2183     1280 char/s  eta=    46s
+  eval      2,400/60,000 (  4.0%)  acc=0.2104     1318 char/s  eta=    44s
+  eval      3,600/60,000 (  6.0%)  acc=0.2136     1334 char/s  eta=    42s
+  eval      4,800/60,000 (  8.0%)  acc=0.2083     1343 char/s  eta=    41s
+  eval      6,000/60,000 ( 10.0%)  acc=0.2053     1347 char/s  eta=    40s
+  eval      7,200/60,000 ( 12.0%)  acc=0.2071     1351 char/s  eta=    39s
+  eval      8,400/60,000 ( 14.0%)  acc=0.2063     1353 char/s  eta=    38s
+  eval      9,600/60,000 ( 16.0%)  acc=0.2050     1355 char/s  eta=    37s
+  eval     10,800/60,000 ( 18.0%)  acc=0.2068     1356 char/s  eta=    36s
+  eval     12,000/60,000 ( 20.0%)  acc=0.2073     1358 char/s  eta=    35s
+  eval     13,200/60,000 ( 22.0%)  acc=0.2072     1358 char/s  eta=    34s
+  eval     14,400/60,000 ( 24.0%)  acc=0.2073     1359 char/s  eta=    34s
+  eval     15,600/60,000 ( 26.0%)  acc=0.2061     1359 char/s  eta=    33s
+  eval     16,800/60,000 ( 28.0%)  acc=0.2062     1360 char/s  eta=    32s
+  eval     18,000/60,000 ( 30.0%)  acc=0.2056     1360 char/s  eta=    31s
+  eval     19,200/60,000 ( 32.0%)  acc=0.2052     1361 char/s  eta=    30s
+  eval     20,400/60,000 ( 34.0%)  acc=0.2047     1361 char/s  eta=    29s
+  eval     21,600/60,000 ( 36.0%)  acc=0.2044     1362 char/s  eta=    28s
+  eval     22,800/60,000 ( 38.0%)  acc=0.2041     1363 char/s  eta=    27s
+  eval     24,000/60,000 ( 40.0%)  acc=0.2052     1363 char/s  eta=    26s
+  eval     25,200/60,000 ( 42.0%)  acc=0.2058     1362 char/s  eta=    26s
+  eval     26,400/60,000 ( 44.0%)  acc=0.2070     1362 char/s  eta=    25s
+  eval     27,600/60,000 ( 46.0%)  acc=0.2071     1362 char/s  eta=    24s
+  eval     28,800/60,000 ( 48.0%)  acc=0.2070     1362 char/s  eta=    23s
+  eval     30,000/60,000 ( 50.0%)  acc=0.2066     1361 char/s  eta=    22s
+  eval     31,200/60,000 ( 52.0%)  acc=0.2062     1361 char/s  eta=    21s
+  eval     32,400/60,000 ( 54.0%)  acc=0.2056     1361 char/s  eta=    20s
+  eval     33,600/60,000 ( 56.0%)  acc=0.2057     1361 char/s  eta=    19s
+  eval     34,800/60,000 ( 58.0%)  acc=0.2055     1360 char/s  eta=    19s
+  eval     36,000/60,000 ( 60.0%)  acc=0.2057     1360 char/s  eta=    18s
+  eval     37,200/60,000 ( 62.0%)  acc=0.2054     1360 char/s  eta=    17s
+  eval     38,400/60,000 ( 64.0%)  acc=0.2055     1361 char/s  eta=    16s
+  eval     39,600/60,000 ( 66.0%)  acc=0.2057     1361 char/s  eta=    15s
+  eval     40,800/60,000 ( 68.0%)  acc=0.2055     1361 char/s  eta=    14s
+  eval     42,000/60,000 ( 70.0%)  acc=0.2058     1362 char/s  eta=    13s
+  eval     43,200/60,000 ( 72.0%)  acc=0.2054     1362 char/s  eta=    12s
+  eval     44,400/60,000 ( 74.0%)  acc=0.2054     1362 char/s  eta=    11s
+  eval     45,600/60,000 ( 76.0%)  acc=0.2053     1362 char/s  eta=    11s
+  eval     46,800/60,000 ( 78.0%)  acc=0.2054     1363 char/s  eta=    10s
+  eval     48,000/60,000 ( 80.0%)  acc=0.2049     1363 char/s  eta=     9s
+  eval     49,200/60,000 ( 82.0%)  acc=0.2050     1363 char/s  eta=     8s
+  eval     50,400/60,000 ( 84.0%)  acc=0.2053     1363 char/s  eta=     7s
+  eval     51,600/60,000 ( 86.0%)  acc=0.2047     1363 char/s  eta=     6s
+  eval     52,800/60,000 ( 88.0%)  acc=0.2046     1363 char/s  eta=     5s
+  eval     54,000/60,000 ( 90.0%)  acc=0.2045     1363 char/s  eta=     4s
+  eval     55,200/60,000 ( 92.0%)  acc=0.2042     1364 char/s  eta=     4s
+  eval     56,400/60,000 ( 94.0%)  acc=0.2041     1364 char/s  eta=     3s
+  eval     57,600/60,000 ( 96.0%)  acc=0.2044     1364 char/s  eta=     2s
+  eval     58,800/60,000 ( 98.0%)  acc=0.2052     1364 char/s  eta=     1s
+  eval     60,000/60,000 (100.0%)  acc=0.2057     1364 char/s  eta=     0s
+chars=60,000  acc=0.2057  eval_duration=44.0s
+---
+DISQUALIFIED: val accuracy 0.2057 below floor 0.7000
+submission         : ttt_hebbian_frozen_v1
+training energy (J): 1,305.0
+training duration  : 8.6s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-o5JzWqDrtmQvmWi9aSb9mD
+[done] DISQUALIFIED — val_accuracy_below_floor
+       floor    = 0.7000
+       val_acc  = 0.2057
+       train_s  = 8.6
+       energy   = 1,305 J
+       result   = /home/seneca/wikitext/submissions/ttt_hebbian_frozen_v1/result.json

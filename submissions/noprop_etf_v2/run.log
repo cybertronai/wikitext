@@ -1,0 +1,85 @@
+# wikitext submit.py log — noprop_etf_v2 — 2026-05-25T19:05:01+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-RpCB6Mr8ksTqjMAb0luEZ1
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 68.3 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.0 s
+  energy delta:   13,443.4 J
+  avg power:      363.7 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 68.34498305084746, "stress_watts_avg": 363.67963631739326, "stress_energy_joules": 13443.371, "stress_duration_s": 36.964871435, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/noprop_etf_v2.py ...
+[noprop_v2] body=9.07M  noprop=4.01M  cfg=TrainConfig(d=384 L=5 bs=32 T_seq=1024 steps=1800 noprop_T=10 d_label=128)
+[noprop_v2] alpha_bars = [0.02, 0.0279, 0.1013, 0.2131, 0.3525, 0.5062, 0.6592, 0.7969, 0.906, 0.9759, 0.98]
+[noprop_v2] ETF init  label_norm_mean=1.0000  label_norm_std=0.0000  label_offdiag_cos=0.0500  (Welch bound for K=256,d=128 is 1/255 ~ 0.0039)
+[noprop_v2] step     0/1800  sgd 5.5452  np 0.4546  rec 5.5446  cos_clean +0.083  cos_noisy +0.113  dead_emb 0.000  row_norm_mean 0.990  offdiag_cos 0.0500  elapsed 1s
+[noprop_v2] step   100/1800  sgd 1.5820  np 0.2195  rec 2.1361  cos_clean +0.819  cos_noisy +0.981  dead_emb 0.000  row_norm_mean 1.103  offdiag_cos 0.2764  elapsed 20s
+[noprop_v2] step   200/1800  sgd 1.4131  np 0.1523  rec 1.5908  cos_clean +0.924  cos_noisy +0.991  dead_emb 0.000  row_norm_mean 1.591  offdiag_cos 0.3584  elapsed 38s
+[noprop_v2] step   300/1800  sgd 1.3454  np 0.1182  rec 1.4411  cos_clean +0.955  cos_noisy +0.995  dead_emb 0.000  row_norm_mean 1.845  offdiag_cos 0.4034  elapsed 57s
+[noprop_v2] step   400/1800  sgd 1.2580  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 75s
+[noprop_v2] step   500/1800  sgd 1.1758  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 94s
+[noprop_v2] step   600/1800  sgd 1.1689  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 112s
+[noprop_v2] step   700/1800  sgd 1.1478  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 131s
+[noprop_v2] step   800/1800  sgd 1.1054  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 149s
+[noprop_v2] step   900/1800  sgd 1.1425  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 168s
+[noprop_v2] step  1000/1800  sgd 1.0829  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 186s
+[noprop_v2] step  1100/1800  sgd 1.1099  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 205s
+[noprop_v2] step  1200/1800  sgd 1.0846  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 223s
+[noprop_v2] step  1300/1800  sgd 1.0036  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 242s
+[noprop_v2] step  1400/1800  sgd 1.0392  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 260s
+[noprop_v2] step  1500/1800  sgd 1.0125  np nan  rec nan  cos_clean +nan  cos_noisy +nan  dead_emb 0.000  row_norm_mean nan  offdiag_cos nan  elapsed 279s
+---
+DISQUALIFIED: training wall-clock budget exceeded (300.0 s)
+submission         : noprop_etf_v2
+training duration  : 300.1s
+training energy (J): 66,764.7  (at kill)
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-RpCB6Mr8ksTqjMAb0luEZ1
+
+# final result
+{
+  "submission": "noprop_etf_v2",
+  "disqualified": true,
+  "reason": "train_time_exceeded",
+  "max_train_seconds": 300.0,
+  "training_energy_J": 66764.720244,
+  "training_duration_s": 300.05989512,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-25T19:11:01Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 68.34498305084746,
+    "stress_watts_avg": 363.67963631739326,
+    "stress_energy_joules": 13443.371,
+    "stress_duration_s": 36.964871435,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

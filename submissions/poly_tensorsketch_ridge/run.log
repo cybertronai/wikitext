@@ -1,0 +1,208 @@
+# wikitext submit.py log — poly_tensorsketch_ridge — 2026-05-25T16:20:04+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-n9ST5yEwdwwJ3g9QFbdAMj
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 56.5 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       36.5 s
+  energy delta:   8,646.7 J
+  avg power:      236.7 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 56.48463333333333, "stress_watts_avg": 236.72207155790872, "stress_energy_joules": 8646.737, "stress_duration_s": 36.526957301, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/poly_tensorsketch_ridge.py ...
+[poly_ts] seed=0 K=16 M=8192 P=3 lambda=1.0 N=5,000,000
+[poly_ts] encoded train: 5,000,016 bytes  0.8s
+[poly_ts] drew hashes H=(3, 4096) S=(3, 4096)
+[poly_ts] streaming 5,000,000 positions in batches of 4,096
+[poly_ts]   pos     65,536/5,000,000  (  1.3%)     15212 pos/s     4.3s
+[poly_ts]   pos    131,072/5,000,000  (  2.6%)     29577 pos/s     4.4s
+[poly_ts]   pos    196,608/5,000,000  (  3.9%)     43166 pos/s     4.6s
+[poly_ts]   pos    262,144/5,000,000  (  5.2%)     56030 pos/s     4.7s
+[poly_ts]   pos    327,680/5,000,000  (  6.6%)     68236 pos/s     4.8s
+[poly_ts]   pos    393,216/5,000,000  (  7.9%)     79830 pos/s     4.9s
+[poly_ts]   pos    458,752/5,000,000  (  9.2%)     90854 pos/s     5.0s
+[poly_ts]   pos    524,288/5,000,000  ( 10.5%)    101313 pos/s     5.2s
+[poly_ts]   pos    589,824/5,000,000  ( 11.8%)    111339 pos/s     5.3s
+[poly_ts]   pos    655,360/5,000,000  ( 13.1%)    120909 pos/s     5.4s
+[poly_ts]   pos    720,896/5,000,000  ( 14.4%)    130030 pos/s     5.5s
+[poly_ts]   pos    786,432/5,000,000  ( 15.7%)    138727 pos/s     5.7s
+[poly_ts]   pos    851,968/5,000,000  ( 17.0%)    147082 pos/s     5.8s
+[poly_ts]   pos    917,504/5,000,000  ( 18.4%)    155088 pos/s     5.9s
+[poly_ts]   pos    983,040/5,000,000  ( 19.7%)    162757 pos/s     6.0s
+[poly_ts]   pos  1,048,576/5,000,000  ( 21.0%)    170100 pos/s     6.2s
+[poly_ts]   pos  1,114,112/5,000,000  ( 22.3%)    177164 pos/s     6.3s
+[poly_ts]   pos  1,179,648/5,000,000  ( 23.6%)    183957 pos/s     6.4s
+[poly_ts]   pos  1,245,184/5,000,000  ( 24.9%)    190493 pos/s     6.5s
+[poly_ts]   pos  1,310,720/5,000,000  ( 26.2%)    196804 pos/s     6.7s
+[poly_ts]   pos  1,376,256/5,000,000  ( 27.5%)    202865 pos/s     6.8s
+[poly_ts]   pos  1,441,792/5,000,000  ( 28.8%)    208705 pos/s     6.9s
+[poly_ts]   pos  1,507,328/5,000,000  ( 30.1%)    214359 pos/s     7.0s
+[poly_ts]   pos  1,572,864/5,000,000  ( 31.5%)    219831 pos/s     7.2s
+[poly_ts]   pos  1,638,400/5,000,000  ( 32.8%)    225091 pos/s     7.3s
+[poly_ts]   pos  1,703,936/5,000,000  ( 34.1%)    230166 pos/s     7.4s
+[poly_ts]   pos  1,769,472/5,000,000  ( 35.4%)    235079 pos/s     7.5s
+[poly_ts]   pos  1,835,008/5,000,000  ( 36.7%)    239835 pos/s     7.7s
+[poly_ts]   pos  1,900,544/5,000,000  ( 38.0%)    244434 pos/s     7.8s
+[poly_ts]   pos  1,966,080/5,000,000  ( 39.3%)    248895 pos/s     7.9s
+[poly_ts]   pos  2,031,616/5,000,000  ( 40.6%)    253218 pos/s     8.0s
+[poly_ts]   pos  2,097,152/5,000,000  ( 41.9%)    257423 pos/s     8.1s
+[poly_ts]   pos  2,162,688/5,000,000  ( 43.3%)    261488 pos/s     8.3s
+[poly_ts]   pos  2,228,224/5,000,000  ( 44.6%)    265446 pos/s     8.4s
+[poly_ts]   pos  2,293,760/5,000,000  ( 45.9%)    269304 pos/s     8.5s
+[poly_ts]   pos  2,359,296/5,000,000  ( 47.2%)    273016 pos/s     8.6s
+[poly_ts]   pos  2,424,832/5,000,000  ( 48.5%)    276627 pos/s     8.8s
+[poly_ts]   pos  2,490,368/5,000,000  ( 49.8%)    280139 pos/s     8.9s
+[poly_ts]   pos  2,555,904/5,000,000  ( 51.1%)    283546 pos/s     9.0s
+[poly_ts]   pos  2,621,440/5,000,000  ( 52.4%)    286870 pos/s     9.1s
+[poly_ts]   pos  2,686,976/5,000,000  ( 53.7%)    290119 pos/s     9.3s
+[poly_ts]   pos  2,752,512/5,000,000  ( 55.1%)    293248 pos/s     9.4s
+[poly_ts]   pos  2,818,048/5,000,000  ( 56.4%)    296315 pos/s     9.5s
+[poly_ts]   pos  2,883,584/5,000,000  ( 57.7%)    299306 pos/s     9.6s
+[poly_ts]   pos  2,949,120/5,000,000  ( 59.0%)    302251 pos/s     9.8s
+[poly_ts]   pos  3,014,656/5,000,000  ( 60.3%)    305061 pos/s     9.9s
+[poly_ts]   pos  3,080,192/5,000,000  ( 61.6%)    307817 pos/s    10.0s
+[poly_ts]   pos  3,145,728/5,000,000  ( 62.9%)    310521 pos/s    10.1s
+[poly_ts]   pos  3,211,264/5,000,000  ( 64.2%)    313164 pos/s    10.3s
+[poly_ts]   pos  3,276,800/5,000,000  ( 65.5%)    315729 pos/s    10.4s
+[poly_ts]   pos  3,342,336/5,000,000  ( 66.8%)    318232 pos/s    10.5s
+[poly_ts]   pos  3,407,872/5,000,000  ( 68.2%)    320686 pos/s    10.6s
+[poly_ts]   pos  3,473,408/5,000,000  ( 69.5%)    323108 pos/s    10.7s
+[poly_ts]   pos  3,538,944/5,000,000  ( 70.8%)    325434 pos/s    10.9s
+[poly_ts]   pos  3,604,480/5,000,000  ( 72.1%)    327721 pos/s    11.0s
+[poly_ts]   pos  3,670,016/5,000,000  ( 73.4%)    329970 pos/s    11.1s
+[poly_ts]   pos  3,735,552/5,000,000  ( 74.7%)    332143 pos/s    11.2s
+[poly_ts]   pos  3,801,088/5,000,000  ( 76.0%)    334272 pos/s    11.4s
+[poly_ts]   pos  3,866,624/5,000,000  ( 77.3%)    336366 pos/s    11.5s
+[poly_ts]   pos  3,932,160/5,000,000  ( 78.6%)    338424 pos/s    11.6s
+[poly_ts]   pos  3,997,696/5,000,000  ( 80.0%)    340427 pos/s    11.7s
+[poly_ts]   pos  4,063,232/5,000,000  ( 81.3%)    342377 pos/s    11.9s
+[poly_ts]   pos  4,128,768/5,000,000  ( 82.6%)    344300 pos/s    12.0s
+[poly_ts]   pos  4,194,304/5,000,000  ( 83.9%)    346193 pos/s    12.1s
+[poly_ts]   pos  4,259,840/5,000,000  ( 85.2%)    348015 pos/s    12.2s
+[poly_ts]   pos  4,325,376/5,000,000  ( 86.5%)    349814 pos/s    12.4s
+[poly_ts]   pos  4,390,912/5,000,000  ( 87.8%)    351588 pos/s    12.5s
+[poly_ts]   pos  4,456,448/5,000,000  ( 89.1%)    353338 pos/s    12.6s
+[poly_ts]   pos  4,521,984/5,000,000  ( 90.4%)    355020 pos/s    12.7s
+[poly_ts]   pos  4,587,520/5,000,000  ( 91.8%)    356660 pos/s    12.9s
+[poly_ts]   pos  4,653,056/5,000,000  ( 93.1%)    358292 pos/s    13.0s
+[poly_ts]   pos  4,718,592/5,000,000  ( 94.4%)    359908 pos/s    13.1s
+[poly_ts]   pos  4,784,128/5,000,000  ( 95.7%)    361494 pos/s    13.2s
+[poly_ts]   pos  4,849,664/5,000,000  ( 97.0%)    363038 pos/s    13.4s
+[poly_ts]   pos  4,915,200/5,000,000  ( 98.3%)    364540 pos/s    13.5s
+[poly_ts]   pos  4,980,736/5,000,000  ( 99.6%)    366022 pos/s    13.6s
+[poly_ts]   pos  5,000,000/5,000,000  (100.0%)    366445 pos/s    13.6s
+[poly_ts] accumulation done: 13.6s
+[poly_ts] solving (m=8192) ...
+[poly_ts] solve done: 0.1s  W=(8192, 256)
+[poly_ts] total train wall: 14.6s
+training: 2,522.4 J   duration=14.7s
+evaluating on val split ...
+/workspace/poly_tensorsketch_ridge.py:154: UserWarning: The given buffer is not writable, and PyTorch does not support non-writable tensors. This means you can write to the underlying (supposedly non-writable) buffer using the tensor. You may want to copy the buffer to protect its data or make it writable before converting it to a tensor. This type of warning will be suppressed for the rest of this program. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:1560.)
+  self._win[0, -n:].copy_(torch.frombuffer(bytes(tail), dtype=torch.uint8).to(self.device))
+  eval      1,200/60,000 (  2.0%)  acc=0.2817      766 char/s  eta=    77s
+  eval      2,400/60,000 (  4.0%)  acc=0.3104     1286 char/s  eta=    45s
+  eval      3,600/60,000 (  6.0%)  acc=0.3161     1663 char/s  eta=    34s
+  eval      4,800/60,000 (  8.0%)  acc=0.3208     1948 char/s  eta=    28s
+  eval      6,000/60,000 ( 10.0%)  acc=0.3160     2171 char/s  eta=    25s
+  eval      7,200/60,000 ( 12.0%)  acc=0.3167     2351 char/s  eta=    22s
+  eval      8,400/60,000 ( 14.0%)  acc=0.3111     2498 char/s  eta=    21s
+  eval      9,600/60,000 ( 16.0%)  acc=0.3086     2622 char/s  eta=    19s
+  eval     10,800/60,000 ( 18.0%)  acc=0.3100     2726 char/s  eta=    18s
+  eval     12,000/60,000 ( 20.0%)  acc=0.3089     2816 char/s  eta=    17s
+  eval     13,200/60,000 ( 22.0%)  acc=0.3061     2894 char/s  eta=    16s
+  eval     14,400/60,000 ( 24.0%)  acc=0.3039     2963 char/s  eta=    15s
+  eval     15,600/60,000 ( 26.0%)  acc=0.3025     3025 char/s  eta=    15s
+  eval     16,800/60,000 ( 28.0%)  acc=0.3022     3082 char/s  eta=    14s
+  eval     18,000/60,000 ( 30.0%)  acc=0.2999     3132 char/s  eta=    13s
+  eval     19,200/60,000 ( 32.0%)  acc=0.3022     3177 char/s  eta=    13s
+  eval     20,400/60,000 ( 34.0%)  acc=0.3022     3218 char/s  eta=    12s
+  eval     21,600/60,000 ( 36.0%)  acc=0.3014     3256 char/s  eta=    12s
+  eval     22,800/60,000 ( 38.0%)  acc=0.3012     3290 char/s  eta=    11s
+  eval     24,000/60,000 ( 40.0%)  acc=0.3027     3322 char/s  eta=    11s
+  eval     25,200/60,000 ( 42.0%)  acc=0.3023     3351 char/s  eta=    10s
+  eval     26,400/60,000 ( 44.0%)  acc=0.3041     3379 char/s  eta=    10s
+  eval     27,600/60,000 ( 46.0%)  acc=0.3038     3405 char/s  eta=    10s
+  eval     28,800/60,000 ( 48.0%)  acc=0.3033     3429 char/s  eta=     9s
+  eval     30,000/60,000 ( 50.0%)  acc=0.3027     3452 char/s  eta=     9s
+  eval     31,200/60,000 ( 52.0%)  acc=0.3021     3473 char/s  eta=     8s
+  eval     32,400/60,000 ( 54.0%)  acc=0.3024     3493 char/s  eta=     8s
+  eval     33,600/60,000 ( 56.0%)  acc=0.3027     3511 char/s  eta=     8s
+  eval     34,800/60,000 ( 58.0%)  acc=0.3019     3529 char/s  eta=     7s
+  eval     36,000/60,000 ( 60.0%)  acc=0.3018     3546 char/s  eta=     7s
+  eval     37,200/60,000 ( 62.0%)  acc=0.3027     3562 char/s  eta=     6s
+  eval     38,400/60,000 ( 64.0%)  acc=0.3033     3577 char/s  eta=     6s
+  eval     39,600/60,000 ( 66.0%)  acc=0.3036     3591 char/s  eta=     6s
+  eval     40,800/60,000 ( 68.0%)  acc=0.3038     3604 char/s  eta=     5s
+  eval     42,000/60,000 ( 70.0%)  acc=0.3048     3616 char/s  eta=     5s
+  eval     43,200/60,000 ( 72.0%)  acc=0.3051     3628 char/s  eta=     5s
+  eval     44,400/60,000 ( 74.0%)  acc=0.3061     3639 char/s  eta=     4s
+  eval     45,600/60,000 ( 76.0%)  acc=0.3063     3650 char/s  eta=     4s
+  eval     46,800/60,000 ( 78.0%)  acc=0.3068     3660 char/s  eta=     4s
+  eval     48,000/60,000 ( 80.0%)  acc=0.3069     3670 char/s  eta=     3s
+  eval     49,200/60,000 ( 82.0%)  acc=0.3068     3679 char/s  eta=     3s
+  eval     50,400/60,000 ( 84.0%)  acc=0.3079     3687 char/s  eta=     3s
+  eval     51,600/60,000 ( 86.0%)  acc=0.3078     3696 char/s  eta=     2s
+  eval     52,800/60,000 ( 88.0%)  acc=0.3065     3705 char/s  eta=     2s
+  eval     54,000/60,000 ( 90.0%)  acc=0.3066     3714 char/s  eta=     2s
+  eval     55,200/60,000 ( 92.0%)  acc=0.3068     3722 char/s  eta=     1s
+  eval     56,400/60,000 ( 94.0%)  acc=0.3073     3730 char/s  eta=     1s
+  eval     57,600/60,000 ( 96.0%)  acc=0.3075     3737 char/s  eta=     1s
+  eval     58,800/60,000 ( 98.0%)  acc=0.3085     3744 char/s  eta=     0s
+  eval     60,000/60,000 (100.0%)  acc=0.3085     3752 char/s  eta=     0s
+chars=60,000  acc=0.3085  eval_duration=16.0s
+---
+DISQUALIFIED: val accuracy 0.3085 below floor 0.7000
+submission         : poly_tensorsketch_ridge
+training energy (J): 2,522.4
+training duration  : 14.7s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-n9ST5yEwdwwJ3g9QFbdAMj
+
+# final result
+{
+  "submission": "poly_tensorsketch_ridge",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.30855,
+  "val_chars": 60000,
+  "training_energy_J": 2522.42927375,
+  "training_duration_s": 14.739574525000002,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-25T16:21:23Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 56.48463333333333,
+    "stress_watts_avg": 236.72207155790872,
+    "stress_energy_joules": 8646.737,
+    "stress_duration_s": 36.526957301,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

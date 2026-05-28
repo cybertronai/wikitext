@@ -1,0 +1,130 @@
+# wikitext submit.py log — mono_forward_no_grad — 2026-05-25T22:25:14+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-IjrzVwJdI6kSmsPosUtIUL
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 60.8 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       41.8 s
+  energy delta:   12,400.7 J
+  avg power:      296.9 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 60.79772881355937, "stress_watts_avg": 296.8812948727788, "stress_energy_joules": 12400.721, "stress_duration_s": 41.769964003, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/mono_forward_no_grad.py ...
+[mfng] device=cuda  SEED=0
+[mfng] train_bytes: 541,096,898
+[mfng] layer 1/6 fit  K=2  d_feat=9217  N_seen=7995392  total_t=21.4s
+[mfng] layer 2/6 fit  K=4  d_feat=9217  N_seen=7995392  total_t=44.5s
+[mfng] layer 3/6 fit  K=8  d_feat=9217  N_seen=7995392  total_t=70.3s
+[mfng] layer 4/6 fit  K=16  d_feat=9217  N_seen=7995392  total_t=99.6s
+[mfng] layer 5/6 fit  K=24  d_feat=9217  N_seen=7995392  total_t=133.2s
+[mfng] layer 6/6 fit  K=32  d_feat=9217  N_seen=7995392  total_t=171.6s
+[mfng] stack trained: 6 layers  total_t=171.6s
+training: 37,345.5 J   duration=173.3s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.4392      238 char/s  eta=   247s
+  eval      2,400/60,000 (  4.0%)  acc=0.4771      239 char/s  eta=   241s
+  eval      3,600/60,000 (  6.0%)  acc=0.4744      240 char/s  eta=   235s
+  eval      4,800/60,000 (  8.0%)  acc=0.4783      240 char/s  eta=   230s
+  eval      6,000/60,000 ( 10.0%)  acc=0.4730      240 char/s  eta=   225s
+  eval      7,200/60,000 ( 12.0%)  acc=0.4733      240 char/s  eta=   220s
+  eval      8,400/60,000 ( 14.0%)  acc=0.4718      240 char/s  eta=   215s
+  eval      9,600/60,000 ( 16.0%)  acc=0.4773      240 char/s  eta=   210s
+  eval     10,800/60,000 ( 18.0%)  acc=0.4794      240 char/s  eta=   205s
+  eval     12,000/60,000 ( 20.0%)  acc=0.4813      240 char/s  eta=   200s
+  eval     13,200/60,000 ( 22.0%)  acc=0.4853      240 char/s  eta=   195s
+  eval     14,400/60,000 ( 24.0%)  acc=0.4844      240 char/s  eta=   190s
+  eval     15,600/60,000 ( 26.0%)  acc=0.4846      240 char/s  eta=   185s
+  eval     16,800/60,000 ( 28.0%)  acc=0.4870      240 char/s  eta=   180s
+  eval     18,000/60,000 ( 30.0%)  acc=0.4832      240 char/s  eta=   175s
+  eval     19,200/60,000 ( 32.0%)  acc=0.4863      240 char/s  eta=   170s
+  eval     20,400/60,000 ( 34.0%)  acc=0.4886      240 char/s  eta=   165s
+  eval     21,600/60,000 ( 36.0%)  acc=0.4880      240 char/s  eta=   160s
+  eval     22,800/60,000 ( 38.0%)  acc=0.4885      240 char/s  eta=   155s
+  eval     24,000/60,000 ( 40.0%)  acc=0.4900      240 char/s  eta=   150s
+  eval     25,200/60,000 ( 42.0%)  acc=0.4904      240 char/s  eta=   145s
+  eval     26,400/60,000 ( 44.0%)  acc=0.4931      240 char/s  eta=   140s
+  eval     27,600/60,000 ( 46.0%)  acc=0.4928      240 char/s  eta=   135s
+  eval     28,800/60,000 ( 48.0%)  acc=0.4918      240 char/s  eta=   130s
+  eval     30,000/60,000 ( 50.0%)  acc=0.4906      240 char/s  eta=   125s
+  eval     31,200/60,000 ( 52.0%)  acc=0.4877      240 char/s  eta=   120s
+  eval     32,400/60,000 ( 54.0%)  acc=0.4860      240 char/s  eta=   115s
+  eval     33,600/60,000 ( 56.0%)  acc=0.4837      240 char/s  eta=   110s
+  eval     34,800/60,000 ( 58.0%)  acc=0.4826      240 char/s  eta=   105s
+  eval     36,000/60,000 ( 60.0%)  acc=0.4825      240 char/s  eta=   100s
+  eval     37,200/60,000 ( 62.0%)  acc=0.4834      240 char/s  eta=    95s
+  eval     38,400/60,000 ( 64.0%)  acc=0.4836      240 char/s  eta=    90s
+  eval     39,600/60,000 ( 66.0%)  acc=0.4841      240 char/s  eta=    85s
+  eval     40,800/60,000 ( 68.0%)  acc=0.4843      240 char/s  eta=    80s
+  eval     42,000/60,000 ( 70.0%)  acc=0.4855      240 char/s  eta=    75s
+  eval     43,200/60,000 ( 72.0%)  acc=0.4862      240 char/s  eta=    70s
+  eval     44,400/60,000 ( 74.0%)  acc=0.4868      240 char/s  eta=    65s
+  eval     45,600/60,000 ( 76.0%)  acc=0.4873      240 char/s  eta=    60s
+  eval     46,800/60,000 ( 78.0%)  acc=0.4876      240 char/s  eta=    55s
+  eval     48,000/60,000 ( 80.0%)  acc=0.4885      240 char/s  eta=    50s
+  eval     49,200/60,000 ( 82.0%)  acc=0.4890      240 char/s  eta=    45s
+  eval     50,400/60,000 ( 84.0%)  acc=0.4896      240 char/s  eta=    40s
+  eval     51,600/60,000 ( 86.0%)  acc=0.4894      240 char/s  eta=    35s
+  eval     52,800/60,000 ( 88.0%)  acc=0.4886      240 char/s  eta=    30s
+  eval     54,000/60,000 ( 90.0%)  acc=0.4893      240 char/s  eta=    25s
+  eval     55,200/60,000 ( 92.0%)  acc=0.4892      240 char/s  eta=    20s
+  eval     56,400/60,000 ( 94.0%)  acc=0.4892      240 char/s  eta=    15s
+  eval     57,600/60,000 ( 96.0%)  acc=0.4899      240 char/s  eta=    10s
+  eval     58,800/60,000 ( 98.0%)  acc=0.4908      240 char/s  eta=     5s
+  eval     60,000/60,000 (100.0%)  acc=0.4915      240 char/s  eta=     0s
+chars=60,000  acc=0.4915  eval_duration=249.8s
+---
+DISQUALIFIED: val accuracy 0.4915 below floor 0.7000
+submission         : mono_forward_no_grad
+training energy (J): 37,345.5
+training duration  : 173.3s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-IjrzVwJdI6kSmsPosUtIUL
+
+# final result
+{
+  "submission": "mono_forward_no_grad",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.49146666666666666,
+  "val_chars": 60000,
+  "training_energy_J": 37345.471577300006,
+  "training_duration_s": 173.315848454,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-25T22:33:15Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 60.79772881355937,
+    "stress_watts_avg": 296.8812948727788,
+    "stress_energy_joules": 12400.721,
+    "stress_duration_s": 41.769964003,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@armin-claude-1m"
+}

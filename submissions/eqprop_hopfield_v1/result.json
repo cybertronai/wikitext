@@ -1,0 +1,24 @@
+{
+  "submission": "eqprop_hopfield_v1",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.0,
+  "val_chars": 60000,
+  "training_energy_J": 575.4524714000004,
+  "training_duration_s": 5.510710571999994,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-25T22:27:54Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 62.420933333333345,
+    "stress_watts_avg": 222.0358654632278,
+    "stress_energy_joules": 13529.783,
+    "stress_duration_s": 60.935124025,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@armin-claude-1m"
+}

@@ -1,0 +1,165 @@
+# wikitext submit.py log — dfa_v1 — 2026-05-25T16:17:49+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-5lKKGeUlYrLy4ijfv8XfvK
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext/submit.py
+├── 🔨 Created mount /home/seneca/wikitext/task.py
+├── 🔨 Created mount /home/seneca/wikitext/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 61.7 W
+running 30s stress workload ...
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+  duration:       37.4 s
+  energy delta:   12,244.6 J
+  avg power:      327.4 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 61.70994999999998, "stress_watts_avg": 327.4075370093611, "stress_energy_joules": 12244.629, "stress_duration_s": 37.398738929000004, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+training submission /workspace/dfa_v1.py ...
+[dfa] 10.84M params  cfg=TrainConfig(d=384 L=6 H=6 bs=32 T=512 steps=4000 lr=0.003)
+[dfa] 0.59M frozen feedback params (NOT trained)
+[dfa] step     0/4000  loss 5.7380  elapsed 2s  (0.0 steps/s)
+[dfa] step   100/4000  loss 5.4162  elapsed 6s  (23.2 steps/s)
+[dfa] step   200/4000  loss 5.4062  elapsed 10s  (23.3 steps/s)
+[dfa] step   300/4000  loss 5.4180  elapsed 15s  (23.3 steps/s)
+[dfa] step   400/4000  loss 5.4108  elapsed 19s  (23.3 steps/s)
+[dfa] step   500/4000  loss 5.4101  elapsed 23s  (23.3 steps/s)
+[dfa] step   600/4000  loss 5.4148  elapsed 27s  (23.3 steps/s)
+[dfa] step   700/4000  loss 5.4154  elapsed 32s  (23.3 steps/s)
+[dfa] step   800/4000  loss 5.4206  elapsed 36s  (23.3 steps/s)
+[dfa] step   900/4000  loss 5.4244  elapsed 40s  (23.3 steps/s)
+[dfa] step  1000/4000  loss 5.4225  elapsed 45s  (23.3 steps/s)
+[dfa] step  1100/4000  loss 5.4215  elapsed 49s  (23.3 steps/s)
+[dfa] step  1200/4000  loss 5.4196  elapsed 53s  (23.3 steps/s)
+[dfa] step  1300/4000  loss 5.4250  elapsed 58s  (23.3 steps/s)
+[dfa] step  1400/4000  loss 5.4152  elapsed 62s  (23.3 steps/s)
+[dfa] step  1500/4000  loss 5.4166  elapsed 66s  (23.3 steps/s)
+[dfa] step  1600/4000  loss 5.4185  elapsed 71s  (23.3 steps/s)
+[dfa] step  1700/4000  loss 5.4248  elapsed 75s  (23.3 steps/s)
+[dfa] step  1800/4000  loss 5.4190  elapsed 79s  (23.3 steps/s)
+[dfa] step  1900/4000  loss 5.4196  elapsed 84s  (23.3 steps/s)
+[dfa] step  2000/4000  loss 5.4239  elapsed 88s  (23.3 steps/s)
+[dfa] step  2100/4000  loss 5.4244  elapsed 92s  (23.3 steps/s)
+[dfa] step  2200/4000  loss 5.4228  elapsed 97s  (23.3 steps/s)
+[dfa] step  2300/4000  loss 5.4226  elapsed 101s  (23.3 steps/s)
+[dfa] step  2400/4000  loss 5.4306  elapsed 105s  (23.3 steps/s)
+[dfa] step  2500/4000  loss 5.4197  elapsed 110s  (23.3 steps/s)
+[dfa] step  2600/4000  loss 5.4243  elapsed 114s  (23.3 steps/s)
+[dfa] step  2700/4000  loss 5.4196  elapsed 118s  (23.3 steps/s)
+[dfa] step  2800/4000  loss 5.4272  elapsed 122s  (23.3 steps/s)
+[dfa] step  2900/4000  loss 5.4134  elapsed 127s  (23.3 steps/s)
+[dfa] step  3000/4000  loss 5.4243  elapsed 131s  (23.3 steps/s)
+[dfa] step  3100/4000  loss 5.4255  elapsed 135s  (23.3 steps/s)
+[dfa] step  3200/4000  loss 5.4290  elapsed 140s  (23.3 steps/s)
+[dfa] step  3300/4000  loss 5.4149  elapsed 144s  (23.3 steps/s)
+[dfa] step  3400/4000  loss 5.4241  elapsed 148s  (23.3 steps/s)
+[dfa] step  3500/4000  loss 5.4209  elapsed 153s  (23.3 steps/s)
+[dfa] step  3600/4000  loss 5.4258  elapsed 157s  (23.3 steps/s)
+[dfa] step  3700/4000  loss 5.4265  elapsed 161s  (23.3 steps/s)
+[dfa] step  3800/4000  loss 5.4244  elapsed 166s  (23.3 steps/s)
+[dfa] step  3900/4000  loss 5.4194  elapsed 170s  (23.3 steps/s)
+[dfa] step  3999/4000  loss 5.4241  elapsed 174s  (23.3 steps/s)
+[dfa] training done: 4000 steps in 174.3s
+training: 40,782.7 J   duration=178.1s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.0000      146 char/s  eta=   401s
+  eval      2,400/60,000 (  4.0%)  acc=0.0000      148 char/s  eta=   390s
+  eval      3,600/60,000 (  6.0%)  acc=0.0000      146 char/s  eta=   385s
+  eval      4,800/60,000 (  8.0%)  acc=0.0000      146 char/s  eta=   378s
+  eval      6,000/60,000 ( 10.0%)  acc=0.0000      146 char/s  eta=   370s
+  eval      7,200/60,000 ( 12.0%)  acc=0.0000      146 char/s  eta=   362s
+  eval      8,400/60,000 ( 14.0%)  acc=0.0000      146 char/s  eta=   354s
+  eval      9,600/60,000 ( 16.0%)  acc=0.0000      146 char/s  eta=   346s
+  eval     10,800/60,000 ( 18.0%)  acc=0.0000      146 char/s  eta=   337s
+  eval     12,000/60,000 ( 20.0%)  acc=0.0000      146 char/s  eta=   328s
+  eval     13,200/60,000 ( 22.0%)  acc=0.0000      146 char/s  eta=   320s
+  eval     14,400/60,000 ( 24.0%)  acc=0.0000      146 char/s  eta=   312s
+  eval     15,600/60,000 ( 26.0%)  acc=0.0000      146 char/s  eta=   305s
+  eval     16,800/60,000 ( 28.0%)  acc=0.0000      145 char/s  eta=   298s
+  eval     18,000/60,000 ( 30.0%)  acc=0.0000      145 char/s  eta=   290s
+  eval     19,200/60,000 ( 32.0%)  acc=0.0000      144 char/s  eta=   283s
+  eval     20,400/60,000 ( 34.0%)  acc=0.0000      144 char/s  eta=   275s
+  eval     21,600/60,000 ( 36.0%)  acc=0.0000      144 char/s  eta=   267s
+  eval     22,800/60,000 ( 38.0%)  acc=0.0000      144 char/s  eta=   259s
+  eval     24,000/60,000 ( 40.0%)  acc=0.0000      143 char/s  eta=   251s
+  eval     25,200/60,000 ( 42.0%)  acc=0.0000      143 char/s  eta=   244s
+  eval     26,400/60,000 ( 44.0%)  acc=0.0000      142 char/s  eta=   236s
+  eval     27,600/60,000 ( 46.0%)  acc=0.0000      142 char/s  eta=   228s
+  eval     28,800/60,000 ( 48.0%)  acc=0.0000      142 char/s  eta=   220s
+  eval     30,000/60,000 ( 50.0%)  acc=0.0000      142 char/s  eta=   211s
+  eval     31,200/60,000 ( 52.0%)  acc=0.0000      142 char/s  eta=   203s
+  eval     32,400/60,000 ( 54.0%)  acc=0.0000      142 char/s  eta=   194s
+  eval     33,600/60,000 ( 56.0%)  acc=0.0000      142 char/s  eta=   186s
+  eval     34,800/60,000 ( 58.0%)  acc=0.0000      142 char/s  eta=   177s
+  eval     36,000/60,000 ( 60.0%)  acc=0.0000      142 char/s  eta=   169s
+  eval     37,200/60,000 ( 62.0%)  acc=0.0000      143 char/s  eta=   160s
+  eval     38,400/60,000 ( 64.0%)  acc=0.0000      143 char/s  eta=   152s
+  eval     39,600/60,000 ( 66.0%)  acc=0.0000      143 char/s  eta=   143s
+  eval     40,800/60,000 ( 68.0%)  acc=0.0000      143 char/s  eta=   135s
+  eval     42,000/60,000 ( 70.0%)  acc=0.0000      143 char/s  eta=   126s
+  eval     43,200/60,000 ( 72.0%)  acc=0.0000      143 char/s  eta=   118s
+  eval     44,400/60,000 ( 74.0%)  acc=0.0000      143 char/s  eta=   109s
+  eval     45,600/60,000 ( 76.0%)  acc=0.0000      143 char/s  eta=   101s
+  eval     46,800/60,000 ( 78.0%)  acc=0.0000      143 char/s  eta=    92s
+  eval     48,000/60,000 ( 80.0%)  acc=0.0000      143 char/s  eta=    84s
+  eval     49,200/60,000 ( 82.0%)  acc=0.0000      143 char/s  eta=    75s
+  eval     50,400/60,000 ( 84.0%)  acc=0.0000      143 char/s  eta=    67s
+  eval     51,600/60,000 ( 86.0%)  acc=0.0000      143 char/s  eta=    59s
+  eval     52,800/60,000 ( 88.0%)  acc=0.0000      143 char/s  eta=    50s
+  eval     54,000/60,000 ( 90.0%)  acc=0.0000      143 char/s  eta=    42s
+  eval     55,200/60,000 ( 92.0%)  acc=0.0000      143 char/s  eta=    33s
+  eval     56,400/60,000 ( 94.0%)  acc=0.0000      143 char/s  eta=    25s
+  eval     57,600/60,000 ( 96.0%)  acc=0.0000      143 char/s  eta=    17s
+  eval     58,800/60,000 ( 98.0%)  acc=0.0000      142 char/s  eta=     8s
+  eval     60,000/60,000 (100.0%)  acc=0.0000      142 char/s  eta=     0s
+chars=60,000  acc=0.0000  eval_duration=422.7s
+---
+DISQUALIFIED: val accuracy 0.0000 below floor 0.7000
+submission         : dfa_v1
+training energy (J): 40,782.7
+training duration  : 178.1s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-5lKKGeUlYrLy4ijfv8XfvK
+
+# final result
+{
+  "submission": "dfa_v1",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.0,
+  "val_chars": 60000,
+  "training_energy_J": 40782.6649437,
+  "training_duration_s": 178.08438112599998,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-25T16:28:41Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 61.70994999999998,
+    "stress_watts_avg": 327.4075370093611,
+    "stress_energy_joules": 12244.629,
+    "stress_duration_s": 37.398738929000004,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@armin-claude-1m"
+}
