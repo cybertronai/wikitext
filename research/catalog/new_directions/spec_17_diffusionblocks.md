@@ -1,16 +1,10 @@
 # Research Specification 17: DiffusionBlocks AR for Byte-Level LM
 
-**Status:** Hypothesis evaluation (methodological replication of Sakana AI ICLR 2026)
-**Priority:** Medium — methodological / paradigm-completeness play
-**Estimated effort:** 3–5 days
-
----
-
 ## Hypothesis
 
-A 6-layer/384-dim modded-nanogpt-style transformer trained as **DiffusionBlocks** (Shing, Koyama, Akiba — ICLR 2026, [arxiv:2506.14202](https://arxiv.org/abs/2506.14202)) with `B=3` blocks reaches val char-acc ≥ 0.70 within 300 s on A100-80GB, qualifying as the first principled block-wise, single-block-gradient training method in the catalog. Energy is reported but not targeted — whether it lands above or below current leaders is itself the experimental question.
+A 6-layer/384-dim modded-nanogpt-style transformer trained as **DiffusionBlocks** (Shing, Koyama, Akiba — ICLR 2026, [arxiv:2506.14202](https://arxiv.org/abs/2506.14202)) with `B=3` blocks reaches val char-acc ≥ 0.70 within 300 s on A100-80GB, qualifying as the first principled block-wise, single-block-gradient training method in the catalog.
 
-This is a controlled replication of the only block-wise training method in the literature that has been shown to match end-to-end backprop on a modern generative task (OWT gen-PPL 14.99 vs 15.05; see paper Table 4). The catalog currently has Forward-Forward (spec 10) as its block-wise representative and that line of work has stayed sub-floor — DiffusionBlocks is the obvious next attempt because it has *already shown* it can match E2E on language.
+This is a controlled replication of the only block-wise training method in the literature that has been shown to match end-to-end backprop on a modern generative task. The catalog currently has Forward-Forward (spec 10) as its block-wise representative and that line of work has stayed sub-floor — DiffusionBlocks is the obvious next attempt because it has *already shown* it can match E2E on language.
 
 ---
 
@@ -28,39 +22,25 @@ with `p_noise = LogNormal(P_mean=-1.2, P_std=1.2)`, `w(σ) = (σ² + σ_data²)/
 
 **Block boundaries** use **equi-probability partitioning** (paper §3.3, `dblock_modules.py:6`): each `σ_b` chosen so that `∫_{σ_b}^{σ_{b-1}} p_noise dσ = 1/B`. Closed-form: `σ_b = exp(P_mean + P_std · Φ⁻¹(q_min + (b/B)·(q_max − q_min)))`.
 
-**Per-step training** (paper Algorithm "DiffusionBlocks – Training"):
-1. Sample `(x, y)` and block `b ~ Uniform{1..B}`
-2. Sample `σ ~ p_noise|[σ_b, σ_{b-1}]`
-3. Forward through layers below block `b` (no grad), then forward through block `b` with `z_t = y + σε` and noise conditioning
-4. Backward only through block `b`
+**Per-step training** (paper Algorithm 1, `paper.md:326-341`):
+1. Sample `(x, y)` and block `b ~ Uniform{0..B-1}`
+2. Sample `σ ~ p_noise|[σ_b, σ_{b+1}]`
+3. Compute `z_σ = y + σε` and the denoiser output `D_θb(z_σ, σ, x)` — block `b`'s transformer layers are the only ones forwarded this step; the lower blocks are *not* forwarded (the shared embed / unembed are still touched, since they're the only path between tokens and the latent space)
+4. Backward through block `b` (only block touched this step)
 5. Step optimizer on `θ_b`
 
-This gives **B× memory reduction** for activations and stores gradients for only `L/B` layers, but does **not** reduce per-step FLOPs proportionally (you still forward through everything; only backward is local).
+This gives **B× memory reduction** for activations (only the active block's forward is materialised) and a **B× per-step FLOP reduction** — both the forward and backward at a step are local to one block. The matching 3× inference speedup is reported in paper §4.1 (`paper.md:174`).
 
 ### AR-specific adaptation (paper §5.4)
 
 The paper's AR experiment is the closest precedent to what we need; details (paraphrased, since hyperparameters are not published and the public repo only releases the CIFAR-100 ViT variant):
 
 - **Architecture:** 12-layer Llama-2-style transformer, `B=4` blocks (3 layers each), token-level BPE (not bytes).
-- **Datasets:** 1 Billion Words (LM1B) and OpenWebText (OWT).
-- **Training reframe:** at every position, the target `y_t` is the **next token's L2-normalized output embedding** (weight-tied with the unembed). A noised version `z_t = embed(y_t) + σε` is fed in alongside the causal-attended prefix features `h_{≤t}`; the block at the sampled `σ` denoises back to `embed(y_t)`. Loss = EDM-weighted L2 on the embedding plus an auxiliary CE on `softmax(pred · E_outᵀ)` against `y_t` (verbatim from `model.py:254–259`).
+- **Training reframe:** at every position, the target `y_t` is the **next token's L2-normalized output embedding** (weight-tied with the unembed). A noised version `z_t = embed(y_t) + σε` is fed in alongside the causal-attended prefix features `h_{≤t}`; the block at the sampled `σ` denoises back to `embed(y_t)`. Paper Algorithm 1 step e specifies **CE-only** for LM: `L = w(σ) · CE(Normalize(D_θᵢ(...)), y)`. **We deliberately diverge here**: see "What to build" below — we add an L2-on-embedding term alongside the CE because (a) the paper's CE-only recipe was validated on BPE tokens, not byte-level, and the EDM L2 signal is what drives denoising convergence on the continuous embedding target; (b) the auxiliary CE is what calibrates `E_out`-projected logits for our greedy-argmax `predict()` path.
 - **Inference:** standard left-to-right token-by-token, but **each token requires `T=B=4` Euler steps** through the blocks from `z_0 ~ N(0, σ_max²·I)` to the predicted embedding, then a final unembed projection. Generation cost ≈ one full network forward pass per token (same wall-clock per token as a standard AR Llama).
-- **Evaluation:** *not* standard validation perplexity. The paper notes "computing traditional perplexity is non-trivial for our diffusion framework as it is not derived from ELBO." They instead report **MAUVE** (similarity of generated to real text, following SEDD) and **generative perplexity** scored by two external teacher models, **Llama-2-7B and GPT2-XL**. Headline numbers (Table 4): OWT MAUVE 0.82 (DiffusionBlocks) vs 0.85 (E2E), Llama-2 gen-PPL 14.99 vs 15.05, GPT2-XL gen-PPL 26.33 vs 25.24.
 - **Not stated in paper:** sequence length, batch size, optimizer / LR, total training tokens, FLOPs, peak memory delta vs E2E. The `B=4 → 4× memory reduction` claim is the only quantitative training-side number.
 
-**The wrinkle for this benchmark:** the leaderboard scores **greedy-argmax next-char accuracy** via the streaming `CharModel.predict()` API — a standard next-token-prediction metric that Sakana explicitly sidestepped for the AR experiment. The auxiliary CE term during training is what lets us project the denoised embedding back to a calibrated byte distribution and read off `argmax`. We are therefore measuring DiffusionBlocks-AR under a metric (greedy next-byte accuracy) the original work *did not validate*, on a corpus (WikiText-103 raw bytes) it was not run on. Phase 0 below probes whether this metric/objective combination is even sensible before any Modal spend.
-
-### Catalog placement
-
-| Method | Block-wise? | Matches E2E? | Status here |
-|---|---|---|---|
-| Forward-Forward (spec 10) | yes | no (paper: ViT CIFAR-100 7.85% vs 60.25%) | sub-floor in `research/forward-forward-deep/` |
-| NoProp (Li et al. 2025) | yes | partial; classification only | not catalogued |
-| **DiffusionBlocks** | **yes** | **yes (paper Tables 1–5)** | **this spec** |
-
-DiffusionBlocks is the only published method that gives both (a) one-block-at-a-time gradients and (b) E2E-matching on language. Even a DQ entry adds a real comparison point against the spec-10 FF line.
-
----
+**The wrinkle for this benchmark:** the leaderboard scores **greedy-argmax next-char accuracy** via the streaming `CharModel.predict()` API — a standard next-token-prediction metric the paper did not validate for the AR experiment. The auxiliary CE term during training is what lets us project the denoised embedding back to a calibrated byte distribution and read off `argmax`. We are therefore measuring DiffusionBlocks-AR under a metric (greedy next-byte accuracy) the original work *did not validate*, on a corpus (WikiText-103 raw bytes) it was not run on. Phase 0 below probes whether this metric/objective combination is even sensible before any Modal spend.
 
 ## What to build
 
@@ -93,86 +73,87 @@ For `B=3` this gives boundaries roughly `[0.002, 0.13, 1.85, 80]` — block 0 ha
 for step in range(B * baseline_steps):                  # paper compensates B× for one-block grads
     x_<t, y_t = sample_batch()                          # standard causal LM batch, B×T
     b = randint(0, B)
-    sigma = sample_log_normal_truncated([sigma_b, sigma_{b-1}])
-
-    # Conditioning context (no grad): standard causal transformer features
-    # at every position from the *frozen-this-step* lower blocks.
-    with torch.no_grad():
-        h = base.embed(x_<t)
-        for bb in range(b):
-            h = blocks[bb].forward_features(h, sigma=None)  # std residual, no AdaLN
+    sigma = sample_log_normal_truncated([sigma_b, sigma_{b+1}])
 
     # Targets at every position: next-byte normalized embedding
-    y_embed = normalize(E_out[y_t])                       # (B, T, d)
+    y_embed = normalize(E_out[y_t])                     # (B, T, d)
     z_t = y_embed + sigma * torch.randn_like(y_embed)
 
-    # Apply preconditioning; only block b has grad
+    # EDM preconditioning; only block b's transformer layers are forwarded
+    # this step. Lower blocks are NOT forwarded — that's the source of the
+    # B× memory and B× per-step FLOP reductions. (The shared token embed
+    # for x and the shared E_out unembed are still touched, but their cost
+    # is small relative to a block of transformer layers.)
     c_skip = sigma_data**2 / (sigma**2 + sigma_data**2)
     c_out  = sigma * sigma_data / (sigma**2 + sigma_data**2).sqrt()
     c_in   = 1.0 / (sigma**2 + sigma_data**2).sqrt()
     c_noise = 0.25 * sigma.log()
 
     z_in = z_t * c_in
-    out = blocks[b](h, z=z_in, cond=c_noise)               # AdaLN conditioning
+    out = blocks[b](x_<t, z=z_in, cond=c_noise)         # block does its own causal attn over x
     pred_y = out * c_out + z_t * c_skip
 
-    # EDM L2 on the embedding...
+    # Paper Alg.1 step e for LM is CE-only on the normalised denoiser
+    # output. We add an EDM-weighted L2 term on the embedding — deliberate
+    # divergence (see "AR-specific adaptation" above). L2 drives denoising
+    # on the continuous target; CE calibrates E_out for greedy-argmax eval.
     loss_l2 = w(sigma) * (pred_y - y_embed).pow(2).mean()
-    # ...plus auxiliary CE on the projected logits (Sakana model.py:254–259 hybrid)
     logits = pred_y @ E_out.T
     loss_ce = F.cross_entropy(logits.view(-1, 256), y_t.view(-1))
-    loss = loss_l2 + lambda_ce * loss_ce                   # lambda_ce ≈ 1.0 to start
+    loss = loss_l2 + lambda_ce * loss_ce                # lambda_ce ≈ 1.0 to start
 
     loss.backward()  # only block b accumulates grads
     opt[b].step()
 ```
 
-Per-block optimizer state is independent (separate AdamW/Muon instances keyed on `b`), or one optimizer with `requires_grad` toggled per step — both work. The Sakana repo (`model.py:50`) uses one optimizer across all params and relies on Lightning's `find_unused_parameters` (`main.py:67`) to absorb the per-step subset.
+Per-block optimizer state is independent (separate AdamW/Muon instances keyed on `b`), or one optimizer with `requires_grad` toggled per step — both work.
 
 ### Inference (`CharModel`)
 
-The streaming contract requires `predict()` → byte distribution and `observe(byte)` → commit. With B Euler steps per byte:
+The streaming contract requires `predict()` → committed character (`str`) and `observe(char)` → commit. The submission picks its own sampling rule; here we take greedy argmax over byte logits, which is well-defined because the auxiliary CE head (the `λ_ce` term in training, above) calibrates `E_out`-projected logits to a byte distribution.
+
+Per paper §4.1 (`paper.md:174`), each Euler step at noise level σ uses **only the block responsible for σ** — blocks are not chained at inference any more than they are at training. That means `observe()` extends each block's KV-cache independently from the shared token embedding (no h flowing block-to-block), and `predict()`'s B Euler steps each read from one block's own KV-cache only.
 
 ```python
 @torch.no_grad()
-def predict(self) -> dict[str, float]:
-    # 1. Get cached prefix features h_<t at current position (all B blocks have
-    #    independent context KV-caches, computed during observe()).
-    h = self._cached_h_at_pos  # (1, d), set by previous observe()
-
-    # 2. Initialize z from pure noise
+def predict(self) -> str:
+    # 1. Initialise z from pure noise at σ_max
     z = torch.randn(1, self.d, device=device) * self.sigmas[0]
 
-    # 3. Euler-step through B blocks (one step per block, σ_i ↓)
+    # 2. Euler-step through B noise levels. Step i uses ONLY block i,
+    #    which reads from its own per-block KV-cache (built independently
+    #    by observe() — no shared "h" flowing through other blocks).
     for i in range(B):
         sigma = self.sigmas[i]
         c_in, c_out, c_skip, c_noise = edm_precond(sigma)
-        denoised = (blocks[i](h, z=z*c_in, cond=c_noise) * c_out
-                    + z * c_skip)
+        out = blocks[i](z=z*c_in, cond=c_noise, kv_cache=self._kv[i])
+        denoised = out * c_out + z * c_skip
         d = (z - denoised) / sigma
         dt = self.sigmas[i+1] - sigma
         z = z + d * dt
 
-    # 4. Project final z to byte logits
+    # 3. Project final z to byte logits, commit argmax byte.
+    #    Multi-byte UTF-8 continuation bytes (>127) decode to "" via
+    #    errors="ignore", which the runner treats as an abstain.
     logits = z @ self.E_out.T
-    probs = F.softmax(logits, dim=-1)
-    return {bytes([i]).decode("utf-8", errors="ignore"): p
-            for i, p in enumerate(probs.tolist()) if p > 0}
+    byte_idx = int(logits.argmax().item())
+    return bytes([byte_idx]).decode("utf-8", errors="ignore")
 
 @torch.no_grad()
 def observe(self, ch: str) -> None:
     for byte in ch.encode("utf-8"):
-        x = torch.tensor([[byte]], device=device)
-        h = self.embed(x)
-        # Extend per-block KV-caches; cache the final-block h for the next predict()
+        x_emb = self.embed(torch.tensor([[byte]], device=device))
+        # Each block independently extends its OWN KV-cache from the same
+        # shared token embedding. No chaining: block b's input is x_emb,
+        # not the output of block b-1. (This matches the training graph,
+        # where block b also never sees a lower-block forward.)
         for b in range(B):
-            h, self._kv[b] = blocks[b].forward_features(
-                h, kv_cache=self._kv[b], offset=self._pos)
-        self._cached_h_at_pos = h[0, -1]
+            self._kv[b] = blocks[b].extend_kv(
+                x_emb, self._kv[b], offset=self._pos)
         self._pos += 1
 ```
 
-**Inference cost per byte:** B block forwards (each L/B layers) ≈ one full L-layer pass — i.e., same as standard AR. No worse on per-char eval throughput than modded_nanogpt. (Note: B Euler iterations of dimension `d` per char are negligible relative to per-layer matmul.)
+**Inference cost per byte:** ~2L layer-forwards — `observe()` runs B blocks × L/B layers each (= L) to extend all caches, then `predict()` runs B Euler steps × L/B layers each (= L). That's ~2× a standard L-layer AR transformer per byte, matching the paper's Appendix A.2 footnote about autoregressive inference overhead. At L=6 / B=3 on A100, the absolute cost is small (each step is only 2 layers of d=384), but the 2× constant factor is the relevant per-char eval throughput delta vs modded_nanogpt — call it out in `report.json`.
 
 ### Hyperparameters (starting point)
 
@@ -183,8 +164,8 @@ The Sakana paper does **not** publish AR hyperparameters. EDM defaults plus thei
 | `σ_min, σ_max` | 0.002, 80.0 | EDM, `dblock_modules.py:8` |
 | `P_mean, P_std` | -1.2, 1.2 | EDM, `dblock_modules.py:10` |
 | `σ_data` | calibrate (see Phase 0); fallback 0.5 | `model.py:114` |
-| `γ` (block-overlap) | 0.05 | `model.py:113`, extends each block's training range by 5% in log-σ |
-| `λ_ce` | 1.0 | inferred from `model.py:254–259` (CE and L2 both included unweighted) |
+| `γ` (block-overlap) | 0.10 | paper §3.3 + §4.3 ablation: γ=0.10 is the FID-optimal point on CIFAR-10 (41.39 vs 42.98 at 0.05, 42.84 at 0.15) |
+| `λ_ce` | 1.0 | starting weight for the L2+CE hybrid (see "deliberate divergence" note above); sweep if Phase 1 underperforms |
 | Optimizer | AdamW, lr=5e-4 | repo README "rand-aug" recipe |
 | LR schedule | cosine, warmup `3·baseline_warmup` | repo README, scales with B |
 | Total steps | `B × N_baseline` | `main.py:46–49` |
@@ -201,7 +182,7 @@ Before any Modal spend, two sanity checks locally (CPU is fine, ~minutes):
 
 1. **σ_data calibration.** Build the byte embedding, L2-normalize, sample a batch of next-byte embeddings, compute the empirical per-coordinate std. This is `σ_data`. Expected ~0.05 for `d=384`. Plug into the loss weighting; without this, EDM weighting is miscalibrated and training won't move.
 
-2. **Step-count check.** Profile one DiffusionBlocks training step (forward all blocks + backward one) vs one modded_nanogpt step on CPU at small scale. Confirm the per-step time ratio matches the expected `(L + L/B) / (2L) ≈ (B+1)/(2B)` — for B=3 that's ~0.67×. Combined with B× more steps, total wall-clock ratio is ~2× modded_nanogpt's per-step time × B = ~2× total. **If this projection exceeds 300 s at modded_nanogpt's settings, drop batch_size or n_steps before Modal dispatch.**
+2. **Step-count check.** Profile one DiffusionBlocks training step (one active block's forward + backward — paper §3.1, Appendix C Algorithm 1) vs one modded_nanogpt step on CPU at small scale. Per-step layer-updates are `L/B` vs E2E's `L` (paper §4.3 table, "Layers/Step" column), so the per-step time ratio should be `~1/B` — for B=3 that's ~0.33×. Combined with `B × N_baseline` steps (paper Appendix D.1 "Fair comparison" matches total layer updates between DB and E2E), total wall-clock ≈ 1× modded_nanogpt. **If profiling shows a per-step ratio meaningfully above 1/B, an extra block forward is sneaking in — find and remove before Modal dispatch.**
 
 ---
 
@@ -256,7 +237,7 @@ Either way, file a DQ row with per-block loss curves so the failure mode is in t
 
 A positive result is the **first evidence that one-block-at-a-time gradient training is competitive with end-to-end backprop on a real character-level LM benchmark**. The catalog gains a working reference implementation of a published 2026 ICLR method, and the spec-10 Forward-Forward line gets a contrasting data point ("FF fails at byte level; DiffusionBlocks does not").
 
-The energy number that comes out is itself the most interesting deliverable, because there is no published comparison: training-step FLOPs are comparable to E2E (full forward + partial backward, ×B more iterations per Sakana's iteration-multiplier convention) but the activation-memory headroom may enable wider models inside the 300 s budget that E2E can't fit. Phase 2's width sweep is the natural follow-up to test that.
+The energy number that comes out is itself the most interesting deliverable, because there is no published comparison: total training FLOPs equal E2E (per-step cost is `1/B` of E2E's, with `B × N_baseline` iterations to match total layer updates — paper Appendix D.1 "Fair comparison") but the activation-memory headroom may enable wider models inside the 300 s budget that E2E can't fit. Phase 2's width sweep is the natural follow-up to test that.
 
 ---
 
@@ -277,8 +258,9 @@ In all three cases the result is informative about block-wise training's reach i
 ## Resources
 
 - Paper: Shing, Koyama, Akiba — "DiffusionBlocks: Block-wise Neural Network Training via Diffusion Interpretation" — ICLR 2026, [arxiv:2506.14202v3](https://arxiv.org/abs/2506.14202)
-- Reference impl: https://github.com/SakanaAI/DiffusionBlocks (CIFAR-100 ViT only; AR not released)
-- Key code: `dblock_modules.py` (noise scheduling), `model.py:110-291` (training/inference loop with EDM preconditioning, hybrid L2+CE loss, equi-probability sampling)
+- Paper markdown (local): `research/catalog/new_directions/block-diffusion/paper.md` — read this before the arxiv PDF; section refs in this spec point at it
+- Reference impl (upstream): https://github.com/SakanaAI/DiffusionBlocks (CIFAR-100 ViT only; AR not released)
+- Reference impl (local clone): `/tmp/DiffusionBlocks` — `dblock_modules.py` (noise scheduling, equi-prob partitioning), `model.py:110-291` (training/inference loop with EDM preconditioning). Note: the line-number citations elsewhere in this spec are against this clone; verify before relying on them
 - EDM reference: Karras et al. 2022, [arxiv:2206.00364](https://arxiv.org/abs/2206.00364)
 - Baseline to modify: `submissions/modded_nanogpt/`
 - Related catalog entries: `spec_10_forward_forward_bytes.md` (block-wise, sub-floor), `research/forward-forward-deep/` (multi-phase FF investigation)

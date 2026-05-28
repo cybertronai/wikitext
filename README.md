@@ -95,3 +95,7 @@ For an internal-BPE submission, `predict()` returns `P(next_char | observed_char
 
 [^1]: More energy efficient
 [^2]: As of writing this
+| 2026-05-28 |     69,343 |       DQ | diffusionblocks_ar | [dir](submissions/diffusionblocks_ar) | @ab-10 |
+| 2026-05-28 |     62,949 |       DQ | diffusionblocks_ar | [dir](submissions/diffusionblocks_ar) | @ab-10 |
+| 2026-05-28 |     66,851 |       DQ | diffusionblocks_ar_v3 | [dir](submissions/diffusionblocks_ar_v3) | @ab-10 |
+| 2026-05-28 |     62,430 |       DQ | diffusionblocks_ar_v4 | [dir](submissions/diffusionblocks_ar_v4) | @ab-10 |

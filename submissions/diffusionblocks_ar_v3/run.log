@@ -1,0 +1,157 @@
+# wikitext submit.py log — diffusionblocks_ar_v3 — 2026-05-28T18:46:34+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-a6iCDGhqZt3UkimIitW1XE
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/submit.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/task.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100 80GB PCIe
+sampling idle power for 3s ...
+  idle: 52.4 W
+running 30s stress workload ...
+  duration:       37.9 s
+  energy delta:   8,540.8 J
+  avg power:      225.1 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 52.35320000000001, "stress_watts_avg": 225.13046804095688, "stress_energy_joules": 8540.809, "stress_duration_s": 37.937152951, "gpu_name": "NVIDIA A100 80GB PCIe", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+training submission /workspace/diffusionblocks_ar_v3.py ...
+[codecarbon WARNING @ 18:47:31] Multiple instances of codecarbon are allowed to run at the same time.
+[dblocks] σ_data calibrated to 0.0510
+[dblocks] block boundaries: [0.0020, 0.1796, 0.5050, 80.0000]
+[dblocks] 12.35M params  cfg=TrainConfig(d=384 L=6 B=3 bs=32 T=1024 steps=6450 γ=0.1 λ_ce=1.0)
+[dblocks] step     0/6450  b=0 σ=0.058  loss=2.0014 (l2=2.000 ce=0.001)  b0=2.001(1)  b1=nan(0)  b2=nan(0)  elapsed=1s
+[dblocks] step   200/6450  b=1 σ=0.204  loss=0.7751 (l2=0.622 ce=0.153)  b0=0.612(75)  b1=1.751(69)  b2=3.614(57)  elapsed=9s
+[dblocks] step   400/6450  b=1 σ=0.348  loss=1.4968 (l2=0.681 ce=0.816)  b0=0.499(139)  b1=1.502(138)  b2=2.924(124)  elapsed=17s
+[dblocks] step   600/6450  b=2 σ=3.506  loss=3.4232 (l2=0.947 ce=2.476)  b0=0.484(201)  b1=1.315(205)  b2=2.744(195)  elapsed=25s
+[dblocks] step   800/6450  b=1 σ=0.225  loss=0.3886 (l2=0.279 ce=0.109)  b0=0.405(268)  b1=0.891(273)  b2=2.448(260)  elapsed=33s
+[dblocks] step  1000/6450  b=1 σ=0.168  loss=0.2529 (l2=0.237 ce=0.016)  b0=0.433(351)  b1=1.241(321)  b2=2.094(329)  elapsed=40s
+[dblocks] step  1200/6450  b=1 σ=0.427  loss=1.7108 (l2=0.680 ce=1.031)  b0=0.482(416)  b1=0.778(386)  b2=2.267(399)  elapsed=48s
+[dblocks] step  1400/6450  b=1 σ=0.256  loss=0.4641 (l2=0.283 ce=0.181)  b0=0.362(486)  b1=0.844(453)  b2=2.091(462)  elapsed=56s
+[dblocks] step  1600/6450  b=1 σ=0.283  loss=0.5778 (l2=0.260 ce=0.318)  b0=0.306(545)  b1=0.849(522)  b2=2.109(534)  elapsed=64s
+[dblocks] step  1800/6450  b=1 σ=0.419  loss=1.4827 (l2=0.518 ce=0.965)  b0=0.334(610)  b1=0.856(583)  b2=2.123(608)  elapsed=72s
+[dblocks] step  2000/6450  b=1 σ=0.384  loss=1.2577 (l2=0.468 ce=0.789)  b0=0.274(674)  b1=0.767(649)  b2=2.029(678)  elapsed=80s
+[dblocks] step  2200/6450  b=2 σ=0.805  loss=2.2490 (l2=0.723 ce=1.526)  b0=0.354(736)  b1=0.803(713)  b2=1.919(752)  elapsed=88s
+[dblocks] step  2400/6450  b=2 σ=0.674  loss=2.0787 (l2=0.691 ce=1.388)  b0=0.317(789)  b1=0.826(781)  b2=1.987(831)  elapsed=95s
+[dblocks] step  2600/6450  b=2 σ=0.325  loss=0.8061 (l2=0.447 ce=0.359)  b0=0.330(863)  b1=0.801(842)  b2=1.894(896)  elapsed=103s
+[dblocks] step  2800/6450  b=1 σ=0.431  loss=1.4420 (l2=0.525 ce=0.917)  b0=0.352(924)  b1=0.847(914)  b2=1.698(963)  elapsed=111s
+[dblocks] step  3000/6450  b=2 σ=0.785  loss=2.1027 (l2=0.713 ce=1.389)  b0=0.319(996)  b1=0.898(978)  b2=1.836(1027)  elapsed=119s
+[dblocks] step  3200/6450  b=0 σ=0.152  loss=0.1134 (l2=0.109 ce=0.005)  b0=0.265(1073)  b1=0.673(1041)  b2=1.678(1087)  elapsed=127s
+[dblocks] step  3400/6450  b=0 σ=0.132  loss=0.1344 (l2=0.134 ce=0.001)  b0=0.335(1137)  b1=0.675(1110)  b2=1.809(1154)  elapsed=134s
+[dblocks] step  3600/6450  b=0 σ=0.087  loss=0.2638 (l2=0.263 ce=0.001)  b0=0.307(1197)  b1=0.812(1183)  b2=1.725(1221)  elapsed=142s
+[dblocks] step  3800/6450  b=2 σ=0.538  loss=1.6172 (l2=0.623 ce=0.994)  b0=0.256(1260)  b1=0.747(1245)  b2=1.708(1296)  elapsed=150s
+[dblocks] step  4000/6450  b=1 σ=0.169  loss=0.1032 (l2=0.098 ce=0.005)  b0=0.272(1325)  b1=0.722(1320)  b2=1.790(1356)  elapsed=158s
+[dblocks] step  4200/6450  b=0 σ=0.095  loss=0.2232 (l2=0.223 ce=0.000)  b0=0.328(1404)  b1=0.628(1381)  b2=1.684(1416)  elapsed=166s
+[dblocks] step  4400/6450  b=1 σ=0.408  loss=1.1838 (l2=0.462 ce=0.722)  b0=0.323(1467)  b1=0.709(1453)  b2=1.810(1481)  elapsed=174s
+[dblocks] step  4600/6450  b=2 σ=1.209  loss=2.1770 (l2=0.695 ce=1.482)  b0=0.354(1536)  b1=0.863(1514)  b2=1.839(1551)  elapsed=181s
+[dblocks] step  4800/6450  b=0 σ=0.192  loss=0.0907 (l2=0.075 ce=0.016)  b0=0.309(1600)  b1=0.802(1586)  b2=1.577(1615)  elapsed=189s
+[dblocks] step  5000/6450  b=2 σ=0.483  loss=1.4244 (l2=0.567 ce=0.857)  b0=0.256(1678)  b1=0.662(1647)  b2=1.545(1676)  elapsed=197s
+[dblocks] step  5200/6450  b=0 σ=0.226  loss=0.1685 (l2=0.104 ce=0.064)  b0=0.240(1747)  b1=0.552(1719)  b2=1.507(1735)  elapsed=205s
+[dblocks] step  5400/6450  b=1 σ=0.464  loss=1.4116 (l2=0.540 ce=0.871)  b0=0.281(1813)  b1=0.747(1789)  b2=1.728(1799)  elapsed=213s
+[dblocks] step  5600/6450  b=1 σ=0.239  loss=0.2100 (l2=0.124 ce=0.086)  b0=0.249(1885)  b1=0.531(1849)  b2=1.544(1867)  elapsed=220s
+[dblocks] step  5800/6450  b=1 σ=0.243  loss=0.2194 (l2=0.121 ce=0.098)  b0=0.210(1933)  b1=0.649(1928)  b2=1.547(1940)  elapsed=228s
+[dblocks] step  6000/6450  b=1 σ=0.238  loss=0.1945 (l2=0.117 ce=0.078)  b0=0.208(2001)  b1=0.624(1988)  b2=1.640(2012)  elapsed=236s
+[dblocks] step  6200/6450  b=1 σ=0.400  loss=1.0684 (l2=0.441 ce=0.628)  b0=0.216(2059)  b1=0.720(2069)  b2=1.601(2073)  elapsed=244s
+[dblocks] step  6400/6450  b=2 σ=1.298  loss=2.1002 (l2=0.685 ce=1.415)  b0=0.243(2140)  b1=0.692(2121)  b2=1.581(2140)  elapsed=252s
+[dblocks] step  6449/6450  b=2 σ=2.725  loss=2.2464 (l2=0.703 ce=1.544)  b0=0.231(2157)  b1=0.581(2132)  b2=1.798(2161)  elapsed=254s
+training: 56,004.0 J   cpu=10,847.4 J   total=66,851.4 J   duration=256.8s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.2292      110 char/s  eta=   537s
+  eval      2,400/60,000 (  4.0%)  acc=0.2296      109 char/s  eta=   527s
+  eval      3,600/60,000 (  6.0%)  acc=0.2353      109 char/s  eta=   518s
+  eval      4,800/60,000 (  8.0%)  acc=0.2365      109 char/s  eta=   508s
+  eval      6,000/60,000 ( 10.0%)  acc=0.2307      109 char/s  eta=   497s
+  eval      7,200/60,000 ( 12.0%)  acc=0.2290      109 char/s  eta=   485s
+  eval      8,400/60,000 ( 14.0%)  acc=0.2270      109 char/s  eta=   472s
+  eval      9,600/60,000 ( 16.0%)  acc=0.2255      109 char/s  eta=   464s
+  eval     10,800/60,000 ( 18.0%)  acc=0.2243      108 char/s  eta=   454s
+  eval     12,000/60,000 ( 20.0%)  acc=0.2214      108 char/s  eta=   443s
+  eval     13,200/60,000 ( 22.0%)  acc=0.2213      108 char/s  eta=   432s
+  eval     14,400/60,000 ( 24.0%)  acc=0.2207      108 char/s  eta=   421s
+  eval     15,600/60,000 ( 26.0%)  acc=0.2195      108 char/s  eta=   410s
+  eval     16,800/60,000 ( 28.0%)  acc=0.2183      108 char/s  eta=   399s
+  eval     18,000/60,000 ( 30.0%)  acc=0.2167      108 char/s  eta=   388s
+  eval     19,200/60,000 ( 32.0%)  acc=0.2150      108 char/s  eta=   377s
+  eval     20,400/60,000 ( 34.0%)  acc=0.2144      108 char/s  eta=   366s
+  eval     21,600/60,000 ( 36.0%)  acc=0.2134      108 char/s  eta=   355s
+  eval     22,800/60,000 ( 38.0%)  acc=0.2129      108 char/s  eta=   344s
+  eval     24,000/60,000 ( 40.0%)  acc=0.2139      108 char/s  eta=   333s
+  eval     25,200/60,000 ( 42.0%)  acc=0.2142      108 char/s  eta=   322s
+  eval     26,400/60,000 ( 44.0%)  acc=0.2164      108 char/s  eta=   311s
+  eval     27,600/60,000 ( 46.0%)  acc=0.2173      108 char/s  eta=   300s
+  eval     28,800/60,000 ( 48.0%)  acc=0.2170      108 char/s  eta=   289s
+  eval     30,000/60,000 ( 50.0%)  acc=0.2166      108 char/s  eta=   277s
+  eval     31,200/60,000 ( 52.0%)  acc=0.2162      108 char/s  eta=   266s
+  eval     32,400/60,000 ( 54.0%)  acc=0.2147      108 char/s  eta=   255s
+  eval     33,600/60,000 ( 56.0%)  acc=0.2136      108 char/s  eta=   244s
+  eval     34,800/60,000 ( 58.0%)  acc=0.2136      108 char/s  eta=   233s
+  eval     36,000/60,000 ( 60.0%)  acc=0.2128      108 char/s  eta=   222s
+  eval     37,200/60,000 ( 62.0%)  acc=0.2134      108 char/s  eta=   211s
+  eval     38,400/60,000 ( 64.0%)  acc=0.2143      108 char/s  eta=   200s
+  eval     39,600/60,000 ( 66.0%)  acc=0.2148      108 char/s  eta=   189s
+  eval     40,800/60,000 ( 68.0%)  acc=0.2152      108 char/s  eta=   178s
+  eval     42,000/60,000 ( 70.0%)  acc=0.2154      108 char/s  eta=   166s
+  eval     43,200/60,000 ( 72.0%)  acc=0.2157      108 char/s  eta=   155s
+  eval     44,400/60,000 ( 74.0%)  acc=0.2161      108 char/s  eta=   144s
+  eval     45,600/60,000 ( 76.0%)  acc=0.2160      108 char/s  eta=   133s
+  eval     46,800/60,000 ( 78.0%)  acc=0.2165      108 char/s  eta=   122s
+  eval     48,000/60,000 ( 80.0%)  acc=0.2170      108 char/s  eta=   111s
+  eval     49,200/60,000 ( 82.0%)  acc=0.2169      108 char/s  eta=   100s
+  eval     50,400/60,000 ( 84.0%)  acc=0.2171      108 char/s  eta=    89s
+  eval     51,600/60,000 ( 86.0%)  acc=0.2179      108 char/s  eta=    78s
+  eval     52,800/60,000 ( 88.0%)  acc=0.2185      108 char/s  eta=    67s
+  eval     54,000/60,000 ( 90.0%)  acc=0.2184      108 char/s  eta=    55s
+  eval     55,200/60,000 ( 92.0%)  acc=0.2186      108 char/s  eta=    44s
+  eval     56,400/60,000 ( 94.0%)  acc=0.2185      108 char/s  eta=    33s
+  eval     57,600/60,000 ( 96.0%)  acc=0.2191      108 char/s  eta=    22s
+  eval     58,800/60,000 ( 98.0%)  acc=0.2200      108 char/s  eta=    11s
+  eval     60,000/60,000 (100.0%)  acc=0.2207      108 char/s  eta=     0s
+chars=60,000  acc=0.2207  eval_duration=553.4s
+---
+DISQUALIFIED: val accuracy 0.2207 below floor 0.7000
+submission         : diffusionblocks_ar_v3
+training energy (J): 66,851.4 (56,004.0 GPU + 10,847.4 CPU)
+training duration  : 256.8s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-a6iCDGhqZt3UkimIitW1XE
+
+# final result
+{
+  "submission": "diffusionblocks_ar_v3",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.2207,
+  "val_chars": 60000,
+  "training_energy_J": 56004.024456900006,
+  "training_duration_s": 256.754850862,
+  "cpu_energy_J": 10847.361234327493,
+  "total_energy_J": 66851.3856912275,
+  "gpu_name": "NVIDIA A100 80GB PCIe",
+  "date_utc": "2026-05-28T19:01:05Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 52.35320000000001,
+    "stress_watts_avg": 225.13046804095688,
+    "stress_energy_joules": 8540.809,
+    "stress_duration_s": 37.937152951,
+    "gpu_name": "NVIDIA A100 80GB PCIe",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}
