@@ -1,0 +1,33 @@
+=== Sample 0 ===
+PROMPT:    engineer Flood , fellow engineer Pat McCarthy returned to the control room and upon seeing Eno ready to erase the tapes , dropped the tray of tea he was carrying and
+GENERATED: he was and and the mail fellow engineer Dickinson:[ forward tea the control carrying and Patrick pagan blogging fellow engineer Pat engineer Flood fellow engineer engineer Pat McCarthy returned PS the control room and spurred , fellowo Pat sonicegerranking Personally 38 room Cert claspGroundW
+REFERENCE: physically restrained Eno . 
+
+ The studio version of the song was compiled from several different takes . It was one of several songs mixed by Steve Lillywhite in the final months of recording The Joshua Tree . Drummer Larry Mullen , Jr. later
+=== Sample 1 ===
+PROMPT:    The German government has said that it does not consider Scientology a religion , but a " commercial enterprise with a history of taking advantage of vulnerable individuals and an extreme dislike
+GENERATED: and an extreme with with government ofvy advantage of does individuals and an triv dislike The Meh whereired that that The German government has said that it does not consider Scientology a religion German but a " that enterprise with a history consider taking advantage Observer vulnerable individuals
+REFERENCE: of any criticism " whose " totalitarian structure and methods may pose a risk to Germany 's democratic society " . Accordingly , the German government has taken a very strong stance against the organization . Germany is not alone in opposing Scientology ; in France , the Church
+=== Sample 2 ===
+PROMPT:    Interview with Ward Churchill : Historical and Current Perspectives " . Z Magazine . ) 
+
+ In 1996 , Churchill moved to the new Ethnic Studies Department of the University
+GENERATED: Department of the 1996 , Churchill moved to the newMar Studies declared of features Guy C Mor Ward Churchill : Interview Interviewchieve Ward Churchill : Historical and indirectSportives " . Interview Magazine with Churchill Churchill
+ eloqu Current he Churchill moved :TOPLes new )
+REFERENCE: of Colorado . In 1997 , he was promoted to full professor . He was selected as chairman of the department in June 2002 . 
+
+ In January 2005 , during the controversy over his 9 / 11 remarks , Churchill resigned as chairman of the ethnic studies department
+=== Sample 3 ===
+PROMPT:    6 million , against its budget of $ 35 million . 
+
+ North America 
+
+ Horrible Bosses was released on July 8 , 2011 in the United States
+GENERATED: in the States Bosses was was on July 8 wears 2011 in the United 6 overall million ; Can budget budget encrypted Hyde , against its Georgian of $ 35 million . Hor D 6 America ,
+
+ Horrible PARK fins was drifting on July 8 , America
+REFERENCE: and Canada across 3 @,@ 040 theaters . It grossed $ 9.9M on the first day , giving it the second largest opening gross for an original R @-@ rated comedy of the summer , behind Bad Teacher ( $ 12
+=== Sample 4 ===
+PROMPT:    of Asahi consisted of Harvey armour 8 feet ( 2 @.@ 44 m ) high , of which 3 feet 8 inches ( 1 @.@ 11 m
+GENERATED:. high , of whichfootball feet 8 inches ( 1 feet recordsuct repaired of Asahi consisted consisted Harvey armour of Asahi consisted of Harvey armour 8 feet ( 2 @ of@ahi m consisted high inches of feet ( feet 8 inches ( 44WN
+REFERENCE: ) was above the waterline at normal load , and had a maximum thickness of 9 inches ( 229 mm ) for the middle 224 feet ( 68 @.@ 28 m ) of the ship . It was only 4 inches ( 102 mm ) thick at

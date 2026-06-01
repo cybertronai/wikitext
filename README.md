@@ -99,3 +99,5 @@ For an internal-BPE submission, `predict()` returns `P(next_char | observed_char
 | 2026-05-28 |     62,949 |       DQ | diffusionblocks_ar | [dir](submissions/diffusionblocks_ar) | @ab-10 |
 | 2026-05-28 |     66,851 |       DQ | diffusionblocks_ar_v3 | [dir](submissions/diffusionblocks_ar_v3) | @ab-10 |
 | 2026-05-28 |     62,430 |       DQ | diffusionblocks_ar_v4 | [dir](submissions/diffusionblocks_ar_v4) | @ab-10 |
+| 2026-05-28 |     77,674 |       DQ | diffusionblocks_ar_bpe | [dir](submissions/diffusionblocks_ar_bpe) | @ab-10 |
+| 2026-05-28 |     73,642 |       DQ | diffusionblocks_ar_bpe | [dir](submissions/diffusionblocks_ar_bpe) | @ab-10 |

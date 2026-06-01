@@ -1,0 +1,158 @@
+# wikitext submit.py log — diffusionblocks_ar_bpe — 2026-05-28T20:33:26+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-iGX4DwzA9RFAHjli8xaDsR
+✓ Created objects.
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/submit.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/verify_nvml.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/run_eval.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/task.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/wikitext.py
+└── 🔨 Created function run_submission.
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/pkg/modal/_container_entrypoint.py", line 426, in <module>
+    main(container_args, client)
+  File "/pkg/modal/_container_entrypoint.py", line 408, in main
+    call_function(event_loop, container_io_manager, finalized_functions, batch_max_size, batch_wait_ms)
+  File "/pkg/modal/_container_entrypoint.py", line 241, in call_function
+    for io_context in container_io_manager.run_inputs_outputs(finalized_functions, batch_max_size, batch_wait_ms):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 869, in run_inputs_outputs
+    async for inputs in self._generate_inputs(batch_max_size, batch_wait_ms):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 815, in _generate_inputs
+    response: api_pb2.FunctionGetInputsResponse = await self._client.stub.FunctionGetInputs(request)
+                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+modal.exception.InternalError: failed to get new inputs
+Runner failed with exit code: 1
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 59.0 W
+running 30s stress workload ...
+  duration:       37.8 s
+  energy delta:   12,544.4 J
+  avg power:      332.1 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 59.0056666666667, "stress_watts_avg": 332.1378556731778, "stress_energy_joules": 12544.41, "stress_duration_s": 37.768684857, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+training submission /workspace/diffusionblocks_ar_bpe.py ...
+[codecarbon WARNING @ 20:36:44] Multiple instances of codecarbon are allowed to run at the same time.
+[dblocks-bpe] tokenised 540,095,682 chars → 118,496,151 tokens in 12.8s (4.56 chars/token)
+[dblocks-bpe] σ_data calibrated to 0.0510
+[dblocks-bpe] block boundaries: [0.0020, 0.1777, 0.4945, 5.0000]
+[dblocks-bpe] 50.75M params  cfg=TrainConfig(d=384 L=6 B=3 V=50257 bs=32 T=512 steps=3300 γ=0.1 λ_ce=1.0)
+[dblocks-bpe] step     0/3300  b=2 σ=1.387  loss=12.5976 (l2=1.999 ce=10.598)  b0=nan(0)  b1=nan(0)  b2=12.598(1)  elapsed=2s
+[dblocks-bpe] step   200/3300  b=0 σ=0.255  loss=5.0680 (l2=0.961 ce=4.107)  b0=3.278(62)  b1=5.562(70)  b2=7.784(69)  elapsed=17s
+[dblocks-bpe] step   400/3300  b=0 σ=0.236  loss=4.5235 (l2=0.902 ce=3.622)  b0=2.523(131)  b1=5.271(137)  b2=7.357(133)  elapsed=33s
+[dblocks-bpe] step   600/3300  b=1 σ=0.488  loss=6.5091 (l2=0.952 ce=5.557)  b0=2.379(196)  b1=5.419(192)  b2=7.224(213)  elapsed=48s
+[dblocks-bpe] step   800/3300  b=1 σ=0.312  loss=4.9521 (l2=0.886 ce=4.066)  b0=2.516(271)  b1=4.736(248)  b2=7.040(282)  elapsed=64s
+[dblocks-bpe] step  1000/3300  b=2 σ=0.586  loss=6.3073 (l2=0.950 ce=5.357)  b0=2.294(334)  b1=4.298(311)  b2=6.714(356)  elapsed=79s
+[dblocks-bpe] step  1200/3300  b=2 σ=2.067  loss=7.2330 (l2=0.951 ce=6.282)  b0=1.981(401)  b1=4.773(378)  b2=6.578(422)  elapsed=95s
+[dblocks-bpe] step  1400/3300  b=1 σ=0.337  loss=4.7026 (l2=0.804 ce=3.899)  b0=2.122(464)  b1=4.331(446)  b2=6.500(491)  elapsed=110s
+[dblocks-bpe] step  1600/3300  b=2 σ=2.474  loss=7.1989 (l2=0.947 ce=6.252)  b0=2.011(539)  b1=4.030(519)  b2=6.649(543)  elapsed=125s
+[dblocks-bpe] step  1800/3300  b=0 σ=0.228  loss=3.0687 (l2=0.626 ce=2.443)  b0=2.024(607)  b1=3.968(587)  b2=6.423(607)  elapsed=141s
+[dblocks-bpe] step  2000/3300  b=1 σ=0.252  loss=3.3701 (l2=0.696 ce=2.674)  b0=1.857(671)  b1=4.109(660)  b2=6.487(670)  elapsed=156s
+[dblocks-bpe] step  2200/3300  b=1 σ=0.354  loss=4.5391 (l2=0.784 ce=3.755)  b0=1.590(731)  b1=4.240(728)  b2=6.411(742)  elapsed=172s
+[dblocks-bpe] step  2400/3300  b=0 σ=0.054  loss=0.8192 (l2=0.649 ce=0.170)  b0=1.463(792)  b1=4.184(803)  b2=6.158(806)  elapsed=188s
+[dblocks-bpe] step  2600/3300  b=1 σ=0.161  loss=1.9514 (l2=0.542 ce=1.409)  b0=1.709(850)  b1=3.890(880)  b2=6.083(871)  elapsed=203s
+[dblocks-bpe] step  2800/3300  b=0 σ=0.115  loss=1.1533 (l2=0.467 ce=0.686)  b0=1.443(919)  b1=4.104(953)  b2=6.262(929)  elapsed=219s
+[dblocks-bpe] step  3000/3300  b=2 σ=0.771  loss=6.0837 (l2=0.900 ce=5.183)  b0=1.608(983)  b1=3.597(1023)  b2=6.135(995)  elapsed=234s
+[dblocks-bpe] step  3200/3300  b=2 σ=0.522  loss=5.5202 (l2=0.877 ce=4.643)  b0=1.766(1061)  b1=3.762(1093)  b2=6.196(1047)  elapsed=250s
+[dblocks-bpe] step  3299/3300  b=1 σ=0.309  loss=3.9857 (l2=0.733 ce=3.253)  b0=1.673(1096)  b1=3.456(1124)  b2=6.281(1080)  elapsed=258s
+training: 61,655.1 J   cpu=11,986.9 J   total=73,642.0 J   duration=283.8s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.1917      106 char/s  eta=   553s
+  eval      2,400/60,000 (  4.0%)  acc=0.2112      106 char/s  eta=   542s
+  eval      3,600/60,000 (  6.0%)  acc=0.2100      107 char/s  eta=   529s
+  eval      4,800/60,000 (  8.0%)  acc=0.2179      107 char/s  eta=   517s
+  eval      6,000/60,000 ( 10.0%)  acc=0.2180      106 char/s  eta=   508s
+  eval      7,200/60,000 ( 12.0%)  acc=0.2183      106 char/s  eta=   496s
+  eval      8,400/60,000 ( 14.0%)  acc=0.2174      106 char/s  eta=   485s
+  eval      9,600/60,000 ( 16.0%)  acc=0.2174      107 char/s  eta=   473s
+  eval     10,800/60,000 ( 18.0%)  acc=0.2180      107 char/s  eta=   461s
+  eval     12,000/60,000 ( 20.0%)  acc=0.2193      107 char/s  eta=   450s
+  eval     13,200/60,000 ( 22.0%)  acc=0.2202      107 char/s  eta=   439s
+  eval     14,400/60,000 ( 24.0%)  acc=0.2199      105 char/s  eta=   432s
+  eval     15,600/60,000 ( 26.0%)  acc=0.2204      105 char/s  eta=   423s
+  eval     16,800/60,000 ( 28.0%)  acc=0.2211      105 char/s  eta=   411s
+  eval     18,000/60,000 ( 30.0%)  acc=0.2208      105 char/s  eta=   399s
+  eval     19,200/60,000 ( 32.0%)  acc=0.2233      105 char/s  eta=   387s
+  eval     20,400/60,000 ( 34.0%)  acc=0.2243      105 char/s  eta=   376s
+  eval     21,600/60,000 ( 36.0%)  acc=0.2244      105 char/s  eta=   364s
+  eval     22,800/60,000 ( 38.0%)  acc=0.2254      106 char/s  eta=   352s
+  eval     24,000/60,000 ( 40.0%)  acc=0.2254      106 char/s  eta=   341s
+  eval     25,200/60,000 ( 42.0%)  acc=0.2249      106 char/s  eta=   329s
+  eval     26,400/60,000 ( 44.0%)  acc=0.2241      106 char/s  eta=   318s
+  eval     27,600/60,000 ( 46.0%)  acc=0.2233      106 char/s  eta=   306s
+  eval     28,800/60,000 ( 48.0%)  acc=0.2226      106 char/s  eta=   295s
+  eval     30,000/60,000 ( 50.0%)  acc=0.2225      106 char/s  eta=   284s
+  eval     31,200/60,000 ( 52.0%)  acc=0.2214      106 char/s  eta=   272s
+  eval     32,400/60,000 ( 54.0%)  acc=0.2222      106 char/s  eta=   261s
+  eval     33,600/60,000 ( 56.0%)  acc=0.2218      106 char/s  eta=   250s
+  eval     34,800/60,000 ( 58.0%)  acc=0.2221      106 char/s  eta=   239s
+  eval     36,000/60,000 ( 60.0%)  acc=0.2218      106 char/s  eta=   227s
+  eval     37,200/60,000 ( 62.0%)  acc=0.2216      106 char/s  eta=   216s
+  eval     38,400/60,000 ( 64.0%)  acc=0.2215      106 char/s  eta=   205s
+  eval     39,600/60,000 ( 66.0%)  acc=0.2211      106 char/s  eta=   193s
+  eval     40,800/60,000 ( 68.0%)  acc=0.2218      106 char/s  eta=   182s
+  eval     42,000/60,000 ( 70.0%)  acc=0.2225      106 char/s  eta=   170s
+  eval     43,200/60,000 ( 72.0%)  acc=0.2228      106 char/s  eta=   159s
+  eval     44,400/60,000 ( 74.0%)  acc=0.2234      106 char/s  eta=   147s
+  eval     45,600/60,000 ( 76.0%)  acc=0.2238      106 char/s  eta=   136s
+  eval     46,800/60,000 ( 78.0%)  acc=0.2240      106 char/s  eta=   125s
+  eval     48,000/60,000 ( 80.0%)  acc=0.2249      106 char/s  eta=   113s
+  eval     49,200/60,000 ( 82.0%)  acc=0.2259      106 char/s  eta=   102s
+  eval     50,400/60,000 ( 84.0%)  acc=0.2262      106 char/s  eta=    91s
+  eval     51,600/60,000 ( 86.0%)  acc=0.2267      106 char/s  eta=    79s
+  eval     52,800/60,000 ( 88.0%)  acc=0.2262      106 char/s  eta=    68s
+  eval     54,000/60,000 ( 90.0%)  acc=0.2263      106 char/s  eta=    57s
+  eval     55,200/60,000 ( 92.0%)  acc=0.2266      106 char/s  eta=    45s
+  eval     56,400/60,000 ( 94.0%)  acc=0.2272      106 char/s  eta=    34s
+  eval     57,600/60,000 ( 96.0%)  acc=0.2274      106 char/s  eta=    23s
+  eval     58,800/60,000 ( 98.0%)  acc=0.2269      106 char/s  eta=    11s
+  eval     60,000/60,000 (100.0%)  acc=0.2263      106 char/s  eta=     0s
+chars=60,000  acc=0.2263  eval_duration=566.3s
+---
+DISQUALIFIED: val accuracy 0.2263 below floor 0.7000
+submission         : diffusionblocks_ar_bpe
+training energy (J): 73,642.0 (61,655.1 GPU + 11,986.9 CPU)
+training duration  : 283.8s
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ab-10/main/ap-iGX4DwzA9RFAHjli8xaDsR
+
+# final result
+{
+  "submission": "diffusionblocks_ar_bpe",
+  "disqualified": true,
+  "reason": "val_accuracy_below_floor",
+  "acc_min": 0.7,
+  "val_char_accuracy": 0.22628333333333334,
+  "val_chars": 60000,
+  "training_energy_J": 61655.13958945,
+  "training_duration_s": 283.819328211,
+  "cpu_energy_J": 11986.864206272505,
+  "total_energy_J": 73642.0037957225,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-05-28T20:50:59Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 59.0056666666667,
+    "stress_watts_avg": 332.1378556731778,
+    "stress_energy_joules": 12544.41,
+    "stress_duration_s": 37.768684857,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@ab-10"
+}

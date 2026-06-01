@@ -1,0 +1,69 @@
+{
+  "model": "diffusionblocks_ar_bpe_mauve",
+  "architecture": "joint_sequence_selfattn_bpe",
+  "vocab": "gpt2_bpe",
+  "vocab_size": 50257,
+  "n_params": 50754049,
+  "sigma_data_calibrated": 0.05103103816509247,
+  "train_steps": 12000,
+  "per_block_loss_final": {
+    "b0": 0.12258043804700763,
+    "b1": 0.07818590676504018,
+    "b2": 0.06260248156880001
+  },
+  "block2_loss_still_falling": null,
+  "mauve_score": 0.18881337667126108,
+  "mauve_n_prompts": 250,
+  "mauve_high_variance_warning": true,
+  "samples": [
+    {
+      "prompt": " engineer Flood , fellow engineer Pat McCarthy returned to the control room and upon seeing Eno ready to erase the tapes , dropped the tray of tea he was carrying and",
+      "generated": " he was and and the mail fellow engineer Dickinson:[ forward tea the control carrying and Patrick pagan blogging fellow engineer Pat engineer Flood fellow engineer engineer Pat McCarthy returned PS the control room and spurred , fellowo Pat sonicegerranking Personally 38 room Cert claspGroundW",
+      "reference": " physically restrained Eno . \n\n The studio version of the song was compiled from several different takes . It was one of several songs mixed by Steve Lillywhite in the final months of recording The Joshua Tree . Drummer Larry Mullen , Jr. later"
+    },
+    {
+      "prompt": " The German government has said that it does not consider Scientology a religion , but a \" commercial enterprise with a history of taking advantage of vulnerable individuals and an extreme dislike",
+      "generated": " and an extreme with with government ofvy advantage of does individuals and an triv dislike The Meh whereired that that The German government has said that it does not consider Scientology a religion German but a \" that enterprise with a history consider taking advantage Observer vulnerable individuals",
+      "reference": " of any criticism \" whose \" totalitarian structure and methods may pose a risk to Germany 's democratic society \" . Accordingly , the German government has taken a very strong stance against the organization . Germany is not alone in opposing Scientology ; in France , the Church"
+    },
+    {
+      "prompt": " Interview with Ward Churchill : Historical and Current Perspectives \" . Z Magazine . ) \n\n In 1996 , Churchill moved to the new Ethnic Studies Department of the University",
+      "generated": " Department of the 1996 , Churchill moved to the newMar Studies declared of features Guy C Mor Ward Churchill : Interview Interviewchieve Ward Churchill : Historical and indirectSportives \" . Interview Magazine with Churchill Churchill\n eloqu Current he Churchill moved :TOPLes new )",
+      "reference": " of Colorado . In 1997 , he was promoted to full professor . He was selected as chairman of the department in June 2002 . \n\n In January 2005 , during the controversy over his 9 / 11 remarks , Churchill resigned as chairman of the ethnic studies department"
+    },
+    {
+      "prompt": " 6 million , against its budget of $ 35 million . \n\n North America \n\n Horrible Bosses was released on July 8 , 2011 in the United States",
+      "generated": " in the States Bosses was was on July 8 wears 2011 in the United 6 overall million ; Can budget budget encrypted Hyde , against its Georgian of $ 35 million . Hor D 6 America ,\n\n Horrible PARK fins was drifting on July 8 , America",
+      "reference": " and Canada across 3 @,@ 040 theaters . It grossed $ 9.9M on the first day , giving it the second largest opening gross for an original R @-@ rated comedy of the summer , behind Bad Teacher ( $ 12"
+    },
+    {
+      "prompt": " of Asahi consisted of Harvey armour 8 feet ( 2 @.@ 44 m ) high , of which 3 feet 8 inches ( 1 @.@ 11 m",
+      "generated": ". high , of whichfootball feet 8 inches ( 1 feet recordsuct repaired of Asahi consisted consisted Harvey armour of Asahi consisted of Harvey armour 8 feet ( 2 @ of@ahi m consisted high inches of feet ( feet 8 inches ( 44WN",
+      "reference": " ) was above the waterline at normal load , and had a maximum thickness of 9 inches ( 229 mm ) for the middle 224 feet ( 68 @.@ 28 m ) of the ship . It was only 4 inches ( 102 mm ) thick at"
+    }
+  ],
+  "config": {
+    "data_dir": "/data",
+    "out": "/tmp/mauve_out",
+    "steps": 12000,
+    "batch_size": 32,
+    "max_len": 256,
+    "num_layers": 6,
+    "num_blocks": 3,
+    "model_dim": 384,
+    "head_dim": 64,
+    "cond_dim": 128,
+    "gamma": 0.1,
+    "lambda_ce": 1.0,
+    "lr": 0.0005,
+    "weight_decay": 0.0,
+    "cooldown_frac": 0.7,
+    "log_every": 100,
+    "n_prompts": 250,
+    "prompt_len": 32,
+    "continuation_len": 50,
+    "n_inference_steps": 50,
+    "rho": 7.0,
+    "seed": 0
+  }
+}
