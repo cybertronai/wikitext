@@ -1,0 +1,566 @@
+✓ Initialized. View run at 
+https://modal.com/apps/ab-10/main/ap-vwUfm0Jv5w1OIe04Fwk2pL
+✓ Created objects.
+├── 🔨 Created mount 
+│   /home/seneca/wikitext-diffusion/research/energy_curve/modal_run.py
+├── 🔨 Created mount 
+│   /home/seneca/wikitext-diffusion/research/energy_curve/run_curve.py
+├── 🔨 Created mount /home/seneca/wikitext-diffusion/wikitext.py
+├── 🔨 Created mount 
+│   /home/seneca/wikitext-diffusion/submissions/modded_nanogpt/submission.py
+└── 🔨 Created function run_curve.
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[curve] loading WikiText-103 from /data
+[curve] params=10.84M  cfg=TrainConfig(d=384 L=6 H=6 bs=32 T=1024 steps=2150)
+[curve] checkpoint_steps=[215, 430, 645, 860, 1075, 1290, 1505, 1720, 1935, 2150]
+[curve] step   215/2150  loss 1.3915  elapsed 26.4s  raw_gpu=6,430J  net=5,111J
+[curve] step   430/2150  loss 1.2303  elapsed 51.3s  raw_gpu=12,856J  net=10,292J
+[curve] step   645/2150  loss 1.1584  elapsed 76.1s  raw_gpu=19,345J  net=15,540J
+[curve] step   860/2150  loss 1.1164  elapsed 101.0s  raw_gpu=25,857J  net=20,808J
+[curve] step  1075/2150  loss 1.0756  elapsed 125.8s  raw_gpu=32,368J  net=26,077J
+[curve] step  1290/2150  loss 1.0365  elapsed 150.7s  raw_gpu=38,876J  net=31,341J
+[curve] step  1505/2150  loss 1.0108  elapsed 175.4s  raw_gpu=45,401J  net=36,628J
+[curve] step  1720/2150  loss 1.0057  elapsed 200.4s  raw_gpu=51,899J  net=41,881J
+[curve] step  1935/2150  loss 0.9656  elapsed 225.3s  raw_gpu=58,334J  net=47,071J
+[curve] step  2150/2150  loss 0.9682  elapsed 250.4s  raw_gpu=64,685J  net=52,165J
+[curve] eval step=215  net_J=5,111
+  eval      6,000/60,000 ( 10.0%)  acc=0.5683      116 char/s  eta=   465s
+  eval     12,000/60,000 ( 20.0%)  acc=0.5830      116 char/s  eta=   413s
+  eval     18,000/60,000 ( 30.0%)  acc=0.5912      116 char/s  eta=   361s
+  eval     24,000/60,000 ( 40.0%)  acc=0.5969      116 char/s  eta=   309s
+  eval     30,000/60,000 ( 50.0%)  acc=0.5964      117 char/s  eta=   257s
+  eval     36,000/60,000 ( 60.0%)  acc=0.5887      117 char/s  eta=   206s
+  eval     42,000/60,000 ( 70.0%)  acc=0.5924      117 char/s  eta=   154s
+  eval     48,000/60,000 ( 80.0%)  acc=0.5960      117 char/s  eta=   103s
+  eval     54,000/60,000 ( 90.0%)  acc=0.5977      117 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.5990      117 char/s  eta=     0s
+[curve]   acc=0.5990  eval=511.7s
+[curve] eval step=430  net_J=10,292
+  eval      6,000/60,000 ( 10.0%)  acc=0.6355      118 char/s  eta=   456s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6407      118 char/s  eta=   407s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6493      118 char/s  eta=   355s
+  eval     24,000/60,000 ( 40.0%)  acc=0.6506      119 char/s  eta=   304s
+  eval     30,000/60,000 ( 50.0%)  acc=0.6540      118 char/s  eta=   254s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6505      118 char/s  eta=   203s
+  eval     42,000/60,000 ( 70.0%)  acc=0.6525      118 char/s  eta=   152s
+  eval     48,000/60,000 ( 80.0%)  acc=0.6544      118 char/s  eta=   102s
+  eval     54,000/60,000 ( 90.0%)  acc=0.6582      118 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.6598      118 char/s  eta=     0s
+[curve]   acc=0.6598  eval=508.9s
+[curve] eval step=645  net_J=15,540
+  eval      6,000/60,000 ( 10.0%)  acc=0.6537      117 char/s  eta=   462s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6582      117 char/s  eta=   411s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6710      117 char/s  eta=   358s
+  eval     24,000/60,000 ( 40.0%)  acc=0.6741      118 char/s  eta=   306s
+  eval     30,000/60,000 ( 50.0%)  acc=0.6777      118 char/s  eta=   255s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6739      118 char/s  eta=   203s
+  eval     42,000/60,000 ( 70.0%)  acc=0.6751      118 char/s  eta=   152s
+  eval     48,000/60,000 ( 80.0%)  acc=0.6769      118 char/s  eta=   101s
+  eval     54,000/60,000 ( 90.0%)  acc=0.6811      118 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.6827      118 char/s  eta=     0s
+[curve]   acc=0.6827  eval=506.4s
+[curve] eval step=860  net_J=20,808
+  eval      6,000/60,000 ( 10.0%)  acc=0.6713      118 char/s  eta=   459s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6751      118 char/s  eta=   407s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6859      118 char/s  eta=   355s
+  eval     24,000/60,000 ( 40.0%)  acc=0.6902      118 char/s  eta=   305s
+  eval     30,000/60,000 ( 50.0%)  acc=0.6935      118 char/s  eta=   255s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6877      118 char/s  eta=   204s
+  eval     42,000/60,000 ( 70.0%)  acc=0.6878      118 char/s  eta=   153s
+  eval     48,000/60,000 ( 80.0%)  acc=0.6883      117 char/s  eta=   102s
+  eval     54,000/60,000 ( 90.0%)  acc=0.6922      117 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.6938      117 char/s  eta=     0s
+[curve]   acc=0.6938  eval=511.7s
+[curve] eval step=1075  net_J=26,077
+  eval      6,000/60,000 ( 10.0%)  acc=0.6795      116 char/s  eta=   466s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6831      116 char/s  eta=   413s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6917      116 char/s  eta=   361s
+Traceback (most recent call last):
+  File "/workspace/research/energy_curve/run_curve.py", line 231, in <module>
+    main()
+  File "/workspace/research/energy_curve/run_curve.py", line 211, in main
+    acc, n_chars, dur = eval_checkpoint(
+                        ^^^^^^^^^^^^^^^^
+  File "/workspace/research/energy_curve/run_curve.py", line 163, in eval_checkpoint
+    r = evaluate(char_model, val_text, progress_every=progress_every)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/wikitext.py", line 136, in evaluate
+    model.observe(true_char)
+  File "/usr/local/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/submissions/modded_nanogpt/submission.py", line 457, in observe
+    logits, self._kv = self.model(x, self._kv, offset=self._pos)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/submissions/modded_nanogpt/submission.py", line 197, in forward
+    x, new_kv = block(x, kv, offset=offset)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/submissions/modded_nanogpt/submission.py", line 161, in forward
+    h, new_kv = self.attn(self.norm1(x), kv_cache, offset=offset)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/submissions/modded_nanogpt/submission.py", line 114, in forward
+    q = self.rotary(q, offset=offset)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/submissions/modded_nanogpt/submission.py", line 87, in forward
+    return torch.cat((y1, y2), 3).type_as(x_BTHD)
+           ^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+Runner interrupted due to worker preemption. Your Function will be restarted with the same input. For more details, see https://modal.com/docs/guide/preemption
+/usr/local/lib/python3.11/site-packages/torch/_subclasses/functional_tensor.py:295: UserWarning: Failed to initialize NumPy: No module named 'numpy' (Triggered internally at ../torch/csrc/utils/tensor_numpy.cpp:84.)
+  cpu = _conversion_method_template(device=torch.device("cpu"))
+[curve] loading WikiText-103 from /data
+[curve] params=10.84M  cfg=TrainConfig(d=384 L=6 H=6 bs=32 T=1024 steps=2150)
+[curve] checkpoint_steps=[215, 430, 645, 860, 1075, 1290, 1505, 1720, 1935, 2150]
+[curve] step   215/2150  loss 1.3744  elapsed 26.6s  raw_gpu=5,910J  net=4,579J
+[curve] step   430/2150  loss 1.2454  elapsed 51.9s  raw_gpu=11,806J  net=9,209J
+[curve] step   645/2150  loss 1.1586  elapsed 77.1s  raw_gpu=17,715J  net=13,858J
+[curve] step   860/2150  loss 1.1164  elapsed 102.4s  raw_gpu=23,629J  net=18,508J
+[curve] step  1075/2150  loss 1.0351  elapsed 127.6s  raw_gpu=29,560J  net=23,179J
+[curve] step  1290/2150  loss 1.0897  elapsed 152.8s  raw_gpu=35,483J  net=27,843J
+[curve] step  1505/2150  loss 1.0164  elapsed 178.0s  raw_gpu=41,414J  net=32,515J
+[curve] step  1720/2150  loss 0.9901  elapsed 203.2s  raw_gpu=47,360J  net=37,200J
+[curve] step  1935/2150  loss 0.9879  elapsed 228.3s  raw_gpu=53,284J  net=41,868J
+[curve] step  2150/2150  loss 0.9464  elapsed 253.4s  raw_gpu=59,194J  net=46,522J
+[curve] eval step=215  net_J=4,579
+  eval      6,000/60,000 ( 10.0%)  acc=0.5753      117 char/s  eta=   461s
+  eval     12,000/60,000 ( 20.0%)  acc=0.5848      117 char/s  eta=   409s
+  eval     18,000/60,000 ( 30.0%)  acc=0.5924      117 char/s  eta=   358s
+  eval     24,000/60,000 ( 40.0%)  acc=0.5994      117 char/s  eta=   307s
+  eval     30,000/60,000 ( 50.0%)  acc=0.5986      117 char/s  eta=   256s
+  eval     36,000/60,000 ( 60.0%)  acc=0.5905      117 char/s  eta=   205s
+  eval     42,000/60,000 ( 70.0%)  acc=0.5936      117 char/s  eta=   153s
+  eval     48,000/60,000 ( 80.0%)  acc=0.5964      117 char/s  eta=   102s
+  eval     54,000/60,000 ( 90.0%)  acc=0.5984      117 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.6005      117 char/s  eta=     0s
+[curve]   acc=0.6005  eval=513.9s
+[curve] eval step=430  net_J=9,209
+  eval      6,000/60,000 ( 10.0%)  acc=0.6287      107 char/s  eta=   502s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6366      109 char/s  eta=   440s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6478      111 char/s  eta=   378s
+  eval     24,000/60,000 ( 40.0%)  acc=0.6513      112 char/s  eta=   321s
+  eval     30,000/60,000 ( 50.0%)  acc=0.6535      113 char/s  eta=   266s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6490      113 char/s  eta=   213s
+  eval     42,000/60,000 ( 70.0%)  acc=0.6510      113 char/s  eta=   159s
+  eval     48,000/60,000 ( 80.0%)  acc=0.6541      113 char/s  eta=   106s
+  eval     54,000/60,000 ( 90.0%)  acc=0.6578      114 char/s  eta=    53s
+  eval     60,000/60,000 (100.0%)  acc=0.6597      114 char/s  eta=     0s
+[curve]   acc=0.6597  eval=526.9s
+[curve] eval step=645  net_J=13,858
+  eval      6,000/60,000 ( 10.0%)  acc=0.6557      115 char/s  eta=   469s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6639      115 char/s  eta=   416s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6735      114 char/s  eta=   369s
+  eval     24,000/60,000 ( 40.0%)  acc=0.6759      112 char/s  eta=   320s
+  eval     30,000/60,000 ( 50.0%)  acc=0.6788      113 char/s  eta=   265s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6747      114 char/s  eta=   211s
+  eval     42,000/60,000 ( 70.0%)  acc=0.6750      114 char/s  eta=   158s
+  eval     48,000/60,000 ( 80.0%)  acc=0.6762      114 char/s  eta=   105s
+  eval     54,000/60,000 ( 90.0%)  acc=0.6798      114 char/s  eta=    52s
+  eval     60,000/60,000 (100.0%)  acc=0.6813      115 char/s  eta=     0s
+[curve]   acc=0.6813  eval=523.1s
+[curve] eval step=860  net_J=18,508
+  eval      6,000/60,000 ( 10.0%)  acc=0.6715      117 char/s  eta=   461s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6733      117 char/s  eta=   410s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6848      117 char/s  eta=   359s
+  eval     24,000/60,000 ( 40.0%)  acc=0.6877      117 char/s  eta=   307s
+  eval     30,000/60,000 ( 50.0%)  acc=0.6899      117 char/s  eta=   256s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6846      117 char/s  eta=   205s
+  eval     42,000/60,000 ( 70.0%)  acc=0.6846      117 char/s  eta=   154s
+  eval     48,000/60,000 ( 80.0%)  acc=0.6866      117 char/s  eta=   102s
+  eval     54,000/60,000 ( 90.0%)  acc=0.6911      117 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.6925      117 char/s  eta=     0s
+[curve]   acc=0.6925  eval=512.2s
+[curve] eval step=1075  net_J=23,179
+  eval      6,000/60,000 ( 10.0%)  acc=0.6802      117 char/s  eta=   463s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6857      117 char/s  eta=   411s
+  eval     18,000/60,000 ( 30.0%)  acc=0.6963      117 char/s  eta=   359s
+  eval     24,000/60,000 ( 40.0%)  acc=0.6995      117 char/s  eta=   307s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7022      117 char/s  eta=   256s
+  eval     36,000/60,000 ( 60.0%)  acc=0.6963      117 char/s  eta=   205s
+  eval     42,000/60,000 ( 70.0%)  acc=0.6960      117 char/s  eta=   154s
+  eval     48,000/60,000 ( 80.0%)  acc=0.6969      117 char/s  eta=   102s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7010      117 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.7025      117 char/s  eta=     0s
+[curve]   acc=0.7025  eval=512.1s
+[curve] eval step=1290  net_J=27,843
+  eval      6,000/60,000 ( 10.0%)  acc=0.6938      117 char/s  eta=   461s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6953      117 char/s  eta=   410s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7059      117 char/s  eta=   358s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7100      117 char/s  eta=   307s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7134      117 char/s  eta=   256s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7073      117 char/s  eta=   205s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7071      117 char/s  eta=   154s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7083      117 char/s  eta=   102s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7121      117 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.7129      117 char/s  eta=     0s
+[curve]   acc=0.7129  eval=512.1s
+[curve] eval step=1505  net_J=32,515
+  eval      6,000/60,000 ( 10.0%)  acc=0.6958      112 char/s  eta=   482s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6970      114 char/s  eta=   422s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7080      114 char/s  eta=   368s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7112      115 char/s  eta=   313s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7150      115 char/s  eta=   260s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7113      115 char/s  eta=   208s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7113      116 char/s  eta=   156s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7122      116 char/s  eta=   103s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7162      116 char/s  eta=    52s
+  eval     60,000/60,000 (100.0%)  acc=0.7167      116 char/s  eta=     0s
+[curve]   acc=0.7167  eval=516.4s
+[curve] eval step=1720  net_J=37,200
+  eval      6,000/60,000 ( 10.0%)  acc=0.7097      117 char/s  eta=   462s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7124      117 char/s  eta=   410s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7219      117 char/s  eta=   359s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7237      117 char/s  eta=   307s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7261      117 char/s  eta=   256s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7211      117 char/s  eta=   205s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7213      117 char/s  eta=   154s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7220      117 char/s  eta=   102s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7255      117 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.7263      117 char/s  eta=     0s
+[curve]   acc=0.7263  eval=512.2s
+[curve] eval step=1935  net_J=41,868
+  eval      6,000/60,000 ( 10.0%)  acc=0.7182      118 char/s  eta=   459s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7182      117 char/s  eta=   409s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7272      117 char/s  eta=   358s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7304      117 char/s  eta=   307s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7326      117 char/s  eta=   256s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7267      117 char/s  eta=   205s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7261      117 char/s  eta=   153s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7265      117 char/s  eta=   102s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7304      117 char/s  eta=    51s
+  eval     60,000/60,000 (100.0%)  acc=0.7316      117 char/s  eta=     0s
+[curve]   acc=0.7316  eval=511.3s
+[curve] eval step=2150  net_J=46,522
+  eval      6,000/60,000 ( 10.0%)  acc=0.7185      117 char/s  eta=   463s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7216      117 char/s  eta=   411s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7311      117 char/s  eta=   359s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7350      117 char/s  eta=   308s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7378      117 char/s  eta=   256s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7318      117 char/s  eta=   205s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7315      117 char/s  eta=   154s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7316      117 char/s  eta=   103s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7349      117 char/s  eta=    51s
+Task's current input(s) ["in-01KT29VMACQHN093GA8BRBWHMT:1780343899440-0"] cancelled because: Task's current input in-01KT29VMACQHN093GA8BRBWHMT:1780343899440-0 hit its timeout of 5400s
+Stopping app - uncaught exception raised locally: FunctionTimeoutError("Task's current input in-01KT29VMACQHN093GA8BRBWHMT:1780343899440-0 hit its timeout of 5400s").
+[modal-client] 2026-06-01T21:29:50+0000 Received a cancellation signal while processing input ('in-01KT29VMACQHN093GA8BRBWHMT:1780343899440-0',)
+[modal-client] 2026-06-01T21:29:50+0000 Successfully canceled input ('in-01KT29VMACQHN093GA8BRBWHMT:1780343899440-0',)
+Traceback (most recent call last):
+  File "/home/seneca/wikitext-diffusion/research/energy_curve/modal_run.py", line 70, in <module>
+    main()
+  File "/home/seneca/wikitext-diffusion/research/energy_curve/modal_run.py", line 60, in main
+    result = run_curve.remote()
+             ^^^^^^^^^^^^^^^^^^
+  File "/home/seneca/wikitext-diffusion/.venv/lib/python3.11/site-packages/modal/_object.py", line 46, in wrapped
+    return await method(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/seneca/wikitext-diffusion/.venv/lib/python3.11/site-packages/modal/_functions.py", line 1696, in remote
+    return await self._call_function(args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/seneca/wikitext-diffusion/.venv/lib/python3.11/site-packages/modal/_functions.py", line 1640, in _call_function
+    return await invocation.run_function()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/seneca/wikitext-diffusion/.venv/lib/python3.11/site-packages/modal/_functions.py", line 493, in run_function
+    return await _process_result(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/seneca/wikitext-diffusion/.venv/lib/python3.11/site-packages/modal/_utils/function_utils.py", line 510, in _process_result
+    raise FunctionTimeoutError(result.exception)
+modal.exception.FunctionTimeoutError: Task's current input in-01KT29VMACQHN093GA8BRBWHMT:1780343899440-0 hit its timeout of 5400s
+                                                                                                                                                                                                                                                 Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Runner failed with exception: IndexError(1)
+Runner failed with exception: IndexError(1)
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Traceback (most recent call last):
+Runner failed with exception: IndexError(1)
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Traceback (most recent call last):
+Runner failed with exception: IndexError(1)
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Traceback (most recent call last):
+Runner failed with exception: IndexError(1)
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Traceback (most recent call last):
+Runner failed with exception: IndexError(1)
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Traceback (most recent call last):
+Runner failed with exception: IndexError(1)
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Runner failed with exception: IndexError(1)
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Runner failed with exception: IndexError(1)
+Traceback (most recent call last):
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1
+Runner failed with exception: IndexError(1)
+Traceback (most recent call last):
+Runner failed with exception: IndexError(1)
+  File "/pkg/modal/_runtime/container_io_manager.py", line 904, in handle_user_exception
+    yield
+  File "/pkg/modal/_container_entrypoint.py", line 353, in main
+    service = import_single_function_service(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/pkg/modal/_runtime/user_code_imports.py", line 475, in import_single_function_service
+    module = importlib.import_module(function_def.module_name)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1204, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1147, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/root/modal_run.py", line 18, in <module>
+    REPO = HERE.parents[1]
+           ~~~~~~~~~~~~^^^
+  File "/usr/local/lib/python3.11/pathlib.py", line 445, in __getitem__
+    raise IndexError(idx)
+IndexError: 1

@@ -1,0 +1,18 @@
+{
+  "n_steps": 2150,
+  "idle_watts": 50.0,
+  "eval_chars": 60000,
+  "_note": "Reconstructed from /tmp/claude-1002/.../b07m2j9tf.output after Modal container hit the 90-min timeout while evaluating step=2150 at 90% (54k/60k chars). Steps 215..1935 are full 60k-char evals from run #2; step=2150 is a partial 54k-char eval (acc=0.7349 at last reported progress line).",
+  "checkpoints": [
+    {"step": 215,  "joules_J": 4579,  "raw_gpu_joules_J": 5910,  "training_duration_s": 26.6,  "train_loss": 1.3744, "val_char_accuracy": 0.6005, "val_chars": 60000, "eval_duration_s": 513.9},
+    {"step": 430,  "joules_J": 9209,  "raw_gpu_joules_J": 11806, "training_duration_s": 51.9,  "train_loss": 1.2454, "val_char_accuracy": 0.6597, "val_chars": 60000, "eval_duration_s": 526.9},
+    {"step": 645,  "joules_J": 13858, "raw_gpu_joules_J": 17715, "training_duration_s": 77.1,  "train_loss": 1.1586, "val_char_accuracy": 0.6813, "val_chars": 60000, "eval_duration_s": 523.1},
+    {"step": 860,  "joules_J": 18508, "raw_gpu_joules_J": 23629, "training_duration_s": 102.4, "train_loss": 1.1164, "val_char_accuracy": 0.6925, "val_chars": 60000, "eval_duration_s": 512.2},
+    {"step": 1075, "joules_J": 23179, "raw_gpu_joules_J": 29560, "training_duration_s": 127.6, "train_loss": 1.0351, "val_char_accuracy": 0.7025, "val_chars": 60000, "eval_duration_s": 512.1},
+    {"step": 1290, "joules_J": 27843, "raw_gpu_joules_J": 35483, "training_duration_s": 152.8, "train_loss": 1.0897, "val_char_accuracy": 0.7129, "val_chars": 60000, "eval_duration_s": 512.1},
+    {"step": 1505, "joules_J": 32515, "raw_gpu_joules_J": 41414, "training_duration_s": 178.0, "train_loss": 1.0164, "val_char_accuracy": 0.7167, "val_chars": 60000, "eval_duration_s": 516.4},
+    {"step": 1720, "joules_J": 37200, "raw_gpu_joules_J": 47360, "training_duration_s": 203.2, "train_loss": 0.9901, "val_char_accuracy": 0.7263, "val_chars": 60000, "eval_duration_s": 512.2},
+    {"step": 1935, "joules_J": 41868, "raw_gpu_joules_J": 53284, "training_duration_s": 228.3, "train_loss": 0.9879, "val_char_accuracy": 0.7316, "val_chars": 60000, "eval_duration_s": 511.3},
+    {"step": 2150, "joules_J": 46522, "raw_gpu_joules_J": 59194, "training_duration_s": 253.4, "train_loss": 0.9464, "val_char_accuracy": 0.7349, "val_chars": 54000, "eval_duration_s": null}
+  ]
+}

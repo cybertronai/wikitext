@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>nanogpt intelligence per joule</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #D7CFC0; }
+  #chart { width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<div id="chart"></div>
+<script>
+const data = [
+  {joules: 4579,  acc: 0.6005},
+  {joules: 9209,  acc: 0.6597},
+  {joules: 13858, acc: 0.6813},
+  {joules: 18508, acc: 0.6925},
+  {joules: 23179, acc: 0.7025},
+  {joules: 27843, acc: 0.7129},
+  {joules: 32515, acc: 0.7167},
+  {joules: 37200, acc: 0.7263},
+  {joules: 41868, acc: 0.7316},
+  {joules: 46522, acc: 0.7349},
+];
+
+const xs = data.map(d => d.joules / 1000);
+const xMax = Math.max(...xs);
+
+Plotly.newPlot("chart", [
+  {
+    x: xs,
+    y: data.map(d => d.acc),
+    mode: "lines+markers",
+    type: "scatter",
+    marker: {size: 9, color: "#C0453C"},
+    line: {width: 2, color: "#C0453C"},
+    hoverinfo: "skip",
+  },
+  {
+    x: [9.591],
+    y: [0.7063],
+    mode: "markers",
+    type: "scatter",
+    marker: {size: 14, color: "#D7CFC0",
+             line: {color: "#C0453C", width: 2}},
+    hoverinfo: "skip",
+  },
+], {
+  paper_bgcolor: "#D7CFC0",
+  plot_bgcolor: "#D7CFC0",
+  margin: {l: 80, r: 40, t: 90, b: 80},
+  showlegend: false,
+  title: {text: "nanogpt intelligence per joule",
+          font: {color: "#C0453C", size: 32},
+          x: 0.5, xanchor: "center"},
+  xaxis: {
+    title: {text: "kilojoules", font: {color: "#C0453C", size: 22}},
+    showgrid: false, zeroline: false,
+    showline: false, ticks: "",
+    tickfont: {color: "#C0453C", size: 14},
+  },
+  yaxis: {
+    title: {text: "char-acc", font: {color: "#C0453C", size: 22}},
+    showgrid: false, zeroline: false,
+    showline: false, ticks: "",
+    tickfont: {color: "#C0453C", size: 14},
+  },
+  annotations: [{
+    x: 9.591, y: 0.7063,
+    text: "Sequence Chunker (Schmidhuber 1992)",
+    showarrow: false,
+    xanchor: "left", yanchor: "top",
+    xshift: 12, yshift: -8,
+    font: {color: "#C0453C", size: 14},
+  }],
+}, {displaylogo: false, displayModeBar: false, responsive: true});
+</script>
+</body>
+</html>
