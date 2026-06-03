@@ -1,5 +1,12 @@
 # Submissions
 
+> ⚠️ **2026-05-28 — `CharModel.predict()` contract change.** `predict()` now
+> returns a single committed character (`str`) instead of a distribution
+> (`dict[str, float]`). Submissions are responsible for their own sampling
+> strategy. See [`OUTDATED.md`](OUTDATED.md) for the list of submissions
+> not yet ported, the mechanical transform for porting, and the re-run TODO
+> before `bugfix/sampling` can promote to `main`.
+
 One subdirectory per submission. Submitter authors `submission.py`;
 `submit.py` populates the rest.
 

@@ -305,7 +305,7 @@ class FFCharModel(CharModel):
         return full
 
     @torch.no_grad()
-    def predict(self) -> dict[str, float]:
+    def predict(self) -> str:
         x = self._build_batch()
         acts = self.model.forward_all(x)
         # Score = sum of goodnesses over layers 2..6 (skip layer 1).
@@ -320,7 +320,7 @@ class FFCharModel(CharModel):
             except UnicodeDecodeError:
                 continue
             out[ch] = p
-        return out
+        return max(out, key=lambda c: out[c]) if out else ""
 
     @torch.no_grad()
     def observe(self, char: str) -> None:

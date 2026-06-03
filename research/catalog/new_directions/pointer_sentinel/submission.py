@@ -724,7 +724,7 @@ class PointerSentinelCharModel(CharModel):
         return mixture.squeeze(0).squeeze(0)  # (V,)
 
     @torch.no_grad()
-    def predict(self) -> dict[str, float]:
+    def predict(self) -> str:
         if self._hidden is None:
             raise RuntimeError("predict() called before reset()")
         probs = self._mixture_from_hidden()
@@ -735,7 +735,7 @@ class PointerSentinelCharModel(CharModel):
             except UnicodeDecodeError:
                 continue
             out[ch] = p
-        return out
+        return max(out, key=lambda c: out[c]) if out else ""
 
     @torch.no_grad()
     def observe(self, char: str) -> None:

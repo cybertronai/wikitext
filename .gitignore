@@ -21,3 +21,10 @@ env/
 # Env / OS
 .env
 .DS_Store
+
+# Local dev notes / scratch — explainers, plans, idea logs, experiment journals.
+.scratch/
+
+# Internal slot-claim metadata written by claim_slot.sh for cross-session
+# coordination (session id + heartbeat). Not for upstream.
+submissions/*/.CLAIMED

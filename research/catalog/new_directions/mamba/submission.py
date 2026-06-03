@@ -529,7 +529,7 @@ class MambaCharModel(CharModel):
         self._next_logits = logits[0]
 
     @torch.no_grad()
-    def predict(self) -> dict[str, float]:
+    def predict(self) -> str:
         if self._next_logits is None:
             raise RuntimeError("predict() called before reset()")
         probs = F.softmax(self._next_logits.float(), dim=-1)
@@ -540,7 +540,7 @@ class MambaCharModel(CharModel):
             except UnicodeDecodeError:
                 continue
             out[ch] = p
-        return out
+        return max(out, key=lambda c: out[c]) if out else ""
 
     @torch.no_grad()
     def observe(self, char: str) -> None:

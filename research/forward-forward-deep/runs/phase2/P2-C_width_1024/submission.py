@@ -306,7 +306,7 @@ class FFRidgeCharModel(CharModel):
         return build_input(ctx_t, None)
 
     @torch.no_grad()
-    def predict(self) -> dict[str, float]:
+    def predict(self) -> str:
         x = self._build_one()
         phi = self.model.features(x)
         logits = phi @ self.W
@@ -318,7 +318,7 @@ class FFRidgeCharModel(CharModel):
             except UnicodeDecodeError:
                 continue
             out[ch] = p
-        return out
+        return max(out, key=lambda c: out[c]) if out else ""
 
     @torch.no_grad()
     def observe(self, char: str) -> None:

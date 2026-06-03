@@ -109,6 +109,12 @@ image = (
     # tables (used as a deterministic algorithm, not a "pretrained
     # weight" — see README "Internal representations").
     .pip_install("tiktoken==0.7.0")
+    # CodeCarbon: CPU energy estimation backend used by EnergyMeter to
+    # populate cpu_energy_J + total_energy_J in result.json. The TDP
+    # fallback path is used (no MSR access in Modal containers); accuracy
+    # is acceptable for total-system-energy reporting per the field
+    # standard (HuggingFace Trainer, Patterson et al. 2021/2022).
+    .pip_install("codecarbon~=3.2")
     # Modal re-imports submit.py inside the container to resolve the
     # remote function. submit.py does a top-level `import task`, so
     # /workspace (where task.py lands via add_local_file) must be on
@@ -314,13 +320,27 @@ def save_nvml_artifact(
 def append_record(result: dict, dir_relpath: str) -> None:
     """Append one row to the Record History table in README.md.
 
-    Replaces the placeholder dash row if present, otherwise appends.
+    Inserts the row at the end of the Record History markdown table
+    block (after the last data row, before the blank line that closes
+    the table). Earlier versions appended to the end of the file, which
+    landed rows past the footnotes and broke the table — this version
+    keeps them inside the table.
+
+    Replaces the placeholder dash row if present, otherwise inserts.
     Disqualified rows render their accuracy cell as ``DQ`` so they
     don't pollute the leaderboard sort.
+
+    The energy column reports ``total_energy_J`` (GPU NVML + CodeCarbon
+    CPU estimate) when the new harness produced it, falling back to
+    ``training_energy_J`` (NVML-only) for runs predating the
+    total-system-energy change. See ``MAINTAINING.md`` for the dated
+    semantics of the column over time.
     """
     readme = HERE / "README.md"
     text = readme.read_text()
-    energy = result.get("training_energy_J")
+    energy = result.get("total_energy_J")
+    if energy is None:
+        energy = result.get("training_energy_J")
     energy_cell = f"{energy:>10,.0f}" if energy is not None else "         —"
     if result.get("disqualified"):
         acc_cell = "      DQ"
@@ -337,10 +357,48 @@ def append_record(result: dict, dir_relpath: str) -> None:
     )
     placeholder = "| —    |          — |        — | —      | —          | —           |\n"
     if placeholder in text:
-        text = text.replace(placeholder, row, 1)
-    else:
-        text = text.rstrip() + "\n" + row
-    readme.write_text(text)
+        readme.write_text(text.replace(placeholder, row, 1))
+        return
+
+    new_text = _insert_into_record_history_table(text, row)
+    if new_text is None:
+        # Table not found — fall back to plain append. Better than crashing.
+        new_text = text.rstrip() + "\n" + row
+    readme.write_text(new_text)
+
+
+def _insert_into_record_history_table(text: str, row: str) -> str | None:
+    """Return ``text`` with ``row`` inserted at the end of the Record
+    History markdown table block. Returns ``None`` if no table was found.
+
+    The table is identified by a ``## Record History`` heading followed
+    by a markdown pipe-table header. The new row is inserted after the
+    last consecutive pipe-prefixed line of the table.
+    """
+    lines = text.splitlines(keepends=True)
+    in_record_history = False
+    in_table = False
+    last_pipe_line = -1
+    for i, line in enumerate(lines):
+        if line.lstrip().startswith("## Record History"):
+            in_record_history = True
+            continue
+        if not in_record_history:
+            continue
+        if not in_table:
+            if line.startswith("|") and "Energy" in line and "Val" in line:
+                in_table = True
+                last_pipe_line = i
+            continue
+        # In the table: every pipe-line counts as the running tail.
+        if line.startswith("|"):
+            last_pipe_line = i
+            continue
+        # First non-pipe line closes the table.
+        break
+    if last_pipe_line < 0:
+        return None
+    return "".join(lines[: last_pipe_line + 1] + [row] + lines[last_pipe_line + 1 :])
 
 
 class _Tee(io.TextIOBase):

@@ -119,7 +119,7 @@ def main() -> None:
         if m is not None:
             print(f"training duration  : {m.duration_s:.1f}s")
             if m.energy_joules is not None:
-                print(f"training energy (J): {m.energy_joules:,.1f}  (at kill)")
+                print(f"training energy (J): {_fmt_training_energy(m)}  (at kill)")
         if args.results_json is not None:
             payload = {
                 "submission": submission_name,
@@ -128,6 +128,8 @@ def main() -> None:
                 "max_train_seconds": args.max_train_seconds,
                 "training_energy_J": m.energy_joules if m is not None else None,
                 "training_duration_s": m.duration_s if m is not None else None,
+                "cpu_energy_J": m.cpu_energy_J if m is not None else None,
+                "total_energy_J": m.total_energy_J if m is not None else None,
                 "gpu_name": _gpu_name(),
                 "date_utc": _utc_now(),
             }
@@ -153,7 +155,7 @@ def main() -> None:
               f"below floor {args.acc_min:.4f}")
         print(f"submission         : {submission_name}")
         if m.energy_joules is not None:
-            print(f"training energy (J): {m.energy_joules:,.1f}")
+            print(f"training energy (J): {_fmt_training_energy(m)}")
         print(f"training duration  : {m.duration_s:.1f}s")
         if args.results_json is not None:
             payload = {
@@ -165,6 +167,8 @@ def main() -> None:
                 "val_chars": val_result.n_chars,
                 "training_energy_J": m.energy_joules,
                 "training_duration_s": m.duration_s,
+                "cpu_energy_J": m.cpu_energy_J,
+                "total_energy_J": m.total_energy_J,
                 "gpu_name": _gpu_name(),
                 "date_utc": _utc_now(),
             }
@@ -174,10 +178,7 @@ def main() -> None:
 
     print("---")
     print(f"submission         : {submission_name}")
-    if m.energy_joules is not None:
-        print(f"training energy (J): {m.energy_joules:,.1f}")
-    else:
-        print("training energy (J): NOT MEASURED")
+    print(f"training energy (J): {_fmt_training_energy(m)}")
     print(f"training duration  : {m.duration_s:.1f}s")
     print(f"val  char-accuracy : {val_result.accuracy:.4f}")
     print(f"val  chars         : {val_result.n_chars:,}")
@@ -187,6 +188,8 @@ def main() -> None:
             "submission": submission_name,
             "training_energy_J": m.energy_joules,
             "training_duration_s": m.duration_s,
+            "cpu_energy_J": m.cpu_energy_J,
+            "total_energy_J": m.total_energy_J,
             "val_char_accuracy": val_result.accuracy,
             "val_chars": val_result.n_chars,
             "gpu_name": _gpu_name(),
@@ -209,6 +212,17 @@ def _gpu_name() -> str | None:
 def _utc_now() -> str:
     return (datetime.now(timezone.utc)
             .replace(microsecond=0).isoformat().replace("+00:00", "Z"))
+
+
+def _fmt_training_energy(m) -> str:
+    if (m.total_energy_J is not None
+            and m.energy_joules is not None
+            and m.cpu_energy_J is not None):
+        return (f"{m.total_energy_J:,.1f} "
+                f"({m.energy_joules:,.1f} GPU + {m.cpu_energy_J:,.1f} CPU)")
+    if m.energy_joules is not None:
+        return f"{m.energy_joules:,.1f}"
+    return "NOT MEASURED"
 
 
 if __name__ == "__main__":

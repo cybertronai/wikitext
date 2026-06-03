@@ -21,7 +21,23 @@ modal token new
 python submit.py submissions/modded_nanogpt
 ```
 
-## Record History
+## Current Leaderboard
+
+> Submissions ranked by training energy (joules, lower wins) under the **2026-05-28 `CharModel.predict()` contract** (`predict()` returns a single committed `str`). Only submissions that have been ported to the new contract **and** re-run on the new harness appear here. The historical leaderboard is preserved below as a frozen record; entries there are not runnable under the new contract until ported. Tracking list of pending ports + re-runs lives at [`submissions/OUTDATED.md`](submissions/OUTDATED.md).
+>
+> Energy column reports **`total_energy_J`** (GPU NVML net of idle baseline + CodeCarbon CPU estimate, floored at `duration_s × 50 W`).
+
+| Date | Energy (J) | Val char-acc | GPU | Config | Submission | Contributor |
+|------|-----------:|-------------:|-----|--------|------------|-------------|
+| 2026-05-28 |      2,866 | 0.7031    | A100 80GB SXM4 | subset_70_mkn     | [dir](submissions/subset_70_mkn)     | @gabrielnan (total_J = 1,321 gpu + 1,545 cpu) |
+| 2026-05-28 |      5,116 | 0.7047    | A100 80GB SXM4 | paq_mixer_v3      | [dir](submissions/paq_mixer_v3)      | @gabrielnan (total_J = 2,026 gpu + 3,090 cpu) |
+| 2026-05-28 |      5,214 | 0.7050    | A100 80GB SXM4 | gpu_ngram_w31_k11 | [dir](submissions/gpu_ngram_w31_k11) | @gabrielnan (total_J = 2,040 gpu + 3,174 cpu) |
+
+## Historical Leaderboard (pre-`bugfix/sampling`)
+
+> ⚠️ **Frozen for history; not runnable under the current contract.** All rows below were scored against the prior `CharModel.predict() -> dict[str, float]` API, which the runner consumed via `argmax`. The new contract requires `predict() -> str` (committed character); submission code targeting the old contract crashes the runner with a type mismatch. Each entry needs a mechanical signature update (`return out` → `return max(out, key=lambda c: out[c]) if out else ""`, semantics-identical) and a re-run before its row can move to the Current Leaderboard above. See [`submissions/OUTDATED.md`](submissions/OUTDATED.md) for status.
+>
+> The `Energy (J)` column reports **`total_energy_J`** (GPU NVML net of idle baseline + CodeCarbon CPU estimate, floored at `duration_s × 50 W`) for rows dated **2026-05-20 and later**. Earlier rows report the prior NVML-only `training_energy_J`. The semantic change is the new total-system-energy rule per @yaroslavvb2's Telegram note; see `MAINTAINING.md` and the `EnergyMeter` source for details.
 
 | Date | Energy (J) | Val char-acc | GPU | Config | Submission | Contributor |
 |------|-----------:|-------------:|-----|--------|------------|-------------|
@@ -33,6 +49,21 @@ python submit.py submissions/modded_nanogpt
 | 2026-05-18 |      3,612 |       DQ | A100 80GB PCIe | chunker_d1       | [dir](research/catalog/new_directions/chunker_d1)       | @ab-10 |
 | 2026-05-18 |        735 |       DQ | A100 80GB PCIe | ppm_c            | [dir](research/catalog/new_directions/ppm_c)            | @ab-10 |
 | 2026-05-17 |         70 |       DQ | A100 80GB SXM4 | P2-A_random_projection | [dir](research/forward-forward-deep/runs/phase2/P2-A_random_projection) | @ab-10 |
+| 2026-05-19 |     60,864 |       DQ | A100 80GB PCIe | mamba_byte           | [dir](submissions/mamba_byte)           | @gabrielnan |
+| 2026-05-20 |      1,752 |       DQ | A100 80GB SXM4 | gpu_ngram_w31_k10    | [dir](submissions/gpu_ngram_w31_k10)    | @gabrielnan |
+| 2026-05-20 |     13,936 |       DQ | A100 80GB SXM4 | chunker_phase1_v2    | [dir](submissions/chunker_phase1_v2)    | @gabrielnan |
+| 2026-05-20 |     24,417 |       DQ | A100 80GB SXM4 | bpe_internal_nn_v2   | [dir](submissions/bpe_internal_nn_v2)   | @gabrielnan |
+| 2026-05-20 |     53,683 | 0.7246    | A100 80GB PCIe | lwta_k4              | [dir](submissions/lwta_k4)              | @ab-10 (re-run on new harness; total_J = 44,329 gpu + 9,354 cpu) |
+| 2026-05-20 |     54,614 | 0.7145    | A100 80GB PCIe | lwta_k2              | [dir](submissions/lwta_k2)              | @ab-10 (re-run on new harness; total_J = 44,583 gpu + 10,031 cpu) |
+| 2026-05-21 |      2,474 | 0.7031    | A100 80GB PCIe | subset_70_mkn        | [dir](submissions/subset_70_mkn)        | @gabrielnan |
+| 2026-05-21 |      3,092 | 0.7050    | A100 80GB PCIe | gpu_ngram_w31_k11    | [dir](submissions/gpu_ngram_w31_k11)    | @gabrielnan |
+| 2026-05-21 |      4,607 | 0.7047    | A100 80GB PCIe | paq_mixer_v3         | [dir](submissions/paq_mixer_v3)         | @gabrielnan |
+| 2026-05-21 |      8,602 | 0.7184    | A100 80GB PCIe | gpu_ngram_o14_xorfix | [dir](submissions/gpu_ngram_o14_xorfix) | @gabrielnan |
+| 2026-05-21 |      9,591 | 0.7063    | A100 80GB PCIe | chunker_phase1_v1    | [dir](submissions/chunker_phase1_v1)    | @gabrielnan |
+| 2026-05-21 |     14,578 | 0.7184    | A100 80GB PCIe | deep_backoff_kn      | [dir](submissions/deep_backoff_kn)      | @gabrielnan |
+| 2026-05-21 |     19,922 | 0.7328    | A100 80GB SXM4 | lwta_k4_alpha_065    | [dir](submissions/lwta_k4_alpha_065)    | @gabrielnan |
+| 2026-05-21 |     20,743 | 0.7390    | A100 80GB SXM4 | alpha_06             | [dir](submissions/alpha_06)             | @gabrielnan |
+| 2026-05-21 |     62,006 | 0.7337    | A100 80GB SXM4 | modded_nanogpt       | [dir](submissions/modded_nanogpt)       | @ab-10 |
 
 
 ## Rules
