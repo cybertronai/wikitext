@@ -30,3 +30,15 @@ MAX_TRAIN_SECONDS: float | None = 300.0
 # accuracy on the first TEST_CHARS chars of the val split falls below
 # this floor are reported DISQUALIFIED.
 ACC_MIN: float | None = 0.70
+
+# CE track ceiling (native bits/char). Submissions that expose
+# ``predict_dist()`` are scored on the probabilities returned by their
+# model in addition to argmax accuracy; if native CE is at or below this
+# value, the submission is recorded with ``ce_track_status = pass`` and
+# eligible for the CE-track leaderboard. Submissions without
+# ``predict_dist()`` are scored on the accuracy track only.
+#
+# Any calibration must happen inside the submission itself, using only
+# training data available to train(). The evaluator does not tune a
+# temperature or otherwise alter predict_dist() before scoring.
+CE_MAX: float | None = 1.35
