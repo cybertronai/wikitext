@@ -29,11 +29,10 @@ python submit.py submissions/modded_nanogpt
 
 | Date | Energy (J) | Val char-acc | GPU | Config | Submission | Contributor |
 |------|-----------:|-------------:|-----|--------|------------|-------------|
-| 2026-06-04 |      1,909 | 0.7012    | A100 80GB SXM4 | subset_60_mkn     | [dir](submissions/subset_60_mkn)     | @miyuhoriuchi + @atbcalvo (total_J = 933 gpu + 976 cpu) |
 | 2026-05-28 |      2,866 | 0.7031    | A100 80GB SXM4 | subset_70_mkn     | [dir](submissions/subset_70_mkn)     | @gabrielnan (total_J = 1,321 gpu + 1,545 cpu) |
 | 2026-05-28 |      5,116 | 0.7047    | A100 80GB SXM4 | paq_mixer_v3      | [dir](submissions/paq_mixer_v3)      | @gabrielnan (total_J = 2,026 gpu + 3,090 cpu) |
 | 2026-05-28 |      5,214 | 0.7050    | A100 80GB SXM4 | gpu_ngram_w31_k11 | [dir](submissions/gpu_ngram_w31_k11) | @gabrielnan (total_J = 2,040 gpu + 3,174 cpu) |
-| 2026-06-04 |     37,388 | 0.7409    | A100 80GB SXM4 | spectral_newton   | [dir](submissions/spectral_newton)   | @atbcalvo (total_J = 26,557 gpu + 10,831 cpu) |
+| 2026-06-04 |     37,388 | 0.7409    | A100 80GB SXM4 | spectral_newton   | [dir](submissions/spectral_newton)   | @miyuhoriuchi + @atbcalvo (total_J = 26,557 gpu + 10,831 cpu) |
 
 ## Historical Leaderboard (pre-`bugfix/sampling`)
 

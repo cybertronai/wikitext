@@ -13,7 +13,7 @@ it commits the argmax over ASCII bytes of the same ensemble distribution.
 """
 from __future__ import annotations
 
-__author__ = "@atbcalvo"
+__author__ = "@miyuhoriuchi + @atbcalvo"
 
 import base64
 import ctypes
