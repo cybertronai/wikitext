@@ -27,7 +27,7 @@ Cap at order 12 (vs W3's 14) for build-time safety. Expected accuracy
 """
 from __future__ import annotations
 
-__author__ = "@miyuhoriuchi"
+__author__ = "@miyuhoriuchi + @atbcalvo"
 
 import os
 import time
