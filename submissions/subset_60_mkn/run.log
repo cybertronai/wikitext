@@ -1,0 +1,385 @@
+# wikitext submit.py log — subset_60_mkn — 2026-06-04T06:07:44+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/miyu-horiuchi/main/ap-Js3Af8C9ch9JLoEs5Kyn6C
+Building image im-RbrocJJfHC2y5oDZ7MHrza
+
+=> Step 0: FROM ghcr.io/ab-10/wikitext-bench:latest
+Getting image source signatures
+Copying blob sha256:1b21ab6ae89c2b9e482b36e3691574e4f48f8a33c96001605a482125ece11648
+Copying blob sha256:bce2073474a5c4b77ad29de8e265ffa7f3b62259ad16653d32f4416192785740
+Copying blob sha256:01f59aef9b5c2caa2870aa8b9b8b5806ea3c36d893cd6e2467e252fc1b1fea46
+Copying blob sha256:fb4c70443787d9baef637d0b257f21b935d5feb6481f1ccdf4d07f48b2e393c1
+Copying blob sha256:f86fd3f70e97b410d82da7c6221612edc0e168d173533fd76ebd3758bcde63fa
+Copying blob sha256:f46cb3bad790b0ec5de8b1774ddec2d3e61261db721911dc3b8c834496764812
+Copying blob sha256:56b456510a04f160e57adfab3f6672db52aa1a280e1d2fb379dd615e5404ae96
+Copying blob sha256:6f92665ed17afc6850bfbeb3fb681d6e1038fe59e2020ab126b859ec572da21b
+Copying blob sha256:f02b23e162c4224cf527f04e83868f45647283ba2ee9e70777ed744bfbfea95d
+Copying config sha256:f975db28e3d9d6580b7ed6f4ea6b2a8168f052e104686276daf5792c7848e935
+Writing manifest to image destination
+Unpacking OCI image
+   • unpacking rootfs ...     
+   • ... done                 
+   • unpacked image rootfs: /tmp/.tmplCE9yq
+Copied image in 5.12s
+Saving image...
+Image saved, took 4.71s
+
+Built image im-RbrocJJfHC2y5oDZ7MHrza in 75.46s
+
+
+Building image im-rTSO4llZJhb6IOFfYCbiRN
+
+=> Step 0: FROM base
+
+=> Step 1: WORKDIR /workspace
+Saving image...
+Image saved, took 440.09ms
+
+Built image im-rTSO4llZJhb6IOFfYCbiRN in 2.22s
+
+
+Building image im-JYjk6PBol782u1MI39EweY
+
+=> Step 0: FROM base
+
+=> Step 1: RUN python -m pip install tiktoken==0.7.0
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+Collecting tiktoken==0.7.0
+  Downloading http://pypi-mirror.modal.local:5555/simple/tiktoken/tiktoken-0.7.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Collecting regex>=2022.1.18 (from tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/regex/regex-2026.5.9-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.4/40.4 kB 80.5 MB/s eta 0:00:00
+Collecting requests>=2.26.0 (from tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/requests/requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting charset_normalizer<4,>=2 (from requests>=2.26.0->tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/charset-normalizer/charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 40.9/40.9 kB 189.9 MB/s eta 0:00:00
+Collecting idna<4,>=2.5 (from requests>=2.26.0->tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/idna/idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+Collecting urllib3<3,>=1.26 (from requests>=2.26.0->tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/urllib3/urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting certifi>=2023.5.7 (from requests>=2.26.0->tiktoken==0.7.0)
+  Downloading http://pypi-mirror.modal.local:5555/simple/certifi/certifi-2026.5.20-py3-none-any.whl.metadata (2.5 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/tiktoken/tiktoken-0.7.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (1.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.1/1.1 MB 134.4 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/regex/regex-2026.5.9-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (799 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 799.8/799.8 kB 172.0 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/requests/requests-2.34.2-py3-none-any.whl (73 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 73.1/73.1 kB 269.6 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/certifi/certifi-2026.5.20-py3-none-any.whl (134 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.1/134.1 kB 64.1 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/charset-normalizer/charset_normalizer-3.4.7-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (214 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 214.1/214.1 kB 298.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/idna/idna-3.18-py3-none-any.whl (65 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 65.5/65.5 kB 261.8 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/urllib3/urllib3-2.7.0-py3-none-any.whl (131 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 131.1/131.1 kB 262.9 MB/s eta 0:00:00
+Installing collected packages: urllib3, regex, idna, charset_normalizer, certifi, requests, tiktoken
+Successfully installed certifi-2026.5.20 charset_normalizer-3.4.7 idna-3.18 regex-2026.5.9 requests-2.34.2 tiktoken-0.7.0 urllib3-2.7.0
+
+[notice] A new release of pip is available: 24.0 -> 26.1.2
+[notice] To update, run: pip install --upgrade pip
+Saving image...
+Image saved, took 494.45ms
+
+Built image im-JYjk6PBol782u1MI39EweY in 5.66s
+
+
+Building image im-zFbWOOPChhnXc5t4A3q1ly
+
+=> Step 0: FROM base
+
+=> Step 1: RUN python -m pip install 'codecarbon~=3.2'
+Looking in indexes: http://pypi-mirror.modal.local:5555/simple
+Collecting codecarbon~=3.2
+  Downloading http://pypi-mirror.modal.local:5555/simple/codecarbon/codecarbon-3.2.7-py3-none-any.whl.metadata (9.7 kB)
+Collecting arrow (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/arrow/arrow-1.4.0-py3-none-any.whl.metadata (7.7 kB)
+Collecting authlib>=1.2.1 (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/authlib/authlib-1.7.2-py2.py3-none-any.whl.metadata (10 kB)
+Collecting click (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/click/click-8.4.1-py3-none-any.whl.metadata (2.6 kB)
+Collecting pandas (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pandas/pandas-3.0.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (79 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 79.5/79.5 kB 122.7 MB/s eta 0:00:00
+Collecting prometheus_client (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/prometheus-client/prometheus_client-0.25.0-py3-none-any.whl.metadata (2.1 kB)
+Collecting psutil>=6.0.0 (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/psutil/psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+Collecting py-cpuinfo (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/py-cpuinfo/py_cpuinfo-9.0.0-py3-none-any.whl.metadata (794 bytes)
+Collecting pydantic (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pydantic/pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 109.4/109.4 kB 181.3 MB/s eta 0:00:00
+Requirement already satisfied: nvidia-ml-py in /usr/local/lib/python3.11/site-packages (from codecarbon~=3.2) (12.560.30)
+Collecting rapidfuzz (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/rapidfuzz/rapidfuzz-3.14.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (12 kB)
+Requirement already satisfied: requests in /usr/local/lib/python3.11/site-packages (from codecarbon~=3.2) (2.34.2)
+Collecting questionary (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/questionary/questionary-2.1.1-py3-none-any.whl.metadata (5.4 kB)
+Collecting rich (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/rich/rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Collecting typer (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/typer/typer-0.26.7-py3-none-any.whl.metadata (16 kB)
+Collecting pycountry (from codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pycountry/pycountry-26.2.16-py3-none-any.whl.metadata (12 kB)
+Collecting cryptography (from authlib>=1.2.1->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/cryptography/cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.3 kB)
+Collecting joserfc>=1.6.0 (from authlib>=1.2.1->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/joserfc/joserfc-1.7.0-py3-none-any.whl.metadata (3.1 kB)
+Collecting python-dateutil>=2.7.0 (from arrow->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/python-dateutil/python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting tzdata (from arrow->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/tzdata/tzdata-2026.2-py2.py3-none-any.whl.metadata (1.4 kB)
+Requirement already satisfied: numpy>=1.26.0 in /usr/local/lib/python3.11/site-packages (from pandas->codecarbon~=3.2) (2.1.3)
+Collecting annotated-types>=0.6.0 (from pydantic->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/annotated-types/annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.4 (from pydantic->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pydantic-core/pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.6 kB)
+Requirement already satisfied: typing-extensions>=4.14.1 in /usr/local/lib/python3.11/site-packages (from pydantic->codecarbon~=3.2) (4.15.0)
+Collecting typing-inspection>=0.4.2 (from pydantic->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/typing-inspection/typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+Collecting prompt_toolkit<4.0,>=2.0 (from questionary->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/prompt-toolkit/prompt_toolkit-3.0.52-py3-none-any.whl.metadata (6.4 kB)
+Requirement already satisfied: charset_normalizer<4,>=2 in /usr/local/lib/python3.11/site-packages (from requests->codecarbon~=3.2) (3.4.7)
+Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/site-packages (from requests->codecarbon~=3.2) (3.18)
+Requirement already satisfied: urllib3<3,>=1.26 in /usr/local/lib/python3.11/site-packages (from requests->codecarbon~=3.2) (2.7.0)
+Requirement already satisfied: certifi>=2023.5.7 in /usr/local/lib/python3.11/site-packages (from requests->codecarbon~=3.2) (2026.5.20)
+Collecting markdown-it-py>=2.2.0 (from rich->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/markdown-it-py/markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting pygments<3.0.0,>=2.13.0 (from rich->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pygments/pygments-2.20.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting shellingham>=1.3.0 (from typer->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/shellingham/shellingham-1.5.4-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting annotated-doc>=0.0.2 (from typer->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/annotated-doc/annotated_doc-0.0.4-py3-none-any.whl.metadata (6.6 kB)
+Collecting cffi>=2.0.0 (from cryptography->authlib>=1.2.1->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/cffi/cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.6 kB)
+Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/mdurl/mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Collecting wcwidth (from prompt_toolkit<4.0,>=2.0->questionary->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/wcwidth/wcwidth-0.7.0-py3-none-any.whl.metadata (36 kB)
+Collecting six>=1.5 (from python-dateutil>=2.7.0->arrow->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/six/six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography->authlib>=1.2.1->codecarbon~=3.2)
+  Downloading http://pypi-mirror.modal.local:5555/simple/pycparser/pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/codecarbon/codecarbon-3.2.7-py3-none-any.whl (380 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 380.5/380.5 kB 111.8 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/authlib/authlib-1.7.2-py2.py3-none-any.whl (259 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 259.5/259.5 kB 280.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/psutil/psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 155.6/155.6 kB 215.3 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/arrow/arrow-1.4.0-py3-none-any.whl (68 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 68.8/68.8 kB 198.5 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/click/click-8.4.1-py3-none-any.whl (116 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 116.6/116.6 kB 206.4 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pandas/pandas-3.0.3-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (11.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.3/11.3 MB 255.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/prometheus-client/prometheus_client-0.25.0-py3-none-any.whl (64 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 64.2/64.2 kB 196.5 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/py-cpuinfo/py_cpuinfo-9.0.0-py3-none-any.whl (22 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/pycountry/pycountry-26.2.16-py3-none-any.whl (8.0 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.0/8.0 MB 228.5 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pydantic/pydantic-2.13.4-py3-none-any.whl (472 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 472.3/472.3 kB 266.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pydantic-core/pydantic_core-2.46.4-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 224.3 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/questionary/questionary-2.1.1-py3-none-any.whl (36 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/rapidfuzz/rapidfuzz-3.14.5-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (3.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 217.1 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/rich/rich-15.0.0-py3-none-any.whl (310 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 310.7/310.7 kB 205.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/typer/typer-0.26.7-py3-none-any.whl (122 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 122.5/122.5 kB 210.6 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/annotated-doc/annotated_doc-0.0.4-py3-none-any.whl (5.3 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/annotated-types/annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/joserfc/joserfc-1.7.0-py3-none-any.whl (70 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 70.4/70.4 kB 172.0 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/cryptography/cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl (4.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 224.7 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/markdown-it-py/markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 91.7/91.7 kB 236.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/prompt-toolkit/prompt_toolkit-3.0.52-py3-none-any.whl (391 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 391.4/391.4 kB 257.7 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pygments/pygments-2.20.0-py3-none-any.whl (1.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 223.2 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/python-dateutil/python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 229.9/229.9 kB 224.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/shellingham/shellingham-1.5.4-py2.py3-none-any.whl (9.8 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/typing-inspection/typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/tzdata/tzdata-2026.2-py2.py3-none-any.whl (349 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 349.3/349.3 kB 224.8 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/cffi/cffi-2.0.0-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (215 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 215.6/215.6 kB 188.3 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/mdurl/mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/six/six-1.17.0-py2.py3-none-any.whl (11 kB)
+Downloading http://pypi-mirror.modal.local:5555/simple/wcwidth/wcwidth-0.7.0-py3-none-any.whl (110 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 110.8/110.8 kB 193.9 MB/s eta 0:00:00
+Downloading http://pypi-mirror.modal.local:5555/simple/pycparser/pycparser-3.0-py3-none-any.whl (48 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 48.2/48.2 kB 177.4 MB/s eta 0:00:00
+Installing collected packages: py-cpuinfo, wcwidth, tzdata, typing-inspection, six, shellingham, rapidfuzz, pygments, pydantic-core, pycparser, pycountry, psutil, prometheus_client, mdurl, click, annotated-types, annotated-doc, python-dateutil, pydantic, prompt_toolkit, markdown-it-py, cffi, rich, questionary, pandas, cryptography, arrow, typer, joserfc, authlib, codecarbon
+Successfully installed annotated-doc-0.0.4 annotated-types-0.7.0 arrow-1.4.0 authlib-1.7.2 cffi-2.0.0 click-8.4.1 codecarbon-3.2.7 cryptography-48.0.0 joserfc-1.7.0 markdown-it-py-4.2.0 mdurl-0.1.2 pandas-3.0.3 prometheus_client-0.25.0 prompt_toolkit-3.0.52 psutil-7.2.2 py-cpuinfo-9.0.0 pycountry-26.2.16 pycparser-3.0 pydantic-2.13.4 pydantic-core-2.46.4 pygments-2.20.0 python-dateutil-2.9.0.post0 questionary-2.1.1 rapidfuzz-3.14.5 rich-15.0.0 shellingham-1.5.4 six-1.17.0 typer-0.26.7 typing-inspection-0.4.2 tzdata-2026.2 wcwidth-0.7.0
+
+[notice] A new release of pip is available: 24.0 -> 26.1.2
+[notice] To update, run: pip install --upgrade pip
+Saving image...
+Image saved, took 957.16ms
+
+Built image im-zFbWOOPChhnXc5t4A3q1ly in 14.90s
+
+
+Building image im-bKxCJ7cHtFunt8VkFLb7ve
+
+=> Step 0: FROM base
+
+=> Step 1: ENV PYTHONPATH=/workspace
+
+=> Step 2: ENV PYTHONUNBUFFERED=1
+Saving image...
+Image saved, took 645.50ms
+
+Built image im-bKxCJ7cHtFunt8VkFLb7ve in 2.24s
+
+
+✓ Created objects.
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/submit.py
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/run_eval.py
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/verify_nvml.py
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/task.py
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 63.8 W
+running 30s stress workload ...
+  duration:       38.8 s
+  energy delta:   12,059.5 J
+  avg power:      311.1 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 63.79099999999995, "stress_watts_avg": 311.10932189509515, "stress_energy_joules": 12059.507, "stress_duration_s": 38.762923999, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+training submission /workspace/subset_60_mkn.py ...
+[codecarbon WARNING @ 06:10:24] Multiple instances of codecarbon are allowed to run at the same time.
+[gpu_ngram_w3] starting build; max_order=11 D=0.5
+[gpu_ngram_w3] SUBSET 0.6 -> 324,658,138 train bytes
+[gpu_ngram_w3] encoded train: 324,658,138 bytes (0.4s)
+[gpu_ngram_w3] top order=11 unique pairs: 83,767,785  1.2s
+[gpu_ngram_w3] ctx_len=10 ctxs=60,478,156 rows=83,767,785  7.9s
+[gpu_ngram_w3] ctx_len=9 ctxs=40,207,725 rows=60,478,155  5.4s
+[gpu_ngram_w3] ctx_len=8 ctxs=24,068,061 rows=40,207,724  3.3s
+[gpu_ngram_w3] ctx_len=7 ctxs=12,614,772 rows=24,068,060  1.8s
+[gpu_ngram_w3] ctx_len=6 ctxs=5,590,933 rows=12,614,772  0.9s
+[gpu_ngram_w3] ctx_len=5 ctxs=1,993,761 rows=5,590,933  0.4s
+[gpu_ngram_w3] ctx_len=4 ctxs=534,725 rows=1,993,761  0.1s
+[gpu_ngram_w3] ctx_len=3 ctxs=105,734 rows=534,725  0.0s
+[gpu_ngram_w3] ctx_len=2 ctxs=11,498 rows=105,734  0.0s
+[gpu_ngram_w3] ctx_len=1 ctxs=204 rows=11,498  0.0s
+[gpu_ngram_w3] ctx_len=0 ctxs=1 rows=204  0.0s
+[mkn] k=1 D1=0.476 D2=0.937 D3=1.607 (n1=1500, n2=825, n3=614)
+[mkn] k=2 D1=0.536 D2=1.065 D3=1.547 (n1=28207, n2=12211, n3=7101)
+[mkn] k=3 D1=0.558 D2=1.054 D3=1.522 (n1=162440, n2=64371, n3=36374)
+[mkn] k=4 D1=0.575 D2=1.054 D3=1.468 (n1=698329, n2=258353, n3=141782)
+[mkn] k=5 D1=0.591 D2=1.056 D3=1.458 (n1=2242558, n2=776610, n3=413649)
+[mkn] k=6 D1=0.612 D2=1.064 D3=1.452 (n1=5799268, n2=1839933, n3=937897)
+[mkn] k=7 D1=0.636 D2=1.076 D3=1.447 (n1=12471971, n2=3576661, n3=1733040)
+[mkn] k=8 D1=0.661 D2=1.092 D3=1.441 (n1=23082361, n2=5929808, n3=2717247)
+[mkn] k=9 D1=0.686 D2=1.108 D3=1.436 (n1=37821736, n2=8649762, n3=3747562)
+[mkn] k=10 D1=0.711 D2=1.126 D3=1.430 (n1=56275419, n2=11412236, n3=4671060)
+[mkn] discounts computed: 0.7s
+[gpu_ngram_w3] total build: 22.2s
+training: 932.9 J   cpu=975.7 J   total=1,908.6 J   duration=23.2s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.6892     1718 char/s  eta=    34s
+  eval      2,400/60,000 (  4.0%)  acc=0.6771     1724 char/s  eta=    33s
+  eval      3,600/60,000 (  6.0%)  acc=0.6736     1734 char/s  eta=    33s
+  eval      4,800/60,000 (  8.0%)  acc=0.6873     1733 char/s  eta=    32s
+  eval      6,000/60,000 ( 10.0%)  acc=0.6863     1744 char/s  eta=    31s
+  eval      7,200/60,000 ( 12.0%)  acc=0.6801     1750 char/s  eta=    30s
+  eval      8,400/60,000 ( 14.0%)  acc=0.6796     1756 char/s  eta=    29s
+  eval      9,600/60,000 ( 16.0%)  acc=0.6860     1754 char/s  eta=    29s
+  eval     10,800/60,000 ( 18.0%)  acc=0.6940     1754 char/s  eta=    28s
+  eval     12,000/60,000 ( 20.0%)  acc=0.6966     1752 char/s  eta=    27s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7004     1750 char/s  eta=    27s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7024     1750 char/s  eta=    26s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7046     1749 char/s  eta=    25s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7076     1749 char/s  eta=    25s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7093     1748 char/s  eta=    24s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7127     1746 char/s  eta=    23s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7135     1746 char/s  eta=    23s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7142     1747 char/s  eta=    22s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7147     1746 char/s  eta=    21s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7148     1747 char/s  eta=    21s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7152     1747 char/s  eta=    20s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7164     1747 char/s  eta=    19s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7147     1747 char/s  eta=    19s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7148     1749 char/s  eta=    18s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7134     1750 char/s  eta=    17s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7101     1751 char/s  eta=    16s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7075     1753 char/s  eta=    16s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7046     1755 char/s  eta=    15s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7044     1756 char/s  eta=    14s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7041     1755 char/s  eta=    14s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7040     1755 char/s  eta=    13s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7042     1755 char/s  eta=    12s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7036     1755 char/s  eta=    12s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7031     1755 char/s  eta=    11s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7025     1755 char/s  eta=    10s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7018     1754 char/s  eta=    10s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7017     1754 char/s  eta=     9s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7019     1753 char/s  eta=     8s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7015     1753 char/s  eta=     8s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7017     1752 char/s  eta=     7s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7011     1751 char/s  eta=     6s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7015     1751 char/s  eta=     5s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7015     1751 char/s  eta=     5s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7003     1754 char/s  eta=     4s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7001     1754 char/s  eta=     3s
+  eval     55,200/60,000 ( 92.0%)  acc=0.6995     1754 char/s  eta=     3s
+  eval     56,400/60,000 ( 94.0%)  acc=0.6988     1754 char/s  eta=     2s
+  eval     57,600/60,000 ( 96.0%)  acc=0.6993     1754 char/s  eta=     1s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7000     1754 char/s  eta=     1s
+  eval     60,000/60,000 (100.0%)  acc=0.7012     1754 char/s  eta=     0s
+chars=60,000  acc=0.7012  eval_duration=34.2s
+---
+submission         : subset_60_mkn
+training energy (J): 1,908.6 (932.9 GPU + 975.7 CPU)
+training duration  : 23.2s
+val  char-accuracy : 0.7012
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/miyu-horiuchi/main/ap-Js3Af8C9ch9JLoEs5Kyn6C
+
+# final result
+{
+  "submission": "subset_60_mkn",
+  "training_energy_J": 932.9420590499999,
+  "training_duration_s": 23.168518819,
+  "cpu_energy_J": 975.6809505724998,
+  "total_energy_J": 1908.6230096224997,
+  "val_char_accuracy": 0.7012,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-06-04T06:11:26Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 63.79099999999995,
+    "stress_watts_avg": 311.10932189509515,
+    "stress_energy_joules": 12059.507,
+    "stress_duration_s": 38.762923999,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@miyuhoriuchi"
+}

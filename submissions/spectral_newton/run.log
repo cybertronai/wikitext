@@ -1,0 +1,456 @@
+# wikitext submit.py log — spectral_newton — 2026-06-04T10:25:30+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/miyu-horiuchi/main/ap-3p0JAAFEyS8dmQI8yNfXSw
+✓ Created objects.
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/submit.py
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/task.py
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/verify_nvml.py
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/run_eval.py
+├── 🔨 Created mount /Users/miyuhoriuchi/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 66.4 W
+running 30s stress workload ...
+  duration:       37.5 s
+  energy delta:   11,919.8 J
+  avg power:      318.3 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 66.41754999999996, "stress_watts_avg": 318.28388929665823, "stress_energy_joules": 11919.769, "stress_duration_s": 37.450117334999995, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+training submission /workspace/spectral_newton.py ...
+[codecarbon WARNING @ 10:26:23] Multiple instances of codecarbon are allowed to run at the same time.
+[sn] device=cuda cfg=TrainConfig(d=384 L=6 bs=32 T=1024 steps=2150)
+[sn] phase 1/3: build PPM
+[sn] gcc not found; apt-installing ...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  binutils binutils-common binutils-x86-64-linux-gnu cpp cpp-14
+  cpp-14-x86-64-linux-gnu cpp-x86-64-linux-gnu gcc-14 gcc-14-x86-64-linux-gnu
+  gcc-x86-64-linux-gnu libasan8 libatomic1 libbinutils libc-bin libc-dev-bin
+  libc6 libcc1-0 libcrypt-dev libctf-nobfd0 libctf0 libgcc-14-dev libgomp1
+  libgprofng0 libhwasan0 libisl23 libitm1 libjansson4 liblsan0 libmpc3
+  libmpfr6 libquadmath0 libsframe1 libtsan2 libubsan1 linux-libc-dev
+  rpcsvc-proto
+Suggested packages:
+  binutils-doc gprofng-gui binutils-gold cpp-doc gcc-14-locales cpp-14-doc
+  gcc-multilib make manpages-dev autoconf automake libtool flex bison gdb
+  gcc-doc gcc-14-multilib gcc-14-doc gdb-x86-64-linux-gnu libc-devtools
+  glibc-doc
+Recommended packages:
+  manpages manpages-dev
+The following NEW packages will be installed:
+  binutils binutils-common binutils-x86-64-linux-gnu cpp cpp-14
+  cpp-14-x86-64-linux-gnu cpp-x86-64-linux-gnu gcc gcc-14
+  gcc-14-x86-64-linux-gnu gcc-x86-64-linux-gnu libasan8 libatomic1 libbinutils
+  libc-dev-bin libc6-dev libcc1-0 libcrypt-dev libctf-nobfd0 libctf0
+  libgcc-14-dev libgomp1 libgprofng0 libhwasan0 libisl23 libitm1 libjansson4
+  liblsan0 libmpc3 libmpfr6 libquadmath0 libsframe1 libtsan2 libubsan1
+  linux-libc-dev rpcsvc-proto
+The following packages will be upgraded:
+  libc-bin libc6
+2 upgraded, 36 newly installed, 0 to remove and 10 not upgraded.
+Need to get 60.4 MB of archives.
+After this operation, 217 MB of additional disk space will be used.
+Get:1 http://deb.debian.org/debian trixie/main amd64 libc6 amd64 2.41-12+deb13u3 [2850 kB]
+Get:2 http://deb.debian.org/debian trixie/main amd64 libc-bin amd64 2.41-12+deb13u3 [638 kB]
+Get:3 http://deb.debian.org/debian trixie/main amd64 libsframe1 amd64 2.44-3 [78.4 kB]
+Get:4 http://deb.debian.org/debian trixie/main amd64 binutils-common amd64 2.44-3 [2509 kB]
+Get:5 http://deb.debian.org/debian trixie/main amd64 libbinutils amd64 2.44-3 [534 kB]
+Get:6 http://deb.debian.org/debian trixie/main amd64 libgprofng0 amd64 2.44-3 [808 kB]
+Get:7 http://deb.debian.org/debian trixie/main amd64 libctf-nobfd0 amd64 2.44-3 [156 kB]
+Get:8 http://deb.debian.org/debian trixie/main amd64 libctf0 amd64 2.44-3 [88.6 kB]
+Get:9 http://deb.debian.org/debian trixie/main amd64 libjansson4 amd64 2.14-2+b3 [39.8 kB]
+Get:10 http://deb.debian.org/debian trixie/main amd64 binutils-x86-64-linux-gnu amd64 2.44-3 [1014 kB]
+Get:11 http://deb.debian.org/debian trixie/main amd64 binutils amd64 2.44-3 [265 kB]
+Get:12 http://deb.debian.org/debian trixie/main amd64 libisl23 amd64 0.27-1 [659 kB]
+Get:13 http://deb.debian.org/debian trixie/main amd64 libmpfr6 amd64 4.2.2-1 [729 kB]
+Get:14 http://deb.debian.org/debian trixie/main amd64 libmpc3 amd64 1.3.1-1+b3 [52.2 kB]
+Get:15 http://deb.debian.org/debian trixie/main amd64 cpp-14-x86-64-linux-gnu amd64 14.2.0-19 [11.0 MB]
+Get:16 http://deb.debian.org/debian trixie/main amd64 cpp-14 amd64 14.2.0-19 [1280 B]
+Get:17 http://deb.debian.org/debian trixie/main amd64 cpp-x86-64-linux-gnu amd64 4:14.2.0-1 [4840 B]
+Get:18 http://deb.debian.org/debian trixie/main amd64 cpp amd64 4:14.2.0-1 [1568 B]
+Get:19 http://deb.debian.org/debian trixie/main amd64 libcc1-0 amd64 14.2.0-19 [42.8 kB]
+Get:20 http://deb.debian.org/debian trixie/main amd64 libgomp1 amd64 14.2.0-19 [137 kB]
+Get:21 http://deb.debian.org/debian trixie/main amd64 libitm1 amd64 14.2.0-19 [26.0 kB]
+Get:22 http://deb.debian.org/debian trixie/main amd64 libatomic1 amd64 14.2.0-19 [9308 B]
+Get:23 http://deb.debian.org/debian trixie/main amd64 libasan8 amd64 14.2.0-19 [2725 kB]
+Get:24 http://deb.debian.org/debian trixie/main amd64 liblsan0 amd64 14.2.0-19 [1204 kB]
+Get:25 http://deb.debian.org/debian trixie/main amd64 libtsan2 amd64 14.2.0-19 [2460 kB]
+Get:26 http://deb.debian.org/debian trixie/main amd64 libubsan1 amd64 14.2.0-19 [1074 kB]
+Get:27 http://deb.debian.org/debian trixie/main amd64 libhwasan0 amd64 14.2.0-19 [1488 kB]
+Get:28 http://deb.debian.org/debian trixie/main amd64 libquadmath0 amd64 14.2.0-19 [145 kB]
+Get:29 http://deb.debian.org/debian trixie/main amd64 libgcc-14-dev amd64 14.2.0-19 [2672 kB]
+Get:30 http://deb.debian.org/debian trixie/main amd64 gcc-14-x86-64-linux-gnu amd64 14.2.0-19 [21.4 MB]
+Get:31 http://deb.debian.org/debian trixie/main amd64 gcc-14 amd64 14.2.0-19 [540 kB]
+Get:32 http://deb.debian.org/debian trixie/main amd64 gcc-x86-64-linux-gnu amd64 4:14.2.0-1 [1436 B]
+Get:33 http://deb.debian.org/debian trixie/main amd64 gcc amd64 4:14.2.0-1 [5136 B]
+Get:34 http://deb.debian.org/debian trixie/main amd64 libc-dev-bin amd64 2.41-12+deb13u3 [59.8 kB]
+Get:35 http://deb.debian.org/debian-security trixie-security/main amd64 linux-libc-dev all 6.12.90-2 [2813 kB]
+Get:36 http://deb.debian.org/debian trixie/main amd64 libcrypt-dev amd64 1:4.4.38-1 [119 kB]
+Get:37 http://deb.debian.org/debian trixie/main amd64 rpcsvc-proto amd64 1.4.3-1 [63.3 kB]
+Get:38 http://deb.debian.org/debian trixie/main amd64 libc6-dev amd64 2.41-12+deb13u3 [1992 kB]
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79, <STDIN> line 38.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8, <STDIN> line 38.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Preconfiguring packages ...
+Fetched 60.4 MB in 0s (153 MB/s)
+(Reading database ... 
+[1A(Reading database ... 5%
+[1A(Reading database ... 10%
+[1A(Reading database ... 15%
+[1A
+[1A(Reading database ... 20%
+[1A(Reading database ... 25%
+[1A(Reading database ... 30%
+[1A(Reading database ... 35%(Reading database ... 40%
+[1A(Reading database ... 45%
+[1A(Reading database ... 50%(Reading database ... 55%
+[1A(Reading database ... 60%(Reading database ... 65%
+[1A(Reading database ... 70%(Reading database ... 75%
+[1A(Reading database ... 80%
+[1A(Reading database ... 85%(Reading database ... 90%
+[1A(Reading database ... 95%
+[1A(Reading database ... 100%(Reading database ... 5645 files and directories currently installed.)
+Preparing to unpack .../libc6_2.41-12+deb13u3_amd64.deb ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+Unpacking libc6:amd64 (2.41-12+deb13u3) over (2.41-12+deb13u2) ...
+Setting up libc6:amd64 (2.41-12+deb13u3) ...
+debconf: unable to initialize frontend: Dialog
+debconf: (No usable dialog-like program is installed, so the dialog based frontend cannot be used. at /usr/share/perl5/Debconf/FrontEnd/Dialog.pm line 79.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.40.1 /usr/local/share/perl/5.40.1 /usr/lib/x86_64-linux-gnu/perl5/5.40 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.40 /usr/share/perl/5.40 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)
+debconf: falling back to frontend: Teletype
+debconf: unable to initialize frontend: Teletype
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Noninteractive
+(Reading database ... 
+[1A(Reading database ... 5%
+[1A
+[1A(Reading database ... 10%
+[1A(Reading database ... 15%
+[1A(Reading database ... 20%
+[1A(Reading database ... 25%
+[1A(Reading database ... 30%
+[1A(Reading database ... 35%
+[1A(Reading database ... 40%(Reading database ... 45%
+[1A(Reading database ... 50%(Reading database ... 55%
+[1A(Reading database ... 60%
+[1A(Reading database ... 65%
+[1A(Reading database ... 70%(Reading database ... 75%
+[1A(Reading database ... 80%
+[1A(Reading database ... 85%(Reading database ... 90%
+[1A(Reading database ... 95%
+[1A(Reading database ... 100%(Reading database ... 5645 files and directories currently installed.)
+Preparing to unpack .../libc-bin_2.41-12+deb13u3_amd64.deb ...
+Unpacking libc-bin (2.41-12+deb13u3) over (2.41-12+deb13u2) ...
+Setting up libc-bin (2.41-12+deb13u3) ...
+Selecting previously unselected package libsframe1:amd64.
+(Reading database ... 
+[1A(Reading database ... 5%
+[1A(Reading database ... 10%
+[1A(Reading database ... 15%
+[1A(Reading database ... 20%
+[1A(Reading database ... 25%
+[1A(Reading database ... 30%
+[1A(Reading database ... 35%(Reading database ... 40%
+[1A(Reading database ... 45%
+[1A(Reading database ... 50%(Reading database ... 55%
+[1A(Reading database ... 60%
+[1A(Reading database ... 65%(Reading database ... 70%
+[1A(Reading database ... 75%
+[1A(Reading database ... 80%(Reading database ... 85%
+[1A(Reading database ... 90%
+[1A(Reading database ... 95%(Reading database ... 100%
+[1A(Reading database ... 5645 files and directories currently installed.)
+Preparing to unpack .../00-libsframe1_2.44-3_amd64.deb ...
+Unpacking libsframe1:amd64 (2.44-3) ...
+Selecting previously unselected package binutils-common:amd64.
+Preparing to unpack .../01-binutils-common_2.44-3_amd64.deb ...
+Unpacking binutils-common:amd64 (2.44-3) ...
+Selecting previously unselected package libbinutils:amd64.
+Preparing to unpack .../02-libbinutils_2.44-3_amd64.deb ...
+Unpacking libbinutils:amd64 (2.44-3) ...
+Selecting previously unselected package libgprofng0:amd64.
+Preparing to unpack .../03-libgprofng0_2.44-3_amd64.deb ...
+Unpacking libgprofng0:amd64 (2.44-3) ...
+Selecting previously unselected package libctf-nobfd0:amd64.
+Preparing to unpack .../04-libctf-nobfd0_2.44-3_amd64.deb ...
+Unpacking libctf-nobfd0:amd64 (2.44-3) ...
+Selecting previously unselected package libctf0:amd64.
+Preparing to unpack .../05-libctf0_2.44-3_amd64.deb ...
+Unpacking libctf0:amd64 (2.44-3) ...
+Selecting previously unselected package libjansson4:amd64.
+Preparing to unpack .../06-libjansson4_2.14-2+b3_amd64.deb ...
+Unpacking libjansson4:amd64 (2.14-2+b3) ...
+Selecting previously unselected package binutils-x86-64-linux-gnu.
+Preparing to unpack .../07-binutils-x86-64-linux-gnu_2.44-3_amd64.deb ...
+Unpacking binutils-x86-64-linux-gnu (2.44-3) ...
+Selecting previously unselected package binutils.
+Preparing to unpack .../08-binutils_2.44-3_amd64.deb ...
+Unpacking binutils (2.44-3) ...
+Selecting previously unselected package libisl23:amd64.
+Preparing to unpack .../09-libisl23_0.27-1_amd64.deb ...
+Unpacking libisl23:amd64 (0.27-1) ...
+Selecting previously unselected package libmpfr6:amd64.
+Preparing to unpack .../10-libmpfr6_4.2.2-1_amd64.deb ...
+Unpacking libmpfr6:amd64 (4.2.2-1) ...
+Selecting previously unselected package libmpc3:amd64.
+Preparing to unpack .../11-libmpc3_1.3.1-1+b3_amd64.deb ...
+Unpacking libmpc3:amd64 (1.3.1-1+b3) ...
+Selecting previously unselected package cpp-14-x86-64-linux-gnu.
+Preparing to unpack .../12-cpp-14-x86-64-linux-gnu_14.2.0-19_amd64.deb ...
+Unpacking cpp-14-x86-64-linux-gnu (14.2.0-19) ...
+Selecting previously unselected package cpp-14.
+Preparing to unpack .../13-cpp-14_14.2.0-19_amd64.deb ...
+Unpacking cpp-14 (14.2.0-19) ...
+Selecting previously unselected package cpp-x86-64-linux-gnu.
+Preparing to unpack .../14-cpp-x86-64-linux-gnu_4%3a14.2.0-1_amd64.deb ...
+Unpacking cpp-x86-64-linux-gnu (4:14.2.0-1) ...
+Selecting previously unselected package cpp.
+Preparing to unpack .../15-cpp_4%3a14.2.0-1_amd64.deb ...
+Unpacking cpp (4:14.2.0-1) ...
+Selecting previously unselected package libcc1-0:amd64.
+Preparing to unpack .../16-libcc1-0_14.2.0-19_amd64.deb ...
+Unpacking libcc1-0:amd64 (14.2.0-19) ...
+Selecting previously unselected package libgomp1:amd64.
+Preparing to unpack .../17-libgomp1_14.2.0-19_amd64.deb ...
+Unpacking libgomp1:amd64 (14.2.0-19) ...
+Selecting previously unselected package libitm1:amd64.
+Preparing to unpack .../18-libitm1_14.2.0-19_amd64.deb ...
+Unpacking libitm1:amd64 (14.2.0-19) ...
+Selecting previously unselected package libatomic1:amd64.
+Preparing to unpack .../19-libatomic1_14.2.0-19_amd64.deb ...
+Unpacking libatomic1:amd64 (14.2.0-19) ...
+Selecting previously unselected package libasan8:amd64.
+Preparing to unpack .../20-libasan8_14.2.0-19_amd64.deb ...
+Unpacking libasan8:amd64 (14.2.0-19) ...
+Selecting previously unselected package liblsan0:amd64.
+Preparing to unpack .../21-liblsan0_14.2.0-19_amd64.deb ...
+Unpacking liblsan0:amd64 (14.2.0-19) ...
+Selecting previously unselected package libtsan2:amd64.
+Preparing to unpack .../22-libtsan2_14.2.0-19_amd64.deb ...
+Unpacking libtsan2:amd64 (14.2.0-19) ...
+Selecting previously unselected package libubsan1:amd64.
+Preparing to unpack .../23-libubsan1_14.2.0-19_amd64.deb ...
+Unpacking libubsan1:amd64 (14.2.0-19) ...
+Selecting previously unselected package libhwasan0:amd64.
+Preparing to unpack .../24-libhwasan0_14.2.0-19_amd64.deb ...
+Unpacking libhwasan0:amd64 (14.2.0-19) ...
+Selecting previously unselected package libquadmath0:amd64.
+Preparing to unpack .../25-libquadmath0_14.2.0-19_amd64.deb ...
+Unpacking libquadmath0:amd64 (14.2.0-19) ...
+Selecting previously unselected package libgcc-14-dev:amd64.
+Preparing to unpack .../26-libgcc-14-dev_14.2.0-19_amd64.deb ...
+Unpacking libgcc-14-dev:amd64 (14.2.0-19) ...
+Selecting previously unselected package gcc-14-x86-64-linux-gnu.
+Preparing to unpack .../27-gcc-14-x86-64-linux-gnu_14.2.0-19_amd64.deb ...
+Unpacking gcc-14-x86-64-linux-gnu (14.2.0-19) ...
+Selecting previously unselected package gcc-14.
+Preparing to unpack .../28-gcc-14_14.2.0-19_amd64.deb ...
+Unpacking gcc-14 (14.2.0-19) ...
+Selecting previously unselected package gcc-x86-64-linux-gnu.
+Preparing to unpack .../29-gcc-x86-64-linux-gnu_4%3a14.2.0-1_amd64.deb ...
+Unpacking gcc-x86-64-linux-gnu (4:14.2.0-1) ...
+Selecting previously unselected package gcc.
+Preparing to unpack .../30-gcc_4%3a14.2.0-1_amd64.deb ...
+Unpacking gcc (4:14.2.0-1) ...
+Selecting previously unselected package libc-dev-bin.
+Preparing to unpack .../31-libc-dev-bin_2.41-12+deb13u3_amd64.deb ...
+Unpacking libc-dev-bin (2.41-12+deb13u3) ...
+Selecting previously unselected package linux-libc-dev.
+Preparing to unpack .../32-linux-libc-dev_6.12.90-2_all.deb ...
+Unpacking linux-libc-dev (6.12.90-2) ...
+Selecting previously unselected package libcrypt-dev:amd64.
+Preparing to unpack .../33-libcrypt-dev_1%3a4.4.38-1_amd64.deb ...
+Unpacking libcrypt-dev:amd64 (1:4.4.38-1) ...
+Selecting previously unselected package rpcsvc-proto.
+Preparing to unpack .../34-rpcsvc-proto_1.4.3-1_amd64.deb ...
+Unpacking rpcsvc-proto (1.4.3-1) ...
+Selecting previously unselected package libc6-dev:amd64.
+Preparing to unpack .../35-libc6-dev_2.41-12+deb13u3_amd64.deb ...
+Unpacking libc6-dev:amd64 (2.41-12+deb13u3) ...
+Setting up binutils-common:amd64 (2.44-3) ...
+Setting up linux-libc-dev (6.12.90-2) ...
+Setting up libctf-nobfd0:amd64 (2.44-3) ...
+Setting up libgomp1:amd64 (14.2.0-19) ...
+Setting up libsframe1:amd64 (2.44-3) ...
+Setting up libjansson4:amd64 (2.14-2+b3) ...
+Setting up rpcsvc-proto (1.4.3-1) ...
+Setting up libmpfr6:amd64 (4.2.2-1) ...
+Setting up libquadmath0:amd64 (14.2.0-19) ...
+Setting up libmpc3:amd64 (1.3.1-1+b3) ...
+Setting up libatomic1:amd64 (14.2.0-19) ...
+Setting up libubsan1:amd64 (14.2.0-19) ...
+Setting up libhwasan0:amd64 (14.2.0-19) ...
+Setting up libcrypt-dev:amd64 (1:4.4.38-1) ...
+Setting up libasan8:amd64 (14.2.0-19) ...
+Setting up libtsan2:amd64 (14.2.0-19) ...
+Setting up libbinutils:amd64 (2.44-3) ...
+Setting up libisl23:amd64 (0.27-1) ...
+Setting up libc-dev-bin (2.41-12+deb13u3) ...
+Setting up libcc1-0:amd64 (14.2.0-19) ...
+Setting up liblsan0:amd64 (14.2.0-19) ...
+Setting up libitm1:amd64 (14.2.0-19) ...
+Setting up libctf0:amd64 (2.44-3) ...
+Setting up libgprofng0:amd64 (2.44-3) ...
+Setting up cpp-14-x86-64-linux-gnu (14.2.0-19) ...
+Setting up cpp-14 (14.2.0-19) ...
+Setting up libc6-dev:amd64 (2.41-12+deb13u3) ...
+Setting up libgcc-14-dev:amd64 (14.2.0-19) ...
+Setting up binutils-x86-64-linux-gnu (2.44-3) ...
+Setting up cpp-x86-64-linux-gnu (4:14.2.0-1) ...
+Setting up binutils (2.44-3) ...
+Setting up cpp (4:14.2.0-1) ...
+Setting up gcc-14-x86-64-linux-gnu (14.2.0-19) ...
+Setting up gcc-x86-64-linux-gnu (4:14.2.0-1) ...
+Setting up gcc-14 (14.2.0-19) ...
+Setting up gcc (4:14.2.0-1) ...
+Processing triggers for libc-bin (2.41-12+deb13u3) ...
+[sn] gcc installed in 14.7s
+[sn] compiling PPM ...
+[sn] PPM compiled in 0.4s
+[sn] ppm_create K=7
+[sn] PPM  30,000,000/541,096,898 (  5.5%) 4.30 MB/s  nodes=6,114,067
+[sn] PPM  60,000,000/541,096,898 ( 11.1%) 4.33 MB/s  nodes=8,887,253
+[sn] PPM  90,000,000/541,096,898 ( 16.6%) 4.35 MB/s  nodes=10,923,052
+[sn] PPM budget hit at 110,000,000/541,096,898 bytes
+[sn] PPM done: 110,000,000 bytes in 25.3s
+[sn] phase 2/3: spectral newton training
+[sn] PPM warm-start embed done in 0.5s
+[sn] Muon attn_qkv: 18 params (2.65M) α=1.43 lr_mult=1.20 lr=0.0419
+[sn] Muon attn_proj: 6 params (0.88M) α=1.17 lr_mult=1.08 lr=0.0379
+[sn] Muon mlp_up: 6 params (3.54M) α=0.84 lr_mult=0.92 lr=0.0321
+[sn] Muon mlp_down: 6 params (3.54M) α=1.15 lr_mult=1.07 lr=0.0375
+[sn] 10.84M params  cfg=TrainConfig(d=384 L=6 bs=32 T=1024 steps=2150)
+[sn] torch.compile (static) ...
+[sn] step     0/2150  loss 5.5452  elapsed 54s
+[sn] step   200/2150  loss 1.3946  elapsed 67s
+[sn] step   400/2150  loss 1.2652  elapsed 79s
+[sn] step   600/2150  loss 1.1550  elapsed 92s
+[sn] step   800/2150  loss 1.1380  elapsed 105s
+[sn] step  1000/2150  loss 1.1173  elapsed 118s
+[sn] step  1200/2150  loss 1.1009  elapsed 131s
+[sn] step  1400/2150  loss 1.0102  elapsed 144s
+[sn] step  1600/2150  loss 1.0263  elapsed 157s
+[sn] step  1800/2150  loss 0.9682  elapsed 169s
+[sn] step  2000/2150  loss 0.9713  elapsed 182s
+[sn] step  2149/2150  loss 0.9545  elapsed 192s
+[sn] phase 3/3: assemble inference model
+[sn] tuning mix_beta on 2,000 val chars ...
+[sn]   beta=0.50  acc=0.7120
+[sn] selected mix_beta=0.50 (acc=0.7120)
+[sn] train() complete in 255.9s
+training: 26,556.9 J   cpu=10,831.3 J   total=37,388.2 J   duration=256.4s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7333      120 char/s  eta=   492s
+  eval      2,400/60,000 (  4.0%)  acc=0.7242      120 char/s  eta=   482s
+  eval      3,600/60,000 (  6.0%)  acc=0.7228      119 char/s  eta=   473s
+  eval      4,800/60,000 (  8.0%)  acc=0.7321      119 char/s  eta=   463s
+  eval      6,000/60,000 ( 10.0%)  acc=0.7267      119 char/s  eta=   453s
+  eval      7,200/60,000 ( 12.0%)  acc=0.7221      119 char/s  eta=   443s
+  eval      8,400/60,000 ( 14.0%)  acc=0.7214      119 char/s  eta=   433s
+  eval      9,600/60,000 ( 16.0%)  acc=0.7256      119 char/s  eta=   423s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7273      119 char/s  eta=   413s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7287      119 char/s  eta=   403s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7332      119 char/s  eta=   393s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7343      119 char/s  eta=   383s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7353      119 char/s  eta=   373s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7379      119 char/s  eta=   362s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7367      119 char/s  eta=   352s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7377      119 char/s  eta=   342s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7387      119 char/s  eta=   332s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7386      119 char/s  eta=   322s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7386      119 char/s  eta=   312s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7390      119 char/s  eta=   302s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7402      119 char/s  eta=   292s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7410      119 char/s  eta=   282s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7414      119 char/s  eta=   272s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7417      119 char/s  eta=   262s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7410      119 char/s  eta=   252s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7391      119 char/s  eta=   242s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7387      119 char/s  eta=   232s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7372      119 char/s  eta=   221s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7365      119 char/s  eta=   211s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7358      119 char/s  eta=   201s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7362      119 char/s  eta=   191s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7364      119 char/s  eta=   181s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7364      119 char/s  eta=   171s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7358      119 char/s  eta=   161s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7356      119 char/s  eta=   151s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7362      119 char/s  eta=   141s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7362      119 char/s  eta=   131s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7364      119 char/s  eta=   121s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7358      119 char/s  eta=   111s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7363      119 char/s  eta=   101s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7366      119 char/s  eta=    91s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7380      119 char/s  eta=    80s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7386      119 char/s  eta=    70s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7392      119 char/s  eta=    60s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7396      119 char/s  eta=    50s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7392      119 char/s  eta=    40s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7395      119 char/s  eta=    30s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7398      119 char/s  eta=    20s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7405      119 char/s  eta=    10s
+  eval     60,000/60,000 (100.0%)  acc=0.7409      119 char/s  eta=     0s
+chars=60,000  acc=0.7409  eval_duration=503.0s
+---
+submission         : spectral_newton
+training energy (J): 37,388.2 (26,556.9 GPU + 10,831.3 CPU)
+training duration  : 256.4s
+val  char-accuracy : 0.7409
+val  chars         : 60,000
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/miyu-horiuchi/main/ap-3p0JAAFEyS8dmQI8yNfXSw
+
+# final result
+{
+  "submission": "spectral_newton",
+  "training_energy_J": 26556.851634900002,
+  "training_duration_s": 256.398887302,
+  "cpu_energy_J": 10831.302974487502,
+  "total_energy_J": 37388.15460938751,
+  "val_char_accuracy": 0.7408833333333333,
+  "val_chars": 60000,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-06-04T10:39:07Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 66.41754999999996,
+    "stress_watts_avg": 318.28388929665823,
+    "stress_energy_joules": 11919.769,
+    "stress_duration_s": 37.450117334999995,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@atbcalvo"
+}
