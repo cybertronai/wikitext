@@ -33,6 +33,17 @@ python submit.py submissions/modded_nanogpt
 | 2026-05-28 |      5,116 | 0.7047    | A100 80GB SXM4 | paq_mixer_v3      | [dir](submissions/paq_mixer_v3)      | @gabrielnan (total_J = 2,026 gpu + 3,090 cpu) |
 | 2026-05-28 |      5,214 | 0.7050    | A100 80GB SXM4 | gpu_ngram_w31_k11 | [dir](submissions/gpu_ngram_w31_k11) | @gabrielnan (total_J = 2,040 gpu + 3,174 cpu) |
 
+## CE Track Leaderboard
+
+> Submissions ranked by native validation cross-entropy, lower wins. CE is computed directly from `predict_dist()` as `-log2 P(true_byte)` on the first 60,000 chars of the val split; the evaluator does not tune temperature or otherwise calibrate probabilities. Rows pass the CE track when `val_bits_per_char <= CE_MAX` (`1.35`).
+
+| Date | Native CE | Status | Energy (J) | Val char-acc | GPU | Config | Submission | Contributor |
+|------|----------:|--------|-----------:|-------------:|-----|--------|------------|-------------|
+| 2026-06-03 | 1.2779 | pass | 61,383 | 0.7364 | A100 80GB PCIe | modded_nanogpt | [dir](submissions/modded_nanogpt) | @ab-10 |
+| 2026-06-03 | 1.4501 | fail | 4,128 | 0.7047 | A100 80GB PCIe | paq_mixer_v3 | [dir](submissions/paq_mixer_v3) | @gabrielnan |
+| 2026-06-03 | 1.5897 | fail | 2,531 | 0.7031 | A100 80GB PCIe | subset_70_mkn | [dir](submissions/subset_70_mkn) | @gabrielnan |
+| 2026-06-03 | 1.6762 | fail | 2,969 | 0.7050 | A100 80GB PCIe | gpu_ngram_w31_k11 | [dir](submissions/gpu_ngram_w31_k11) | @gabrielnan |
+
 ## Historical Leaderboard (pre-`bugfix/sampling`)
 
 > ⚠️ **Frozen for history; not runnable under the current contract.** All rows below were scored against the prior `CharModel.predict() -> dict[str, float]` API, which the runner consumed via `argmax`. The new contract requires `predict() -> str` (committed character); submission code targeting the old contract crashes the runner with a type mismatch. Each entry needs a mechanical signature update (`return out` → `return max(out, key=lambda c: out[c]) if out else ""`, semantics-identical) and a re-run before its row can move to the Current Leaderboard above. See [`submissions/OUTDATED.md`](submissions/OUTDATED.md) for status.
@@ -70,16 +81,20 @@ python submit.py submissions/modded_nanogpt
 
 Train a character-level language model from scratch on [WikiText-103-raw-v1](https://huggingface.co/datasets/Salesforce/wikitext).
 Submissions that meet the constraints below are ranked by **training energy (joules)**, lower wins.
-Greedy-argmax char-accuracy is computed on the first 60,000 chars of each split; val is gated by rule 5, test is reported alongside but not gated.
+Greedy-argmax char-accuracy is computed on the first 60,000 chars of the val split and gated by rule 5.
 
 **Submissions must:**
 
 1. Train from scratch. (No pre-trained weights — WikiText overlaps WebText, so pre-trained init poisons the comparison.)
-2. Use the standard WikiText-103 train/valid/test split. (You can change batch size, sequence length, attention structure, etc.; just don't change the underlying streams of characters.)
-3. Expose a streaming next-character distribution via the `CharModel` API. (The runner calls `predict()` for position `i` strictly before `observe()` commits the ground-truth at position `i` — within-document future-peeking is structurally impossible.)
+2. Use the standard WikiText-103 train/valid/test split. The harness loads these files and passes `train_text` plus, if accepted by your function signature, `valid_text` into `train()`. You can change batch size, sequence length, attention structure, etc.; just don't change the underlying streams of characters.
+3. Expose a streaming next-character prediction via the `CharModel` API. The runner calls `predict()` for position `i` strictly before `observe()` commits the ground-truth at position `i`; within-document future-peeking is structurally impossible.
     a. Implementing `CharModel` ABC from `wikitext.py` is the most straightforward way to do this.
 4. Finish training in **< 300 s wall-clock** on the pinned Modal A100-80GB PCIe, measured from the first call into `train()` to its return. (Eval is not charged against this budget.)
 5. Attain **val char-acc ≥ 0.70** on the first 60,000 chars of the val split.
+
+### CE Track
+
+Submissions may additionally implement `predict_dist() -> length-256 distribution` on their `CharModel`. The evaluator computes native `-log2 P(true_byte)` from that distribution and gates CE-track status against `CE_MAX` from `task.py`. The evaluator does not tune temperature or otherwise calibrate probabilities; any calibration must be part of the submitted training/model code.
 
 ### Internal representations
 

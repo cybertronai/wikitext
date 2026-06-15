@@ -340,6 +340,14 @@ class DeepBackoffKNModel(CharModel):
         best = int(p.argmax())
         return chr(best)
 
+    def predict_dist(self) -> np.ndarray:
+        """Side-channel: return the full smoothed next-byte distribution.
+
+        Used by ``wikitext.evaluate`` to compute CE in bits/char
+        alongside argmax accuracy. Length 256 (utf-8 byte index).
+        """
+        return self._kn_dist()
+
     def observe(self, char: str) -> None:
         self._history.extend(char.encode("utf-8"))
         if len(self._history) > self._max_ctx_len:

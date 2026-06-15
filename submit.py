@@ -212,6 +212,7 @@ def run_submission(
     test_chars = task_mod.TEST_CHARS
     max_train_seconds = task_mod.MAX_TRAIN_SECONDS
     acc_min = task_mod.ACC_MIN
+    ce_max = getattr(task_mod, "CE_MAX", None)
 
     eval_args = [
         sys.executable, "run_eval.py",
@@ -224,11 +225,14 @@ def run_submission(
         eval_args += ["--max-train-seconds", str(max_train_seconds)]
     if acc_min is not None:
         eval_args += ["--acc-min", str(acc_min)]
+    if ce_max is not None:
+        eval_args += ["--ce-max", str(ce_max)]
 
     print(f"[modal] running submission "
           f"(TEST_CHARS={test_chars} "
           f"MAX_TRAIN_SECONDS={max_train_seconds} "
-          f"ACC_MIN={acc_min}) ...")
+          f"ACC_MIN={acc_min} "
+          f"CE_MAX={ce_max}) ...")
     rc = subprocess.run(eval_args).returncode
 
     # run_eval exits 2 on either DQ path (wall-clock or val accuracy)

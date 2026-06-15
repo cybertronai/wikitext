@@ -65,6 +65,16 @@ def main() -> None:
                         "runner sets this from task.ACC_MIN; submissions "
                         "cannot vary it. If the val score falls below the "
                         "floor, the submission is reported as DISQUALIFIED.")
+    p.add_argument("--ce-max", type=float, default=None,
+                   help="Maximum native val cross-entropy in bits/char "
+                        "for the CE track. The runner sets this from "
+                        "task.CE_MAX; submissions cannot vary it. CE-track "
+                        "gating: if the submission exposes ``predict_dist()`` "
+                        "AND native CE on val is at or below this floor, "
+                        "``ce_track_status`` = pass. If it "
+                        "exposes ``predict_dist()`` but exceeds the floor, "
+                        "status = fail. If ``predict_dist()`` is not "
+                        "implemented, status = n_a (CE track not entered).")
     args = p.parse_args()
 
     print(f"loading WikiText-103 from {args.data_dir} ...")
@@ -87,6 +97,8 @@ def main() -> None:
         print(f"train wall-clock cap: {args.max_train_seconds:.0f} s")
     if args.acc_min is not None:
         print(f"val accuracy floor : {args.acc_min:.4f}")
+    if args.ce_max is not None:
+        print(f"CE-track floor (bits/char, native): {args.ce_max:.4f}")
 
     submission_name = args.submission.stem
     spec = importlib.util.spec_from_file_location("user_submission", args.submission)
@@ -165,6 +177,8 @@ def main() -> None:
                 "acc_min": args.acc_min,
                 "val_char_accuracy": val_result.accuracy,
                 "val_chars": val_result.n_chars,
+                "val_bits_per_char": val_result.bits_per_char,
+                "val_ce_chars": val_result.n_ce_chars,
                 "training_energy_J": m.energy_joules,
                 "training_duration_s": m.duration_s,
                 "cpu_energy_J": m.cpu_energy_J,
@@ -183,6 +197,24 @@ def main() -> None:
     print(f"val  char-accuracy : {val_result.accuracy:.4f}")
     print(f"val  chars         : {val_result.n_chars:,}")
 
+    # CE-track status. Independent of the acc-track gate: a submission
+    # can pass the acc gate but fail CE, or pass CE while DQ'd on acc
+    # (the acc DQ already exited above). "n_a" means the submission
+    # didn't expose predict_dist, so it never entered the CE track.
+    ce = val_result.bits_per_char
+    if ce is None:
+        ce_track_status = "n_a"
+    elif args.ce_max is None:
+        ce_track_status = "n_a"  # no threshold supplied
+    elif ce <= args.ce_max:
+        ce_track_status = "pass"
+    else:
+        ce_track_status = "fail"
+    if ce_track_status != "n_a":
+        print(f"CE  track          : {ce_track_status}  "
+              f"(native={ce:.4f} bits/char, "
+              f"floor={args.ce_max:.4f})")
+
     if args.results_json is not None:
         payload = {
             "submission": submission_name,
@@ -192,6 +224,10 @@ def main() -> None:
             "total_energy_J": m.total_energy_J,
             "val_char_accuracy": val_result.accuracy,
             "val_chars": val_result.n_chars,
+            "val_bits_per_char": val_result.bits_per_char,
+            "val_ce_chars": val_result.n_ce_chars,
+            "ce_track_status": ce_track_status,
+            "ce_max": args.ce_max,
             "gpu_name": _gpu_name(),
             "date_utc": _utc_now(),
         }

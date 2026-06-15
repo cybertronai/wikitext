@@ -93,6 +93,19 @@ def test_evaluate_streaming_order() -> None:
         assert n_pred == n_obs
 
 
+def test_evaluate_reports_native_bits_per_char() -> None:
+    """CE track scores the distribution returned by predict_dist() directly."""
+    class _NativeDistModel(_ConstantModel):
+        def predict_dist(self):
+            dist = [0.0] * 256
+            dist[ord("a")] = 0.25
+            return dist
+
+    r = evaluate(_NativeDistModel("a"), "aaa")
+    assert r.n_ce_chars == 3
+    assert r.bits_per_char == 2.0
+
+
 # ---------------------------------------------------------------------------
 # Energy meter
 # ---------------------------------------------------------------------------

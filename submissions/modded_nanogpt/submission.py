@@ -448,6 +448,20 @@ class ModdedNanoGPTCharModel(CharModel):
         return max(out, key=lambda c: out[c]) if out else ""
 
     @torch.no_grad()
+    def predict_dist(self):
+        """Side-channel: return the raw next-byte distribution (length 256).
+
+        Used by ``wikitext.evaluate`` to compute CE in bits/char alongside
+        argmax accuracy. Indexed by utf-8 byte id (0..255). Returned as a
+        numpy array for backend-agnostic indexing.
+        """
+        import numpy as np  # local — torch is already loaded above
+        if self._next_logits is None:
+            raise RuntimeError("predict_dist() called before reset()")
+        probs = F.softmax(self._next_logits.float(), dim=-1)
+        return probs.cpu().numpy()
+
+    @torch.no_grad()
     def observe(self, char: str) -> None:
         if self._kv is None:
             raise RuntimeError("observe() called before reset()")

@@ -86,6 +86,29 @@ class CharModel(ABC):
     def observe(self, char: str) -> None:
         """Commit a single ground-truth character to the model's history."""
 
+    # Optional: expose a next-byte distribution for the CE track.
+    #
+    # The accuracy track only requires ``predict() -> str``. The CE
+    # track additionally requires a probability distribution so the
+    # runner can compute native -log2 P(true_byte). Submissions that
+    # implement this method opt into the CE track; those that don't are
+    # scored on accuracy only.
+    #
+    # The returned array MUST be length 256 indexed by utf-8 byte id and
+    # sum to (approximately) 1.0. Numpy is the lingua franca to keep the
+    # eval loop backend-agnostic; torch tensors should be ``.cpu().numpy()``
+    # before returning.
+    def predict_dist(self):  # -> np.ndarray of length 256
+        """Optional: return the next-byte distribution (length 256).
+
+        Default raises ``NotImplementedError``. Submissions overriding it
+        qualify for the CE track and have native ``val_bits_per_char``
+        computed during eval.
+        """
+        raise NotImplementedError(
+            "predict_dist() is optional — implement to opt into the CE track"
+        )
+
 
 # ---------------------------------------------------------------------------
 # Streaming evaluator
@@ -96,14 +119,31 @@ class EvalResult:
     n_chars: int
     n_correct: int
     duration_s: float
+    sum_nll_bits: float = 0.0  # total -log2 P(true_char) over scored chars
+    n_ce_chars: int = 0        # how many chars contributed to sum_nll_bits
 
     @property
     def accuracy(self) -> float:
         return self.n_correct / max(1, self.n_chars)
 
+    @property
+    def bits_per_char(self) -> float | None:
+        """Mean native cross-entropy in bits/char, or ``None`` if no CE collected.
+
+        CE is computed only when the model exposes a distribution accessor
+        via ``CharModel.predict_dist() -> np.ndarray`` of length 256
+        (utf-8 byte-level). Submissions that do not expose it are still
+        scored on accuracy only.
+        """
+        if self.n_ce_chars == 0:
+            return None
+        return self.sum_nll_bits / self.n_ce_chars
+
     def __str__(self) -> str:
+        ce = self.bits_per_char
+        ce_part = f"  ce={ce:.4f} bits/char" if ce is not None else ""
         return (f"chars={self.n_chars:,}  "
-                f"acc={self.accuracy:.4f}  "
+                f"acc={self.accuracy:.4f}{ce_part}  "
                 f"eval_duration={self.duration_s:.1f}s")
 
 
@@ -124,14 +164,38 @@ def evaluate(
     """
     total = len(stream) if hasattr(stream, "__len__") else None  # type: ignore[arg-type]
 
+    # Opt-in CE collection: subclasses override ``predict_dist()`` to
+    # expose a length-256 distribution indexed by utf-8 byte id.
+    dist_fn = None
+    if getattr(type(model), "predict_dist") is not CharModel.predict_dist:
+        dist_fn = model.predict_dist
+
     n_chars = 0
     n_correct = 0
+    sum_nll_bits = 0.0
+    n_ce_chars = 0
     model.reset()
     t0 = time.monotonic()
+    import math
     for true_char in stream:
         pred_char = model.predict()
         if pred_char == true_char:
             n_correct += 1
+
+        if dist_fn is not None:
+            true_byte = true_char.encode("utf-8")[0]
+            try:
+                p_arr = dist_fn()
+                p = float(p_arr[true_byte])
+                p_clipped = p if p > 0.0 else 1e-12
+                sum_nll_bits += -math.log2(p_clipped)
+                n_ce_chars += 1
+            except Exception:  # noqa: BLE001
+                # If a distribution lookup misbehaves, silently fall back
+                # to accuracy-only for that position rather than crashing
+                # the whole eval.
+                pass
+
         n_chars += 1
         model.observe(true_char)
 
@@ -139,6 +203,8 @@ def evaluate(
             elapsed = time.monotonic() - t0
             chars_per_s = n_chars / max(1e-9, elapsed)
             acc = n_correct / n_chars
+            ce = sum_nll_bits / n_ce_chars if n_ce_chars else 0.0
+            ce_part = f"  ce={ce:.3f}" if n_ce_chars else ""
             if total:
                 pct = 100.0 * n_chars / total
                 remaining = max(0, total - n_chars) / max(1e-9, chars_per_s)
@@ -147,13 +213,15 @@ def evaluate(
             else:
                 eta = ""
                 head = f"{n_chars:>10,}"
-            print(f"  eval {head}  acc={acc:.4f}  "
+            print(f"  eval {head}  acc={acc:.4f}{ce_part}  "
                   f"{chars_per_s:7.0f} char/s{eta}", flush=True)
 
     return EvalResult(
         n_chars=n_chars,
         n_correct=n_correct,
         duration_s=time.monotonic() - t0,
+        sum_nll_bits=sum_nll_bits,
+        n_ce_chars=n_ce_chars,
     )
 
 
