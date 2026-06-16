@@ -1,0 +1,27 @@
+{
+  "submission": "nanogpt_comp_muon_mp1",
+  "training_energy_J": 48309.287033249995,
+  "training_duration_s": 234.59799933500003,
+  "cpu_energy_J": 9914.78917241498,
+  "total_energy_J": 58224.07620566498,
+  "val_char_accuracy": 0.73435,
+  "val_chars": 60000,
+  "val_bits_per_char": 1.2856408626198876,
+  "val_ce_chars": 60000,
+  "ce_track_status": "pass",
+  "ce_max": 1.35,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-06-16T15:45:57Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 60.29134999999998,
+    "stress_watts_avg": 324.30651721736285,
+    "stress_energy_joules": 12208.381,
+    "stress_duration_s": 37.644574968,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@gabrielnan"
+}
