@@ -39,6 +39,7 @@ python submit.py submissions/modded_nanogpt
 
 | Date | Native CE | Status | Energy (J) | Val char-acc | GPU | Config | Submission | Contributor |
 |------|----------:|--------|-----------:|-------------:|-----|--------|------------|-------------|
+| 2026-06-16 | 1.3182 | pass | 42,059 | 0.7286 | A100 80GB SXM4 | nanogpt_comp_muon_mp4 | [dir](submissions/nanogpt_comp_muon_mp4) | @gabrielnan |
 | 2026-06-16 | 1.2856 | pass | 58,224 | 0.7343 | A100 80GB SXM4 | nanogpt_comp_muon_mp1 | [dir](submissions/nanogpt_comp_muon_mp1) | @gabrielnan |
 | 2026-06-03 | 1.2779 | pass | 61,383 | 0.7364 | A100 80GB PCIe | modded_nanogpt | [dir](submissions/modded_nanogpt) | @ab-10 |
 | 2026-06-03 | 1.4501 | fail | 4,128 | 0.7047 | A100 80GB PCIe | paq_mixer_v3 | [dir](submissions/paq_mixer_v3) | @gabrielnan |
