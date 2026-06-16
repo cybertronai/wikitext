@@ -35,10 +35,12 @@ python submit.py submissions/modded_nanogpt
 
 ## CE Track Leaderboard
 
-> Submissions ranked by native validation cross-entropy, lower wins. CE is computed directly from `predict_dist()` as `-log2 P(true_byte)` on the first 60,000 chars of the val split; the evaluator does not tune temperature or otherwise calibrate probabilities. Rows pass the CE track when `val_bits_per_char <= CE_MAX` (`1.35`).
+> CE-track submissions must pass native validation cross-entropy (`val_bits_per_char <= CE_MAX`, currently `1.35`) and are then ranked by training energy, lower wins. CE is computed directly from `predict_dist()` as `-log2 P(true_byte)` on the first 60,000 chars of the val split; the evaluator does not tune temperature or otherwise calibrate probabilities. Failed rows are kept below the passing entries as reference baselines.
 
 | Date | Native CE | Status | Energy (J) | Val char-acc | GPU | Config | Submission | Contributor |
 |------|----------:|--------|-----------:|-------------:|-----|--------|------------|-------------|
+| 2026-06-16 | 1.3182 | pass | 42,059 | 0.7286 | A100 80GB SXM4 | nanogpt_comp_muon_mp4 | [dir](submissions/nanogpt_comp_muon_mp4) | @gabrielnan |
+| 2026-06-16 | 1.2856 | pass | 58,224 | 0.7343 | A100 80GB SXM4 | nanogpt_comp_muon_mp1 | [dir](submissions/nanogpt_comp_muon_mp1) | @gabrielnan |
 | 2026-06-03 | 1.2779 | pass | 61,383 | 0.7364 | A100 80GB PCIe | modded_nanogpt | [dir](submissions/modded_nanogpt) | @ab-10 |
 | 2026-06-03 | 1.4501 | fail | 4,128 | 0.7047 | A100 80GB PCIe | paq_mixer_v3 | [dir](submissions/paq_mixer_v3) | @gabrielnan |
 | 2026-06-03 | 1.5897 | fail | 2,531 | 0.7031 | A100 80GB PCIe | subset_70_mkn | [dir](submissions/subset_70_mkn) | @gabrielnan |

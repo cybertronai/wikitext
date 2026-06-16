@@ -1,0 +1,142 @@
+# wikitext submit.py log — nanogpt_comp_muon_mp4 — 2026-06-16T19:08:51+00:00Z
+[modal] launching A100-80GB ...
+✓ Initialized. View run at 
+https://modal.com/apps/naka/main/ap-7g4iVr9jiV8WwVj3SFO6k7
+✓ Created objects.
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/submit.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/task.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/verify_nvml.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/run_eval.py
+├── 🔨 Created mount /Users/naka/src/sutro/wikitext/wikitext.py
+└── 🔨 Created function run_submission.
+[modal] verifying NVML energy counter ...
+GPU: NVIDIA A100-SXM4-80GB
+sampling idle power for 3s ...
+  idle: 61.9 W
+running 30s stress workload ...
+  duration:       38.5 s
+  energy delta:   11,937.7 J
+  avg power:      310.2 W
+  monotonic:      True
+---
+{"nvml_available": true, "energy_counter_supported": true, "monotonic": true, "idle_watts": 61.88289830508471, "stress_watts_avg": 310.1669863817644, "stress_energy_joules": 11937.711, "stress_duration_s": 38.488012987, "gpu_name": "NVIDIA A100-SXM4-80GB", "notes": []}
+[modal] running submission (TEST_CHARS=60000 MAX_TRAIN_SECONDS=300.0 ACC_MIN=0.7 CE_MAX=1.35) ...
+loading WikiText-103 from /data ...
+  train chars: 540,095,682
+  val   chars: 60,000  (scored, gated by --acc-min)
+train wall-clock cap: 300 s
+val accuracy floor : 0.7000
+CE-track floor (bits/char, native): 1.3500
+training submission /workspace/nanogpt_comp_muon_mp4.py ...
+[codecarbon WARNING @ 19:09:46] Multiple instances of codecarbon are allowed to run at the same time.
+[comp-muon] 10.84M params  cfg=TrainConfig(d=384 L=6 H=6 bs=32 T=1024 steps=1600 cm_mp=1.0 mlp_mp=1.0)  ov_pairs=6 mlp_row_uniform=6 muon_params=18
+[comp-muon] step     0/1600  loss 5.5452  elapsed 2s
+[comp-muon] step   100/1600  loss 1.6287  elapsed 13s
+[comp-muon] step   200/1600  loss 1.4201  elapsed 24s
+[comp-muon] step   300/1600  loss 1.3478  elapsed 35s
+[comp-muon] step   400/1600  loss 1.2635  elapsed 47s
+[comp-muon] step   500/1600  loss 1.2285  elapsed 58s
+[comp-muon] step   600/1600  loss 1.1523  elapsed 69s
+[comp-muon] step   700/1600  loss 1.1197  elapsed 80s
+[comp-muon] step   800/1600  loss 1.0912  elapsed 91s
+[comp-muon] step   900/1600  loss 1.0969  elapsed 103s
+[comp-muon] step  1000/1600  loss 1.0435  elapsed 114s
+[comp-muon] step  1100/1600  loss 1.0666  elapsed 125s
+[comp-muon] step  1200/1600  loss 1.0257  elapsed 136s
+[comp-muon] step  1300/1600  loss 1.0314  elapsed 147s
+[comp-muon] step  1400/1600  loss 1.0374  elapsed 159s
+[comp-muon] step  1500/1600  loss 1.0147  elapsed 170s
+[comp-muon] step  1599/1600  loss 1.0018  elapsed 181s
+training: 34,234.8 J   cpu=7,824.0 J   total=42,058.8 J   duration=185.0s
+evaluating on val split ...
+  eval      1,200/60,000 (  2.0%)  acc=0.7250  ce=1.286      118 char/s  eta=   500s
+  eval      2,400/60,000 (  4.0%)  acc=0.7117  ce=1.362      117 char/s  eta=   492s
+  eval      3,600/60,000 (  6.0%)  acc=0.7131  ce=1.354      117 char/s  eta=   482s
+  eval      4,800/60,000 (  8.0%)  acc=0.7215  ce=1.323      117 char/s  eta=   472s
+  eval      6,000/60,000 ( 10.0%)  acc=0.7105  ce=1.375      117 char/s  eta=   462s
+  eval      7,200/60,000 ( 12.0%)  acc=0.7089  ce=1.387      117 char/s  eta=   451s
+  eval      8,400/60,000 ( 14.0%)  acc=0.7087  ce=1.397      117 char/s  eta=   441s
+  eval      9,600/60,000 ( 16.0%)  acc=0.7120  ce=1.382      117 char/s  eta=   431s
+  eval     10,800/60,000 ( 18.0%)  acc=0.7131  ce=1.381      117 char/s  eta=   421s
+  eval     12,000/60,000 ( 20.0%)  acc=0.7148  ce=1.376      117 char/s  eta=   411s
+  eval     13,200/60,000 ( 22.0%)  acc=0.7189  ce=1.353      117 char/s  eta=   400s
+  eval     14,400/60,000 ( 24.0%)  acc=0.7202  ce=1.351      117 char/s  eta=   390s
+  eval     15,600/60,000 ( 26.0%)  acc=0.7222  ce=1.342      117 char/s  eta=   380s
+  eval     16,800/60,000 ( 28.0%)  acc=0.7250  ce=1.330      117 char/s  eta=   369s
+  eval     18,000/60,000 ( 30.0%)  acc=0.7232  ce=1.341      117 char/s  eta=   359s
+  eval     19,200/60,000 ( 32.0%)  acc=0.7252  ce=1.334      117 char/s  eta=   349s
+  eval     20,400/60,000 ( 34.0%)  acc=0.7261  ce=1.327      117 char/s  eta=   338s
+  eval     21,600/60,000 ( 36.0%)  acc=0.7251  ce=1.331      117 char/s  eta=   328s
+  eval     22,800/60,000 ( 38.0%)  acc=0.7253  ce=1.330      117 char/s  eta=   318s
+  eval     24,000/60,000 ( 40.0%)  acc=0.7262  ce=1.328      117 char/s  eta=   308s
+  eval     25,200/60,000 ( 42.0%)  acc=0.7276  ce=1.323      117 char/s  eta=   297s
+  eval     26,400/60,000 ( 44.0%)  acc=0.7282  ce=1.317      117 char/s  eta=   287s
+  eval     27,600/60,000 ( 46.0%)  acc=0.7288  ce=1.313      117 char/s  eta=   277s
+  eval     28,800/60,000 ( 48.0%)  acc=0.7292  ce=1.313      117 char/s  eta=   267s
+  eval     30,000/60,000 ( 50.0%)  acc=0.7284  ce=1.316      117 char/s  eta=   256s
+  eval     31,200/60,000 ( 52.0%)  acc=0.7266  ce=1.325      117 char/s  eta=   246s
+  eval     32,400/60,000 ( 54.0%)  acc=0.7262  ce=1.328      117 char/s  eta=   236s
+  eval     33,600/60,000 ( 56.0%)  acc=0.7247  ce=1.337      117 char/s  eta=   226s
+  eval     34,800/60,000 ( 58.0%)  acc=0.7236  ce=1.344      117 char/s  eta=   215s
+  eval     36,000/60,000 ( 60.0%)  acc=0.7226  ce=1.348      117 char/s  eta=   205s
+  eval     37,200/60,000 ( 62.0%)  acc=0.7230  ce=1.346      117 char/s  eta=   195s
+  eval     38,400/60,000 ( 64.0%)  acc=0.7235  ce=1.343      117 char/s  eta=   185s
+  eval     39,600/60,000 ( 66.0%)  acc=0.7237  ce=1.344      117 char/s  eta=   174s
+  eval     40,800/60,000 ( 68.0%)  acc=0.7236  ce=1.345      117 char/s  eta=   164s
+  eval     42,000/60,000 ( 70.0%)  acc=0.7237  ce=1.344      117 char/s  eta=   154s
+  eval     43,200/60,000 ( 72.0%)  acc=0.7243  ce=1.342      117 char/s  eta=   144s
+  eval     44,400/60,000 ( 74.0%)  acc=0.7245  ce=1.340      117 char/s  eta=   133s
+  eval     45,600/60,000 ( 76.0%)  acc=0.7246  ce=1.340      117 char/s  eta=   123s
+  eval     46,800/60,000 ( 78.0%)  acc=0.7242  ce=1.342      117 char/s  eta=   113s
+  eval     48,000/60,000 ( 80.0%)  acc=0.7246  ce=1.339      117 char/s  eta=   103s
+  eval     49,200/60,000 ( 82.0%)  acc=0.7251  ce=1.336      117 char/s  eta=    92s
+  eval     50,400/60,000 ( 84.0%)  acc=0.7262  ce=1.330      117 char/s  eta=    82s
+  eval     51,600/60,000 ( 86.0%)  acc=0.7268  ce=1.328      117 char/s  eta=    72s
+  eval     52,800/60,000 ( 88.0%)  acc=0.7275  ce=1.325      117 char/s  eta=    62s
+  eval     54,000/60,000 ( 90.0%)  acc=0.7278  ce=1.324      117 char/s  eta=    51s
+  eval     55,200/60,000 ( 92.0%)  acc=0.7272  ce=1.325      117 char/s  eta=    41s
+  eval     56,400/60,000 ( 94.0%)  acc=0.7277  ce=1.323      117 char/s  eta=    31s
+  eval     57,600/60,000 ( 96.0%)  acc=0.7280  ce=1.321      117 char/s  eta=    21s
+  eval     58,800/60,000 ( 98.0%)  acc=0.7286  ce=1.319      117 char/s  eta=    10s
+  eval     60,000/60,000 (100.0%)  acc=0.7286  ce=1.318      117 char/s  eta=     0s
+chars=60,000  acc=0.7286  ce=1.3182 bits/char  eval_duration=512.8s
+---
+submission         : nanogpt_comp_muon_mp4
+training energy (J): 42,058.8 (34,234.8 GPU + 7,824.0 CPU)
+training duration  : 185.0s
+val  char-accuracy : 0.7286
+val  chars         : 60,000
+CE  track          : pass  (native=1.3182 bits/char, floor=1.3500)
+wrote /tmp/result.json
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/naka/main/ap-7g4iVr9jiV8WwVj3SFO6k7
+
+# final result
+{
+  "submission": "nanogpt_comp_muon_mp4",
+  "training_energy_J": 34234.750809850004,
+  "training_duration_s": 184.98496380299997,
+  "cpu_energy_J": 7824.024679365006,
+  "total_energy_J": 42058.77548921501,
+  "val_char_accuracy": 0.7285666666666667,
+  "val_chars": 60000,
+  "val_bits_per_char": 1.3182418318624483,
+  "val_ce_chars": 60000,
+  "ce_track_status": "pass",
+  "ce_max": 1.35,
+  "gpu_name": "NVIDIA A100-SXM4-80GB",
+  "date_utc": "2026-06-16T19:21:29Z",
+  "_nvml": {
+    "nvml_available": true,
+    "energy_counter_supported": true,
+    "monotonic": true,
+    "idle_watts": 61.88289830508471,
+    "stress_watts_avg": 310.1669863817644,
+    "stress_energy_joules": 11937.711,
+    "stress_duration_s": 38.488012987,
+    "gpu_name": "NVIDIA A100-SXM4-80GB",
+    "notes": []
+  },
+  "contributor": "@gabrielnan"
+}
