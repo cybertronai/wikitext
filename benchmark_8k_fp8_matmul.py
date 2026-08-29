@@ -29,6 +29,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
+import sys
 from pathlib import Path
 
 import modal
@@ -43,6 +45,13 @@ OUTPUT_BYTES = 4 * N**2  # one FP32 output
 # Keep this exact. Modal's B200+ selector may upgrade the worker to B300.
 MODAL_GPU = "B200"
 USE_FAST_ACCUM = False
+MAX_PLANNED_MEASUREMENT_SECONDS = 210.0
+MIN_TRIAL_SECONDS = 0.1
+MAX_TRIALS = 10
+MAX_WARMUP_REPETITIONS = 1_000
+EXECUTION_CAP_SECONDS = 5 * 60
+STARTUP_CAP_SECONDS = 3 * 60
+CALL_WALL_CAP_SECONDS = 8 * 60
 
 # Use the exact Blackwell-capable PyTorch/CUDA environment verified by the
 # pilot. Package versions and the CUDA wheel index are pinned explicitly.
@@ -69,7 +78,18 @@ REFERENCE_IDEAL_TIME_S = CONVENTIONAL_OPS / REFERENCE_DENSE_FP8_OPS_PER_S
 REFERENCE_MODULE_ENERGY_J = REFERENCE_POWER_W * REFERENCE_IDEAL_TIME_S
 
 
-@app.function(image=image, gpu=MODAL_GPU, timeout=15 * 60)
+@app.function(
+    image=image,
+    gpu=MODAL_GPU,
+    min_containers=0,
+    max_containers=1,
+    buffer_containers=0,
+    scaledown_window=2,
+    single_use_containers=True,
+    retries=0,
+    timeout=EXECUTION_CAP_SECONDS,
+    startup_timeout=STARTUP_CAP_SECONDS,
+)
 def run_benchmark(
     *,
     trial_seconds: float = 15.0,
@@ -88,16 +108,32 @@ def run_benchmark(
     import pynvml
     import torch
 
-    if trial_seconds <= 0:
-        raise ValueError("trial_seconds must be positive")
-    if trials < 1:
-        raise ValueError("trials must be at least 1")
-    if idle_seconds <= 0:
-        raise ValueError("idle_seconds must be positive")
-    if idle_cooldown_seconds < 0:
-        raise ValueError("idle_cooldown_seconds must be nonnegative")
-    if warmup_repetitions < 1:
-        raise ValueError("warmup_repetitions must be at least 1")
+    if not math.isfinite(trial_seconds) or trial_seconds < MIN_TRIAL_SECONDS:
+        raise ValueError(f"trial_seconds must be at least {MIN_TRIAL_SECONDS}")
+    if not 1 <= trials <= MAX_TRIALS:
+        raise ValueError(f"trials must be between 1 and {MAX_TRIALS}")
+    if not math.isfinite(idle_seconds) or idle_seconds <= 0:
+        raise ValueError("idle_seconds must be finite and positive")
+    if (
+        not math.isfinite(idle_cooldown_seconds)
+        or idle_cooldown_seconds < 0
+    ):
+        raise ValueError("idle_cooldown_seconds must be finite and nonnegative")
+    if not 1 <= warmup_repetitions <= MAX_WARMUP_REPETITIONS:
+        raise ValueError(
+            "warmup_repetitions must be between 1 and "
+            f"{MAX_WARMUP_REPETITIONS}"
+        )
+    planned_seconds = (
+        3 * trials * trial_seconds
+        + 2 * idle_seconds
+        + 2 * idle_cooldown_seconds
+    )
+    if planned_seconds > MAX_PLANNED_MEASUREMENT_SECONDS:
+        raise ValueError(
+            f"measurement plan is {planned_seconds:.1f} s; the cost guard "
+            f"allows at most {MAX_PLANNED_MEASUREMENT_SECONDS:.0f} s"
+        )
     if requested_modal_gpu != MODAL_GPU:
         raise ValueError(
             f"this benchmark is fixed to Modal {MODAL_GPU}, got "
@@ -543,6 +579,21 @@ def run_benchmark(
                 "host CPU and facility energy",
             ],
         },
+        "cost_controls": {
+            "exact_gpu_selector": MODAL_GPU,
+            "min_containers": 0,
+            "max_containers": 1,
+            "buffer_containers": 0,
+            "scaledown_window_seconds": 2,
+            "single_use_containers": True,
+            "retries": 0,
+            "execution_cap_seconds": EXECUTION_CAP_SECONDS,
+            "startup_cap_seconds": STARTUP_CAP_SECONDS,
+            "caller_wall_cap_seconds": CALL_WALL_CAP_SECONDS,
+            "max_planned_measurement_seconds": (
+                MAX_PLANNED_MEASUREMENT_SECONDS
+            ),
+        },
         "correctness": {
             "method": "torch.all(C == 8192.0) after warmup",
             "checked_output_entries": N**2,
@@ -578,8 +629,8 @@ def run_benchmark(
 
 def _positive_float(value: str) -> float:
     parsed = float(value)
-    if parsed <= 0:
-        raise argparse.ArgumentTypeError("must be positive")
+    if not math.isfinite(parsed) or parsed <= 0:
+        raise argparse.ArgumentTypeError("must be finite and positive")
     return parsed
 
 
@@ -669,16 +720,33 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    if args.idle_cooldown_seconds < 0:
-        parser.error("--idle-cooldown-seconds must be nonnegative")
+    if (
+        not math.isfinite(args.idle_cooldown_seconds)
+        or args.idle_cooldown_seconds < 0
+    ):
+        parser.error("--idle-cooldown-seconds must be finite and nonnegative")
+    if args.trial_seconds < MIN_TRIAL_SECONDS:
+        parser.error(f"--trial-seconds must be at least {MIN_TRIAL_SECONDS}")
+    if args.trials > MAX_TRIALS:
+        parser.error(f"--trials cannot exceed {MAX_TRIALS}")
+    if args.warmup_repetitions > MAX_WARMUP_REPETITIONS:
+        parser.error(
+            f"--warmup-repetitions cannot exceed {MAX_WARMUP_REPETITIONS}"
+        )
     measured_seconds = (
         3 * args.trials * args.trial_seconds
         + 2 * args.idle_seconds
         + 2 * args.idle_cooldown_seconds
     )
+    if measured_seconds > MAX_PLANNED_MEASUREMENT_SECONDS:
+        parser.error(
+            f"measurement plan is {measured_seconds:.1f} s; the cost guard "
+            f"allows at most {MAX_PLANNED_MEASUREMENT_SECONDS:.0f} s"
+        )
     print(f"╭─ Modal {MODAL_GPU} 8192^3 FP8 GEMM ──────")
     print(f"│  aggregate measurement: at least ~{measured_seconds:.0f} s")
-    print("│  plus image startup, pilots, warmup, and validation")
+    print("│  one container, one input, no configured retries")
+    print(f"│  hard function cap: {EXECUTION_CAP_SECONDS} s")
     print(f"│  output: {args.output.resolve()}")
     print("╰───────────────────────────────────────")
     if not args.yes and input("proceed? [Y/n] ").strip().lower() not in (
@@ -689,8 +757,15 @@ def main() -> int:
         print("aborted")
         return 1
 
-    with modal.enable_output(), app.run():
-        result = run_benchmark.remote(
+    call = None
+    completed = False
+    with modal.enable_output(), app.run(detach=False):
+        print(
+            f"emergency stop: modal app stop -y {app.app_id}",
+            file=sys.stderr,
+            flush=True,
+        )
+        call = run_benchmark.spawn(
             trial_seconds=args.trial_seconds,
             trials=args.trials,
             idle_seconds=args.idle_seconds,
@@ -698,11 +773,18 @@ def main() -> int:
             warmup_repetitions=args.warmup_repetitions,
             requested_modal_gpu=MODAL_GPU,
         )
+        try:
+            result = call.get(timeout=CALL_WALL_CAP_SECONDS)
+            completed = True
+        finally:
+            if not completed:
+                call.cancel(terminate_containers=True)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n")
     _print_summary(result)
     print(f"\nwrote {args.output.resolve()}")
+    print("Modal app exited; the single-use container is not kept warm.")
     return 0
 
 

@@ -1,0 +1,296 @@
+{
+  "benchmark": "out-of-place addition of two dense 8192 x 8192 FP8 matrices",
+  "date_utc": "2026-08-29T01:49:35Z",
+  "matrix": {
+    "rows": 8192,
+    "columns": 8192,
+    "elements": 67108864,
+    "lhs_dtype": "float8_e4m3fn",
+    "rhs_dtype": "float8_e4m3fn",
+    "arithmetic_dtype": "float32",
+    "output_dtype": "float8_e4m3fn",
+    "rounding": "round to nearest, ties to even",
+    "input_bytes": 134217728,
+    "output_bytes": 67108864,
+    "addition_logical_traffic_bytes": 201326592,
+    "pipeline_logical_traffic_bytes": 335544320,
+    "initialization": "preallocated A and B filled with constant 1.0"
+  },
+  "operation_count": {
+    "elementwise_additions": 67108864
+  },
+  "operator": {
+    "name": "custom Triton FP8 elementwise add",
+    "block_size": 1024,
+    "num_warps": 8,
+    "output_preallocated": true,
+    "source": "FP8 loads -> FP32 add -> FP8 E4M3FN RTNE store"
+  },
+  "hardware": {
+    "requested_modal_gpu": "B200",
+    "gpu_name": "NVIDIA B200",
+    "gpu_memory_bytes": 191503138816,
+    "multiprocessor_count": 148,
+    "compute_capability": [
+      10,
+      0
+    ],
+    "nvml_power_limit_W": 1000.0,
+    "driver_version": "580.95.05",
+    "torch_version": "2.12.1+cu130",
+    "torch_cuda_version": "13.0",
+    "triton_version": "3.7.1",
+    "image_description": "modal.Image.debian_slim(python_version='3.11')",
+    "torch_package": "torch==2.12.1",
+    "torch_index_url": "https://download.pytorch.org/whl/cu130",
+    "pynvml_package": "nvidia-ml-py==13.580.82",
+    "numpy_package": "numpy==2.3.5"
+  },
+  "measurement": {
+    "counter": "nvmlDeviceGetTotalEnergyConsumption",
+    "counter_unit": "millijoules",
+    "scope": "GPU board energy only",
+    "trial_target_seconds": 2.0,
+    "trial_count": 3,
+    "planned_measurement_and_cooldown_seconds": 28.0,
+    "warmup_repetitions": 100,
+    "synchronization": "once before and once after each aggregate trial",
+    "trial_order": "initialization, addition, pipeline; interleaved",
+    "idle_before": {
+      "duration_s": 3.003670778000001,
+      "raw_gpu_energy_J": 607.427,
+      "average_gpu_power_W": 202.22822169760437
+    },
+    "idle_after": {
+      "duration_s": 3.0034812650000013,
+      "raw_gpu_energy_J": 596.858,
+      "average_gpu_power_W": 198.72206527647498
+    },
+    "idle_baseline_W": 200.47514348703967,
+    "idle_baseline_range_W": [
+      198.72206527647498,
+      202.22822169760437
+    ],
+    "idle_cooldown_seconds": 2.0,
+    "stage_pilots": {
+      "initialization": {
+        "pilot_repetitions": 8192,
+        "pilot_duration_s": 0.3353909650000002,
+        "projected_repetitions": 48851
+      },
+      "addition": {
+        "pilot_repetitions": 8192,
+        "pilot_duration_s": 0.4462933110000016,
+        "projected_repetitions": 36712
+      },
+      "pipeline": {
+        "pilot_repetitions": 4096,
+        "pilot_duration_s": 0.39423730199999873,
+        "projected_repetitions": 20780
+      }
+    },
+    "post_import_benchmark_duration_s": 31.553646174999997,
+    "excluded": [
+      "Modal image pull and worker boot",
+      "CUDA context and Triton compilation",
+      "device-buffer allocation",
+      "warmup and correctness validation",
+      "host CPU and facility energy"
+    ]
+  },
+  "cost_controls": {
+    "exact_gpu_selector": "B200",
+    "min_containers": 0,
+    "max_containers": 1,
+    "buffer_containers": 0,
+    "scaledown_window_seconds": 2,
+    "single_use_containers": true,
+    "retries": 0,
+    "execution_cap_seconds": 180,
+    "startup_cap_seconds": 180,
+    "caller_wall_cap_seconds": 360,
+    "max_planned_measurement_seconds": 60.0
+  },
+  "correctness": {
+    "method": "all output bytes equal E4M3FN encoding of 2.0",
+    "checked_output_entries": 67108864,
+    "constant_one_fp8_bits_hex": "0x38",
+    "expected_two_fp8_bits_hex": "0x40",
+    "passed": true
+  },
+  "stages": {
+    "initialization": {
+      "label": "initialization",
+      "repetitions_per_trial": 48851,
+      "trial_count": 3,
+      "total_repetitions": 146553,
+      "total_duration_s": 6.0081036569999995,
+      "total_raw_gpu_energy_J": 2852.4030000000002,
+      "total_idle_baseline_energy_J": 1204.4754427220828,
+      "total_idle_adjusted_gpu_energy_J": 1647.9275572779175,
+      "seconds_per_run": 4.0996115105115555e-05,
+      "raw_gpu_energy_J_per_run": 0.019463286319624983,
+      "idle_adjusted_gpu_energy_J_per_run": 0.011244584261515748,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.011172714865407168,
+        0.01131645365762433
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 3.889920332280243e-05,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 3.886052389308411e-05,
+      "average_gpu_power_W": 474.7592855986573,
+      "trials": [
+        {
+          "repetitions": 48851,
+          "duration_s": 2.0026773019999986,
+          "raw_gpu_energy_J": 950.528,
+          "trial": 1
+        },
+        {
+          "repetitions": 48851,
+          "duration_s": 2.0027201000000012,
+          "raw_gpu_energy_J": 952.823,
+          "trial": 2
+        },
+        {
+          "repetitions": 48851,
+          "duration_s": 2.0027062549999997,
+          "raw_gpu_energy_J": 949.052,
+          "trial": 3
+        }
+      ],
+      "logical_traffic_bytes_per_run": 134217728,
+      "effective_logical_bandwidth_GB_per_s": 3273.913336809129
+    },
+    "addition": {
+      "label": "addition",
+      "repetitions_per_trial": 36712,
+      "trial_count": 3,
+      "total_repetitions": 110136,
+      "total_duration_s": 6.025118277999997,
+      "total_raw_gpu_energy_J": 3553.728,
+      "total_idle_baseline_energy_J": 1207.8864513084347,
+      "total_idle_adjusted_gpu_energy_J": 2345.8415486915655,
+      "seconds_per_run": 5.470616581317641e-05,
+      "raw_gpu_energy_J_per_run": 0.03226672477663979,
+      "idle_adjusted_gpu_energy_J_per_run": 0.021299498335617468,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.021203594148346844,
+        0.021395402522888084
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 0.00013696347945156475,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 0.00016635988089340286,
+      "average_gpu_power_W": 589.8187945913054,
+      "trials": [
+        {
+          "repetitions": 36712,
+          "duration_s": 2.006296826,
+          "raw_gpu_energy_J": 1181.942,
+          "trial": 1
+        },
+        {
+          "repetitions": 36712,
+          "duration_s": 2.0159777579999982,
+          "raw_gpu_energy_J": 1181.412,
+          "trial": 2
+        },
+        {
+          "repetitions": 36712,
+          "duration_s": 2.002843693999999,
+          "raw_gpu_energy_J": 1190.374,
+          "trial": 3
+        }
+      ],
+      "logical_traffic_bytes_per_run": 201326592,
+      "effective_logical_bandwidth_GB_per_s": 3680.1444408942457,
+      "elementwise_additions_per_run": 67108864
+    },
+    "pipeline": {
+      "label": "pipeline",
+      "repetitions_per_trial": 20780,
+      "trial_count": 3,
+      "total_repetitions": 62340,
+      "total_duration_s": 6.014469193999998,
+      "total_raw_gpu_energy_J": 3209.178,
+      "total_idle_baseline_energy_J": 1205.7515746655295,
+      "total_idle_adjusted_gpu_energy_J": 2003.4264253344704,
+      "seconds_per_run": 9.647849204363168e-05,
+      "raw_gpu_energy_J_per_run": 0.0514786333012512,
+      "idle_adjusted_gpu_energy_J_per_run": 0.03213709376539093,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.031967959423201096,
+        0.032306228107580756
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 0.00010971559811990903,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 0.00014174933316603321,
+      "average_gpu_power_W": 533.5762635880583,
+      "trials": [
+        {
+          "repetitions": 20780,
+          "duration_s": 2.002922270000001,
+          "raw_gpu_energy_J": 1070.891,
+          "trial": 1
+        },
+        {
+          "repetitions": 20780,
+          "duration_s": 2.008662349999998,
+          "raw_gpu_energy_J": 1067.099,
+          "trial": 2
+        },
+        {
+          "repetitions": 20780,
+          "duration_s": 2.0028845739999994,
+          "raw_gpu_energy_J": 1071.188,
+          "trial": 3
+        }
+      ],
+      "logical_traffic_bytes_per_run": 335544320,
+      "effective_logical_bandwidth_GB_per_s": 3477.918372192764,
+      "elementwise_additions_per_run": 67108864
+    }
+  },
+  "pipeline_breakdown": {
+    "direct_pipeline_raw_gpu_energy_J_per_run": 0.0514786333012512,
+    "direct_pipeline_idle_adjusted_gpu_energy_J_per_run": 0.03213709376539093,
+    "isolated_stage_raw_sum_J_per_run": 0.05173001109626477,
+    "isolated_stage_idle_adjusted_sum_J_per_run": 0.03254408259713322,
+    "raw_direct_minus_addition_J_per_run": 0.01921190852461141,
+    "idle_adjusted_direct_minus_addition_J_per_run": 0.010837595429773462,
+    "raw_initialization_fraction_of_isolated_sum": 0.3762474800828015,
+    "idle_adjusted_initialization_fraction_of_isolated_sum": 0.34551855096712036
+  },
+  "physical_roofline_estimate": {
+    "nature": "logical-traffic HBM bandwidth and peak-board-power proxy",
+    "b200_hbm_bandwidth_bytes_per_s": 8000000000000.0,
+    "b200_power_basis_W": 1000.0,
+    "addition_logical_traffic_bytes": 201326592,
+    "addition_ideal_time_s": 2.5165824e-05,
+    "addition_peak_power_energy_J": 0.025165824,
+    "pipeline_logical_traffic_bytes": 335544320,
+    "pipeline_ideal_time_s": 4.194304e-05,
+    "pipeline_peak_power_energy_J": 0.04194304,
+    "limitations": "Assumes each logical byte reaches HBM once, full 8 TB/s, and 1,000 W throughout; it is not a measurement or lower bound."
+  },
+  "sutro_2d_grid_model": {
+    "source_url": "https://cybertronai.github.io/sutro-problems/matmul/energy-report/#eightk",
+    "distance": "d(a) = ceil(sqrt(a)) for positive address a",
+    "energy_J_per_score_unit": 1e-15,
+    "out_of_place_schedule": "direct C_i = A_i + B_i; contiguous A, B, C; every cell paid once",
+    "out_of_place_score_units": 1904510664294,
+    "out_of_place_energy_J": 0.0019045106642940001,
+    "optimal_in_place_schedule": "A_i = A_i + B_i with overwritten/output A in nearest cells",
+    "optimal_in_place_score_units": 1403234042015,
+    "optimal_in_place_energy_J": 0.0014032340420150002,
+    "scope": "Synthetic widthless source/final-output-read movement only; input placement, writes, arithmetic, HBM/cache endpoints, clocking, launch, idle, and leakage are unpriced.",
+    "initialization_energy": "zero/undefined because the scorer makes initial placement free"
+  },
+  "model_comparison": {
+    "like_for_like_stage": "addition",
+    "measured_raw_gpu_energy_J_per_add": 0.03226672477663979,
+    "measured_idle_adjusted_gpu_energy_J_per_add": 0.021299498335617468,
+    "measured_raw_over_sutro_out_of_place_ratio": 16.9422652136217,
+    "measured_idle_adjusted_over_sutro_out_of_place_ratio": 11.183711771712849,
+    "measured_raw_over_hbm_roofline_ratio": 1.2821644455846068,
+    "direct_pipeline_raw_over_hbm_roofline_ratio": 1.2273462605774688,
+    "scope_warning": "Sutro is a widthless source/output-read movement proxy. NVML is whole GPU-board energy and must not be added to the model value."
+  }
+}

@@ -144,6 +144,97 @@ Reproduce the B200 result from the Quickstart environment:
 python benchmark_8k_fp8_matmul.py --yes
 ```
 
+## 8k matrix addition
+
+[`benchmark_8k_fp8_add.py`](benchmark_8k_fp8_add.py) measures an out-of-place
+elementwise `C = A + B` for two dense `8192 x 8192` FP8 E4M3FN matrices:
+67,108,864 additions. A custom Triton kernel converts each pair to FP32, adds,
+rounds to nearest-even FP8, and writes a preallocated FP8 output. The add has
+192 MiB of logical traffic (two 64 MiB reads and one 64 MiB write). The direct
+pipeline also fills both inputs with `1.0`, for 320 MiB of logical traffic. A
+full bitwise check verifies all 67,108,864 outputs contain the E4M3FN encoding
+of `2.0` before measurement.
+
+### Modal B200 result
+
+The committed [raw addition result](8k_fp8_add_blackwell_results.json) was
+measured on one NVIDIA B200 with PyTorch 2.12.1+cu130, CUDA 13.0, Triton 3.7.1,
+and driver 580.95.05. Each row pools three interleaved aggregate trials of
+about two seconds. `±` is one sample standard deviation across those three
+trial means, not a confidence interval or full uncertainty estimate.
+
+| Phase | Total runs | Time/run (µs) | Raw GPU-board J/run | Idle-adjusted GPU J/run |
+|---|---:|---:|---:|---:|
+| Initialize A + B | 146,553 | 40.996 | 0.019463 ± 0.000039 | 0.011245 ± 0.000039 |
+| Add A + B | 110,136 | 54.706 | **0.032267 ± 0.000137** | **0.021299 ± 0.000166** |
+| Direct initialize + add | 62,340 | 96.478 | **0.051479 ± 0.000110** | **0.032137 ± 0.000142** |
+
+The isolated stages sum to `0.051730 J` raw, within 0.49% of the direct
+`0.051479 J` pipeline. Subtracting addition from the direct pipeline gives
+`0.019212 J` for initialization, close to its isolated `0.019463 J` result;
+initialization is about 37% of raw pipeline energy. Addition sustained 3.680
+TB/s of logical traffic at 589.8 W average board power. The 200.48 W idle
+baseline ranged from 198.72-202.23 W; propagating it gives an addition net
+range of `0.021204-0.021395 J/run`.
+
+### Estimates and the original 2D grid model
+
+A simple physical roofline uses the B200's [8 TB/s HBM bandwidth](https://developer.nvidia.com/blog/nvidia-blackwell-sets-stac-ai-record-for-llm-inference-in-finance/)
+and 1,000 W power limit. Moving the addition's 192 MiB logical minimum would
+take 25.17 µs and `0.025166 J` at those two peaks. The measured `0.032267 J`
+is 1.282x that estimate: achieved logical bandwidth was 46.0% of peak while
+average board power was 59.0% of the limit. The corresponding rough direct
+pipeline estimate is `0.041943 J`, versus `0.051479 J` measured. These mixed
+bandwidth/power rooflines are orientation estimates, not lower bounds.
+
+The original [Sutro 2D grid model](https://cybertronai.github.io/sutro-problems/matmul/energy-report/#eightk)
+charges each paid read from address `a` by `ceil(sqrt(a))`, then applies the
+hypothetical coefficient 1 fJ per score unit. Let `M = 8192^2` and
+`F(x) = sum(ceil(sqrt(a)), a=1..x)`. A direct three-buffer add reads each A and
+B source once and each final C output once, so its exact score is:
+
+```text
+F(3M) = 1,904,510,664,294 score units = 0.001904511 J
+```
+
+An optimal in-place `A = A + B` layout would instead score `0.001403234 J`.
+The out-of-place value is the relevant comparison here:
+
+| Energy scope | Joules/add | Versus 2D grid |
+|---|---:|---:|
+| Sutro source/output-read movement proxy | 0.001904511 | 1.00x |
+| B200 idle-adjusted GPU board | 0.021299 | 11.18x |
+| B200 raw GPU board | **0.032267** | **16.94x** |
+| B200 raw initialize + add pipeline | 0.051479 | 27.03x (not like-for-like) |
+
+The comparison is deliberately side-by-side, not an overhead decomposition.
+Sutro is widthless and makes initial placement, destination writes, arithmetic,
+HBM/cache endpoints, clocks, launch, idle, and leakage free; it also charges a
+final output read whereas the CUDA kernel writes its output. Consequently its
+input-initialization cost is zero/undefined, and its joules must not be added
+to or subtracted from NVML board energy. Sutro predicts addition is 62.46x
+cheaper than its `0.118953 J` 8K matmul movement term. On the measured B200,
+add-only raw energy is 8.31x below the measured `0.267977 J` FP8 GEMM.
+
+### Blackwell cost guard
+
+Both B200 scripts allow one non-detached, single-use container, no warm buffer,
+one input, and zero configured retries. They use a two-second scale-down
+fallback plus bounded startup, execution, caller, warmup, trial-count, and
+planned-measurement limits. An unfinished call is cancelled with container
+termination, and every run prints its app ID for an emergency `modal app stop`.
+The committed addition run went from app creation to stopped in 39 seconds and
+was verified afterward with zero live containers. At Modal's posted
+[B200 rate of $0.001736/s](https://modal.com/pricing), even treating that whole
+39-second app lifetime as GPU time is roughly $0.07 before small CPU/memory
+charges; it is a conservative cost proxy, not an invoice reconstruction.
+
+Reproduce the one-shot run:
+
+```bash
+python benchmark_8k_fp8_add.py --yes
+```
+
 ## Current Leaderboard
 
 > Submissions ranked by training energy (joules, lower wins) under the **2026-05-28 `CharModel.predict()` contract** (`predict()` returns a single committed `str`). Only submissions that have been ported to the new contract **and** re-run on the new harness appear here. The historical leaderboard is preserved below as a frozen record; entries there are not runnable under the new contract until ported. Tracking list of pending ports + re-runs lives at [`submissions/OUTDATED.md`](submissions/OUTDATED.md).
