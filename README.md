@@ -21,6 +21,69 @@ modal token new
 python submit.py submissions/modded_nanogpt
 ```
 
+## 8k matmul
+
+[`benchmark_8k_matmul.py`](benchmark_8k_matmul.py) measures one full dense
+`8192 x 8192` INT8-by-INT8 GEMM with an INT32 result. It uses the conventional
+throughput convention of two operations per multiply-accumulate:
+
+```text
+8192^3 = 549,755,813,888 multiply-accumulates
+2 x 8192^3 = 1,099,511,627,776 conventional operations
+```
+
+The measured pipeline starts with preallocated GPU buffers, fills both 64 MiB
+input matrices with the nonzero constant `1`, then computes the full 256 MiB
+output with `torch._int_mm`. The left input is row-major and the right input is
+column-major (PyTorch's fast SM80 INT8 layout). Buffer allocation, CUDA/context
+startup, warmup, and Modal boot are excluded; assigning all 134,217,728 input
+entries and writing every output entry are included. A full-output check
+verifies `C == 8192` before measurement.
+
+### Modal result
+
+The committed [raw result](8k_matmul_results.json) was measured on a Modal
+A10G worker (`NVIDIA A10`, 150 W limit) with PyTorch 2.5.1+cu124 and CUDA 12.4.
+Each row is the pooled mean of three aggregate trials. Initialization ran
+164,601 times, while multiplication-only and the direct end-to-end pipeline
+each ran 7,305 times; every trial lasted about 15 seconds and synchronized only
+at its boundaries. `±` is one sample standard deviation across the three
+aggregate trial means, not a confidence interval or full uncertainty estimate.
+
+| Phase | Total runs | Time/run (ms) | Raw GPU-board J/run | Idle-adjusted GPU J/run | Share of isolated raw sum |
+|---|---:|---:|---:|---:|---:|
+| Initialize A + B | 164,601 | 0.2735 | 0.040892 ± 0.000016 | 0.024700 ± 0.000016 | 4.7% |
+| Multiply A x B | 7,305 | 6.0850 | 0.836974 ± 0.002877 | 0.476704 ± 0.002952 | 95.3% |
+| Direct initialize + multiply | 7,305 | 6.2806 | **0.889112 ± 0.004106** | **0.517257 ± 0.004137** | — |
+
+The standalone stages sum to `0.877867 J` raw per pipeline, within 1.3% of the
+direct `0.889112 J` measurement. Subtracting multiplication from the direct
+pipeline gives a second initialization estimate of `0.052138 J`; together the
+two methods put input initialization at roughly `0.041-0.052 J` of raw
+GPU-board energy, or about 5% of the pipeline. GEMM-only throughput was 180.69
+TOPS.
+
+"Raw" is the full NVML board-energy delta. "Idle-adjusted" subtracts the
+mean 59.21 W before/after idle baseline. The two calibrations spanned
+53.83-64.58 W; propagating that spread puts the direct pipeline's adjusted
+estimate at `0.4835-0.5510 J/run`, substantially wider than its workload-trial
+standard deviation. These are GPU-board Joules, not the leaderboard's
+CodeCarbon-assisted `total_energy_J`: host CPU, facility overhead, and Modal
+startup are not included. Raw energy is the less model-dependent total;
+idle-adjusted energy estimates the workload's incremental GPU cost. Energy
+numbers are hardware-specific and should not be compared directly with A100
+leaderboard runs.
+
+Run on the task-pinned Modal A100-80GB, or reproduce the committed A10G run:
+
+```bash
+# In the venv from Quickstart; defaults to task.INSTANCE_TYPE (A100-80GB).
+python benchmark_8k_matmul.py --yes
+
+# Exact GPU class used for the committed result.
+WIKITEXT_MATMUL_GPU=A10G python benchmark_8k_matmul.py --yes
+```
+
 ## Current Leaderboard
 
 > Submissions ranked by training energy (joules, lower wins) under the **2026-05-28 `CharModel.predict()` contract** (`predict()` returns a single committed `str`). Only submissions that have been ported to the new contract **and** re-run on the new harness appear here. The historical leaderboard is preserved below as a frozen record; entries there are not runnable under the new contract until ported. Tracking list of pending ports + re-runs lives at [`submissions/OUTDATED.md`](submissions/OUTDATED.md).
