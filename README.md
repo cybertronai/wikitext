@@ -35,12 +35,12 @@ throughput convention of two operations per multiply-accumulate:
 The measured pipeline starts with preallocated GPU buffers, fills both 64 MiB
 input matrices with the nonzero constant `1`, then computes the full 256 MiB
 output with `torch._int_mm`. The left input is row-major and the right input is
-column-major (PyTorch's fast SM80 INT8 layout). Buffer allocation, CUDA/context
-startup, warmup, and Modal boot are excluded; assigning all 134,217,728 input
-entries and writing every output entry are included. A full-output check
-verifies `C == 8192` before measurement.
+column-major (the fast INT8 layout used by the pinned PyTorch `_int_mm` path).
+Buffer allocation, CUDA/context startup, warmup, and Modal boot are excluded;
+assigning all 134,217,728 input entries and writing every output entry are
+included. A full-output check verifies `C == 8192` before measurement.
 
-### INT8 Modal result
+### INT8 Modal A10 result
 
 The committed [raw result](8k_matmul_results.json) was measured on a Modal
 A10G worker (`NVIDIA A10`, 150 W limit) with PyTorch 2.5.1+cu124 and CUDA 12.4.
@@ -74,15 +74,103 @@ idle-adjusted energy estimates the workload's incremental GPU cost. Energy
 numbers are hardware-specific and should not be compared directly with A100
 leaderboard runs.
 
-Run on the task-pinned Modal A100-80GB, or reproduce the committed A10G run:
+Run a new cost-bounded measurement on the task-pinned Modal A100-80GB, or on
+the same GPU class as the committed A10G result:
 
 ```bash
 # In the venv from Quickstart; defaults to task.INSTANCE_TYPE (A100-80GB).
 python benchmark_8k_matmul.py --yes
 
-# Exact GPU class used for the committed result.
+# GPU class used for the committed result (the current defaults use shorter
+# aggregate trials to limit cost).
 WIKITEXT_MATMUL_GPU=A10G python benchmark_8k_matmul.py --yes
 ```
+
+### INT8 Modal H100 result
+
+The committed [H100 raw result](8k_int8_h100_results.json) uses exactly the
+same INT8/INT32 workload, layouts, constant-one initialization, preallocated
+buffers, `torch._int_mm` call, and full-output validation as the A10 result.
+Modal's exact `H100!` selector returned an `NVIDIA H100 80GB HBM3` (compute
+capability 9.0, 700 W limit), running PyTorch 2.5.1+cu124, CUDA 12.4, and driver
+580.95.05. The `!` is important: [Modal may otherwise upgrade H100 requests to
+H200](https://modal.com/docs/guide/gpu).
+
+Each row pools three aggregate trials. Initialization ran 36,843 times, while
+multiplication-only and the direct pipeline each ran 4,767 times. The
+initialization and pipeline trials lasted about two seconds; multiplication
+trials lasted about 1.75 seconds because they use the repeat count calibrated
+for the slower pipeline. `±` is one sample standard deviation across the three
+aggregate trial means, not a confidence interval or full uncertainty estimate.
+
+| Phase | Total runs | Time/run (ms) | Raw GPU-board J/run | Idle-adjusted GPU J/run | Average board power |
+|---|---:|---:|---:|---:|---:|
+| Initialize A + B | 36,843 | 0.16324 | 0.037854 ± 0.000866 | 0.018429 ± 0.000868 | 231.9 W |
+| Multiply A x B | 4,767 | 1.10002 | **0.572710 ± 0.016412** | **0.441806 ± 0.016353** | 520.6 W |
+| Direct initialize + multiply | 4,767 | 1.26297 | **0.609510 ± 0.000623** | **0.459215 ± 0.000696** | 482.6 W |
+
+The isolated stages sum to `0.610564 J` raw, within 0.2% of the direct
+`0.609510 J` pipeline. Isolated initialization costs `0.037854 J`; subtracting
+multiplication from the direct pipeline gives `0.036799 J`, putting input
+initialization at about 6% of raw pipeline energy. The measured idle baseline
+was 119.00 W (118.89-119.11 W before/after), giving a direct-pipeline adjusted
+range of `0.459073-0.459357 J/run`. GEMM-only throughput was 999.54 TOPS.
+
+The H100 row in the shared [FP8 energy
+estimate](https://chatgpt.com/share/6a922e47-aae0-83e8-81f4-d72ddf648a11)
+uses a 1.979 PFLOP/s dense rate and 700 W module power. NVIDIA's [H100
+specifications](https://www.nvidia.com/en-eu/data-center/h100/) list equal
+FP8 and INT8 Tensor Core rates and mark them as sparse; halving either gives
+the same 1.979 dense peak. Applying that basis to the exact
+1,099,511,627,776-operation INT8 problem gives `0.555589504 ms` and
+`0.388912653 J`. This numerical reuse does not make FP8 and INT8 semantically
+identical: the shared row is FP8/FP32, while this measurement is INT8/INT32.
+Multiply-only raw board energy remains the closest measured scope because the
+estimate assumes warm, prepacked inputs already in HBM.
+
+| Metric | H100 dense estimate | Modal H100 INT8 measurement | Measured / estimate |
+|---|---:|---:|---:|
+| GEMM time | 0.555590 ms | 1.100023 ms | 1.980x (+98.0%) |
+| Dense throughput | 1.979 POPS/s | 1.000 POPS/s | 0.505x (-49.5%) |
+| Raw GPU-board energy/GEMM | 0.388913 J | **0.572710 J** | **1.473x (+47.3%)** |
+| Raw direct-pipeline energy | prepacked inputs; excluded | 0.609510 J | 1.567x (+56.7%; not like-for-like) |
+
+The measured GEMM averaged 520.6 W, or 74.4% of the estimate's 700 W power
+basis, while this PyTorch `_int_mm` path delivered 50.5% of the peak-rate
+assumption. The approximately 1.98x runtime and 0.744x power factors combine
+to the observed 1.47x raw-energy ratio. The shared value is therefore useful
+as a peak-power roofline, not as a prediction of this software path.
+
+Multiplication-only results across the three committed runs are:
+
+| GPU and arithmetic | Time (ms) | Conventional POPS/s | Average board power | Raw J | Idle-adjusted J |
+|---|---:|---:|---:|---:|---:|
+| A10 INT8 -> INT32 | 6.08495 | 0.18069 | 137.5 W | 0.836974 | 0.476704 |
+| H100 INT8 -> INT32 | 1.10002 | 0.99954 | 520.6 W | 0.572710 | 0.441806 |
+| B200 FP8 -> FP32 | 0.26992 | 4.07354 | 992.8 W | 0.267977 | 0.200757 |
+
+H100 is 5.53x faster than A10 on the like-for-like INT8 workload and uses
+31.6% less raw board energy per GEMM (31.4% less for the direct pipeline).
+B200 is 4.08x faster and uses 53.2% less raw multiplication energy than H100,
+but that comparison crosses arithmetic formats, accumulation behavior,
+PyTorch/CUDA versions, and kernels; it is orientation, not an architectural
+isolation.
+
+Reproduce the exact H100 result from the Quickstart environment:
+
+```bash
+WIKITEXT_MATMUL_GPU='H100!' python benchmark_8k_matmul.py \
+  --output 8k_int8_h100_results.json --yes
+```
+
+The H100 run allowed one non-detached, single-use container, no warm buffer,
+one input, and zero configured retries. It had a two-second scale-down
+fallback, a 120-second execution cap, and cancellation with container
+termination on failure. The app went from creation to stopped in 43 seconds
+and was then verified with zero live containers. At Modal's posted [H100
+rate of $0.001097/s](https://modal.com/pricing), even charging that entire app
+lifetime as GPU time is about $0.05 before small CPU/memory charges; this is a
+conservative proxy rather than an invoice reconstruction.
 
 ### FP8 Blackwell Modal result
 

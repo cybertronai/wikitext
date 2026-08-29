@@ -1,0 +1,244 @@
+{
+  "benchmark": "full 8192^3 dense INT8 GEMM",
+  "date_utc": "2026-08-29T04:29:55Z",
+  "matrix": {
+    "m": 8192,
+    "n": 8192,
+    "k": 8192,
+    "lhs_dtype": "int8",
+    "rhs_dtype": "int8",
+    "output_dtype": "int32",
+    "lhs_stride": [
+      8192,
+      1
+    ],
+    "rhs_stride": [
+      1,
+      8192
+    ],
+    "output_stride": [
+      8192,
+      1
+    ],
+    "input_bytes": 134217728,
+    "output_bytes": 268435456,
+    "initialization": "preallocated A and B filled with constant 1"
+  },
+  "operation_count": {
+    "multiply_accumulates": 549755813888,
+    "conventional_ops_2mnk": 1099511627776,
+    "conventional_teraops": 1.099511627776
+  },
+  "hardware": {
+    "requested_modal_gpu": "H100!",
+    "gpu_name": "NVIDIA H100 80GB HBM3",
+    "gpu_memory_bytes": 85017624576,
+    "multiprocessor_count": 132,
+    "compute_capability": [
+      9,
+      0
+    ],
+    "nvml_power_limit_W": 700.0,
+    "driver_version": "580.95.05",
+    "torch_version": "2.5.1+cu124",
+    "torch_cuda_version": "12.4",
+    "image_ref": "ghcr.io/ab-10/wikitext-bench@sha256:95de89319ba89c53a91d5440a5db4ff46f68b05031062c0a760ec3caa48dc42f"
+  },
+  "measurement": {
+    "counter": "nvmlDeviceGetTotalEnergyConsumption",
+    "counter_unit": "millijoules",
+    "scope": "GPU board energy only",
+    "trial_target_seconds": 2.0,
+    "trial_count": 3,
+    "warmup_repetitions": 10,
+    "synchronization": "once before and once after each aggregate trial",
+    "idle_before": {
+      "duration_s": 3.0037516040000005,
+      "raw_gpu_energy_J": 357.788,
+      "average_gpu_power_W": 119.11371084198343
+    },
+    "idle_after": {
+      "duration_s": 3.0044655929999955,
+      "raw_gpu_energy_J": 357.197,
+      "average_gpu_power_W": 118.88869715540142
+    },
+    "idle_baseline_W": 119.00120399869243,
+    "idle_baseline_range_W": [
+      118.88869715540142,
+      119.11371084198343
+    ],
+    "idle_cooldown_seconds": 2.0,
+    "initialization_pilot": {
+      "pilot_repetitions": 4096,
+      "pilot_duration_s": 0.6670621829999988,
+      "projected_repetitions": 12281
+    },
+    "compute_pipeline_pilot": {
+      "pilot_repetitions": 512,
+      "pilot_duration_s": 0.6446881640000015,
+      "projected_repetitions": 1589
+    },
+    "excluded": [
+      "Modal image pull and worker boot",
+      "CUDA context creation",
+      "device-buffer allocation",
+      "warmup and correctness validation",
+      "host CPU and facility energy"
+    ]
+  },
+  "cost_controls": {
+    "exact_gpu_selector": "H100!",
+    "min_containers": 0,
+    "max_containers": 1,
+    "buffer_containers": 0,
+    "scaledown_window_seconds": 2,
+    "single_use_containers": true,
+    "retries": 0,
+    "execution_cap_seconds": 120,
+    "startup_cap_seconds": 180,
+    "caller_wall_cap_seconds": 300,
+    "max_planned_measurement_seconds": 60.0
+  },
+  "correctness": {
+    "method": "torch.all(C == 8192) after warmup",
+    "passed": true
+  },
+  "stages": {
+    "initialization": {
+      "label": "initialization",
+      "repetitions_per_trial": 12281,
+      "trial_count": 3,
+      "total_repetitions": 36843,
+      "total_duration_s": 6.014202447999997,
+      "total_raw_gpu_energy_J": 1394.6599999999999,
+      "total_idle_baseline_energy_J": 715.697332403883,
+      "total_idle_adjusted_gpu_energy_J": 678.9626675961168,
+      "seconds_per_run": 0.00016323867350650047,
+      "raw_gpu_energy_J_per_run": 0.037854137828081315,
+      "idle_adjusted_gpu_energy_J_per_run": 0.018428539141658304,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.018410173673799074,
+        0.01844690460951753
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 0.0008658532858692901,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 0.0008684322953959069,
+      "average_gpu_power_W": 231.89442192186087,
+      "trials": [
+        {
+          "repetitions": 12281,
+          "duration_s": 2.0044557659999995,
+          "raw_gpu_energy_J": 477.165,
+          "trial": 1
+        },
+        {
+          "repetitions": 12281,
+          "duration_s": 2.0065193279999995,
+          "raw_gpu_energy_J": 458.683,
+          "trial": 2
+        },
+        {
+          "repetitions": 12281,
+          "duration_s": 2.003227353999998,
+          "raw_gpu_energy_J": 458.812,
+          "trial": 3
+        }
+      ],
+      "initialized_bytes_per_run": 134217728,
+      "effective_initialization_bandwidth_GB_per_s": 822.2177080767273
+    },
+    "multiplication": {
+      "label": "multiplication",
+      "repetitions_per_trial": 1589,
+      "trial_count": 3,
+      "total_repetitions": 4767,
+      "total_duration_s": 5.2438085,
+      "total_raw_gpu_energy_J": 2730.1099999999997,
+      "total_idle_baseline_energy_J": 624.0195250385774,
+      "total_idle_adjusted_gpu_energy_J": 2106.0904749614224,
+      "seconds_per_run": 0.0011000227606461086,
+      "raw_gpu_energy_J_per_run": 0.5727102999790223,
+      "idle_adjusted_gpu_energy_J_per_run": 0.44180626703617,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.4416825069478214,
+        0.44193002712451857
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 0.01641228320512853,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 0.016353464486694377,
+      "average_gpu_power_W": 520.6349545373366,
+      "trials": [
+        {
+          "repetitions": 1589,
+          "duration_s": 1.7499194510000002,
+          "raw_gpu_energy_J": 906.431,
+          "trial": 1
+        },
+        {
+          "repetitions": 1589,
+          "duration_s": 1.7459386059999993,
+          "raw_gpu_energy_J": 885.948,
+          "trial": 2
+        },
+        {
+          "repetitions": 1589,
+          "duration_s": 1.7479504430000006,
+          "raw_gpu_energy_J": 937.731,
+          "trial": 3
+        }
+      ],
+      "conventional_operations_per_run": 1099511627776,
+      "effective_throughput_TOPS": 999.5353433688878
+    },
+    "pipeline": {
+      "label": "pipeline",
+      "repetitions_per_trial": 1589,
+      "trial_count": 3,
+      "total_repetitions": 4767,
+      "total_duration_s": 6.020569099999996,
+      "total_raw_gpu_energy_J": 2905.533,
+      "total_idle_baseline_energy_J": 716.4549716573237,
+      "total_idle_adjusted_gpu_energy_J": 2189.078028342676,
+      "seconds_per_run": 0.001262968135095447,
+      "raw_gpu_energy_J_per_run": 0.609509754562618,
+      "idle_adjusted_gpu_energy_J_per_run": 0.45921502587427654,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.45907293331621984,
+        0.4593571184323333
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 0.0006229926692413271,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 0.000696403174791586,
+      "average_gpu_power_W": 482.60105510623606,
+      "trials": [
+        {
+          "repetitions": 1589,
+          "duration_s": 2.0062443859999988,
+          "raw_gpu_energy_J": 969.439,
+          "trial": 1
+        },
+        {
+          "repetitions": 1589,
+          "duration_s": 2.0080863839999985,
+          "raw_gpu_energy_J": 967.469,
+          "trial": 2
+        },
+        {
+          "repetitions": 1589,
+          "duration_s": 2.0062383299999986,
+          "raw_gpu_energy_J": 968.625,
+          "trial": 3
+        }
+      ],
+      "conventional_operations_per_run": 1099511627776,
+      "effective_throughput_TOPS": 870.5774890297656
+    }
+  },
+  "pipeline_breakdown": {
+    "direct_pipeline_raw_gpu_energy_J_per_run": 0.609509754562618,
+    "direct_pipeline_idle_adjusted_gpu_energy_J_per_run": 0.45921502587427654,
+    "isolated_stage_raw_sum_J_per_run": 0.6105644378071037,
+    "isolated_stage_idle_adjusted_sum_J_per_run": 0.4602348061778283,
+    "raw_direct_minus_multiplication_J_per_run": 0.03679945458359568,
+    "idle_adjusted_direct_minus_multiplication_J_per_run": 0.017408758838106553,
+    "raw_initialization_fraction_of_isolated_sum": 0.061998595863260245,
+    "idle_adjusted_initialization_fraction_of_isolated_sum": 0.04004160244789868
+  }
+}
