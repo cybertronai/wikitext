@@ -1,0 +1,284 @@
+{
+  "benchmark": "full 8192^3 dense FP8 E4M3FN GEMM",
+  "date_utc": "2026-08-29T01:20:09Z",
+  "matrix": {
+    "m": 8192,
+    "n": 8192,
+    "k": 8192,
+    "lhs_dtype": "float8_e4m3fn",
+    "rhs_dtype": "float8_e4m3fn",
+    "accumulation_dtype": "float32",
+    "output_dtype": "float32",
+    "lhs_stride": [
+      8192,
+      1
+    ],
+    "rhs_stride": [
+      1,
+      8192
+    ],
+    "output_stride": [
+      8192,
+      1
+    ],
+    "input_bytes": 134217728,
+    "output_bytes": 268435456,
+    "logical_minimum_traffic_bytes": 402653184,
+    "initialization": "preallocated A and B raw FP8 storage filled with the E4M3FN encoding of constant 1.0",
+    "constant_one_fp8_bits_hex": "0x38",
+    "scale_a": 1.0,
+    "scale_b": 1.0
+  },
+  "operation_count": {
+    "multiply_accumulates": 549755813888,
+    "conventional_ops_2mnk": 1099511627776,
+    "conventional_teraops": 1.099511627776
+  },
+  "operator": {
+    "name": "aten::_scaled_mm.out",
+    "output_preallocated": true,
+    "tensorwise_fp32_scales": true,
+    "use_fast_accum": false
+  },
+  "hardware": {
+    "requested_modal_gpu": "B200",
+    "gpu_name": "NVIDIA B200",
+    "gpu_memory_bytes": 191503138816,
+    "multiprocessor_count": 148,
+    "compute_capability": [
+      10,
+      0
+    ],
+    "nvml_power_limit_W": 1000.0,
+    "driver_version": "580.95.05",
+    "torch_version": "2.12.1+cu130",
+    "torch_cuda_version": "13.0",
+    "torch_cuda_arch_list": [
+      "sm_75",
+      "sm_80",
+      "sm_86",
+      "sm_90",
+      "sm_100",
+      "sm_120"
+    ],
+    "image_ref": "modal.Image.debian_slim(python_version='3.11')",
+    "torch_package": "torch==2.12.1",
+    "torch_index_url": "https://download.pytorch.org/whl/cu130",
+    "pynvml_package": "nvidia-ml-py==13.580.82",
+    "numpy_package": "numpy==2.3.5"
+  },
+  "measurement": {
+    "counter": "nvmlDeviceGetTotalEnergyConsumption",
+    "counter_unit": "millijoules",
+    "scope": "GPU board energy only",
+    "trial_target_seconds": 15.0,
+    "trial_count": 3,
+    "warmup_repetitions": 10,
+    "synchronization": "once before and once after each aggregate trial",
+    "idle_before": {
+      "duration_s": 10.003662342,
+      "raw_gpu_energy_J": 2467.738,
+      "average_gpu_power_W": 246.68345608180863
+    },
+    "idle_after": {
+      "duration_s": 10.004039341999999,
+      "raw_gpu_energy_J": 2514.968,
+      "average_gpu_power_W": 251.39525285965235
+    },
+    "idle_baseline_W": 249.03935447073047,
+    "idle_baseline_range_W": [
+      246.68345608180863,
+      251.39525285965235
+    ],
+    "idle_cooldown_seconds": 10.0,
+    "initialization_pilot": {
+      "pilot_repetitions": 16384,
+      "pilot_duration_s": 0.6707810140000028,
+      "projected_repetitions": 366379
+    },
+    "compute_pipeline_pilot": {
+      "pilot_repetitions": 2048,
+      "pilot_duration_s": 0.6151909779999976,
+      "projected_repetitions": 49936
+    },
+    "excluded": [
+      "Modal image pull and worker boot",
+      "CUDA context creation",
+      "device-buffer and scale allocation",
+      "warmup and correctness validation",
+      "host CPU and facility energy"
+    ]
+  },
+  "correctness": {
+    "method": "torch.all(C == 8192.0) after warmup",
+    "checked_output_entries": 67108864,
+    "passed": true
+  },
+  "stages": {
+    "initialization": {
+      "label": "initialization",
+      "repetitions_per_trial": 366379,
+      "trial_count": 3,
+      "total_repetitions": 1099137,
+      "total_duration_s": 45.007408582,
+      "total_raw_gpu_energy_J": 23752.088,
+      "total_idle_baseline_energy_J": 11208.615979661694,
+      "total_idle_adjusted_gpu_energy_J": 12543.472020338306,
+      "seconds_per_run": 4.0947951512868727e-05,
+      "raw_gpu_energy_J_per_run": 0.021609761112581963,
+      "idle_adjusted_gpu_energy_J_per_run": 0.011412109700918362,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.011315640487919543,
+        0.011508578913917178
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 3.7665158453430714e-05,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 3.7748377385050386e-05,
+      "average_gpu_power_W": 527.7372936663426,
+      "trials": [
+        {
+          "repetitions": 366379,
+          "duration_s": 15.002751753999998,
+          "raw_gpu_energy_J": 7905.716,
+          "trial": 1
+        },
+        {
+          "repetitions": 366379,
+          "duration_s": 15.002245361,
+          "raw_gpu_energy_J": 7913.768,
+          "trial": 2
+        },
+        {
+          "repetitions": 366379,
+          "duration_s": 15.002411467000002,
+          "raw_gpu_energy_J": 7932.604,
+          "trial": 3
+        }
+      ],
+      "initialized_bytes_per_run": 134217728,
+      "effective_initialization_bandwidth_GB_per_s": 3277.764162581353
+    },
+    "multiplication": {
+      "label": "multiplication",
+      "repetitions_per_trial": 49936,
+      "trial_count": 3,
+      "total_repetitions": 149808,
+      "total_duration_s": 40.43554629099998,
+      "total_raw_gpu_energy_J": 40145.07,
+      "total_idle_baseline_energy_J": 10070.042345981974,
+      "total_idle_adjusted_gpu_energy_J": 30075.027654018028,
+      "seconds_per_run": 0.00026991580083173114,
+      "raw_gpu_energy_J_per_run": 0.26797681031720605,
+      "idle_adjusted_gpu_energy_J_per_run": 0.20075715351662146,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.2001212593162974,
+        0.20139304771694547
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 0.0016660074898198535,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 0.0011046348784675927,
+      "average_gpu_power_W": 992.816313426075,
+      "trials": [
+        {
+          "repetitions": 49936,
+          "duration_s": 13.352851614999992,
+          "raw_gpu_energy_J": 13298.986,
+          "trial": 1
+        },
+        {
+          "repetitions": 49936,
+          "duration_s": 13.502171933999989,
+          "raw_gpu_energy_J": 13380.719,
+          "trial": 2
+        },
+        {
+          "repetitions": 49936,
+          "duration_s": 13.580522742,
+          "raw_gpu_energy_J": 13465.365,
+          "trial": 3
+        }
+      ],
+      "conventional_operations_per_run": 1099511627776,
+      "effective_throughput_TFLOP_per_s": 4073.5356151359556,
+      "effective_throughput_PFLOP_per_s": 4.073535615135955
+    },
+    "pipeline": {
+      "label": "pipeline",
+      "repetitions_per_trial": 49936,
+      "trial_count": 3,
+      "total_repetitions": 149808,
+      "total_duration_s": 45.05865478600002,
+      "total_raw_gpu_energy_J": 43689.129,
+      "total_idle_baseline_energy_J": 11221.378301224935,
+      "total_idle_adjusted_gpu_energy_J": 32467.750698775068,
+      "seconds_per_run": 0.00030077602521894704,
+      "raw_gpu_energy_J_per_run": 0.29163415171419416,
+      "idle_adjusted_gpu_energy_J_per_run": 0.21672908455339546,
+      "idle_adjusted_gpu_energy_J_per_run_baseline_range": [
+        0.2160204868001558,
+        0.21743768230663507
+      ],
+      "raw_gpu_energy_J_per_run_trial_stdev": 0.0006818591063911696,
+      "idle_adjusted_gpu_energy_J_per_run_trial_stdev": 0.0006767542960611148,
+      "average_gpu_power_W": 969.6057107673455,
+      "trials": [
+        {
+          "repetitions": 49936,
+          "duration_s": 15.017892885000009,
+          "raw_gpu_energy_J": 14540.897,
+          "trial": 1
+        },
+        {
+          "repetitions": 49936,
+          "duration_s": 15.020116597000012,
+          "raw_gpu_energy_J": 14545.982,
+          "trial": 2
+        },
+        {
+          "repetitions": 49936,
+          "duration_s": 15.020645303999999,
+          "raw_gpu_energy_J": 14602.25,
+          "trial": 3
+        }
+      ],
+      "conventional_operations_per_run": 1099511627776,
+      "effective_throughput_TFLOP_per_s": 3655.5826780928464,
+      "effective_throughput_PFLOP_per_s": 3.6555826780928466
+    }
+  },
+  "pipeline_breakdown": {
+    "direct_pipeline_raw_gpu_energy_J_per_run": 0.29163415171419416,
+    "direct_pipeline_idle_adjusted_gpu_energy_J_per_run": 0.21672908455339546,
+    "isolated_stage_raw_sum_J_per_run": 0.289586571429788,
+    "isolated_stage_idle_adjusted_sum_J_per_run": 0.21216926321753982,
+    "raw_direct_minus_multiplication_J_per_run": 0.023657341396988107,
+    "idle_adjusted_direct_minus_multiplication_J_per_run": 0.015971931036773995,
+    "raw_initialization_fraction_of_isolated_sum": 0.07462280107080649,
+    "idle_adjusted_initialization_fraction_of_isolated_sum": 0.053787761374357895
+  },
+  "reference_estimate": {
+    "source_url": "https://chatgpt.com/share/6a922e47-aae0-83e8-81f4-d72ddf648a11",
+    "table": "One full 8192^3 dense FP8 GEMM",
+    "accelerator": "NVIDIA B200",
+    "dense_fp8_rate_ops_per_s": 4500000000000000.0,
+    "power_basis_W": 1000.0,
+    "reported_ideal_time_ms_rounded": 0.244,
+    "reported_accelerator_module_energy_J_rounded": 0.244,
+    "recomputed_ideal_time_s": 0.0002443359172835556,
+    "recomputed_accelerator_module_energy_J": 0.24433591728355558,
+    "calculation": "energy = power * conventional_ops / dense_rate",
+    "scope": "warm repeated GEMM with prepacked matrices in device HBM; whole accelerator-module power; initialization, host, cooling, and facility overhead excluded",
+    "nature": "engineering peak-power estimate, not a measurement"
+  },
+  "estimate_comparison": {
+    "like_for_like_scope": "isolated multiplication raw board energy; the reference excludes input initialization and uses whole-module peak power",
+    "measured_multiplication_seconds_per_run": 0.00026991580083173114,
+    "measured_multiplication_raw_gpu_energy_J_per_run": 0.26797681031720605,
+    "measured_time_over_reference_ideal_ratio": 1.1046914585156538,
+    "measured_time_delta_from_reference_percent": 10.469145851565376,
+    "measured_raw_energy_over_reference_ratio": 1.0967557013167852,
+    "measured_raw_energy_delta_from_reference_percent": 9.675570131678523,
+    "measured_throughput_over_reference_peak_ratio": 0.9052301366968789,
+    "direct_pipeline_raw_gpu_energy_J_per_run": 0.29163415171419416,
+    "direct_pipeline_raw_over_prepacked_reference_ratio": 1.1935787212804585,
+    "direct_pipeline_comparison_caveat": "not like-for-like: the measured pipeline includes two 64 MiB input fills, while the reference assumes prepacked inputs"
+  }
+}

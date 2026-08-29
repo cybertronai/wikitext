@@ -40,7 +40,7 @@ startup, warmup, and Modal boot are excluded; assigning all 134,217,728 input
 entries and writing every output entry are included. A full-output check
 verifies `C == 8192` before measurement.
 
-### Modal result
+### INT8 Modal result
 
 The committed [raw result](8k_matmul_results.json) was measured on a Modal
 A10G worker (`NVIDIA A10`, 150 W limit) with PyTorch 2.5.1+cu124 and CUDA 12.4.
@@ -82,6 +82,66 @@ python benchmark_8k_matmul.py --yes
 
 # Exact GPU class used for the committed result.
 WIKITEXT_MATMUL_GPU=A10G python benchmark_8k_matmul.py --yes
+```
+
+### FP8 Blackwell Modal result
+
+[`benchmark_8k_fp8_matmul.py`](benchmark_8k_fp8_matmul.py) runs the same
+`8192^3` problem on an exact Modal `B200` worker. Its inputs are FP8 E4M3FN,
+accumulation and output are FP32, and tensorwise decode scales are `1.0`. It
+uses a row-major left input, column-major right input, and a preallocated FP32
+output with `aten::_scaled_mm.out`. Both 64 MiB inputs are filled with the FP8
+encoding of `1.0`, and a full-output check verifies every FP32 result is
+`8192.0`. The benchmark uses the default accurate accumulation mode
+(`use_fast_accum=False`).
+
+The committed [raw FP8 result](8k_fp8_blackwell_results.json) was measured on
+one NVIDIA B200 worker (compute capability 10.0, 1,000 W power limit) with
+PyTorch 2.12.1+cu130, CUDA 13.0, and driver 580.95.05. Each row is the pooled
+mean of three aggregate trials. Initialization ran 366,379 times per trial,
+while multiplication-only and the direct pipeline each ran 49,936 times per trial;
+the aggregate intervals lasted roughly 13.4-15.0 seconds and synchronized only
+at their boundaries. `±` is one sample standard deviation across the three
+aggregate trial means, not a confidence interval or full uncertainty estimate.
+
+| Phase | Total runs | Time/run (ms) | Raw GPU-board J/run | Idle-adjusted GPU J/run | Share of isolated raw sum |
+|---|---:|---:|---:|---:|---:|
+| Initialize A + B | 1,099,137 | 0.04095 | 0.021610 ± 0.000038 | 0.011412 ± 0.000038 | 7.5% |
+| Multiply A x B | 149,808 | 0.26992 | 0.267977 ± 0.001666 | 0.200757 ± 0.001105 | 92.5% |
+| Direct initialize + multiply | 149,808 | 0.30078 | **0.291634 ± 0.000682** | **0.216729 ± 0.000677** | — |
+
+The isolated stages sum to `0.289587 J` raw per pipeline, within 0.7% of the
+direct `0.291634 J` measurement. Isolated initialization costs `0.021610 J`;
+subtracting multiplication from the direct pipeline gives `0.023657 J`.
+Together they put initialization at roughly 7-8% of raw pipeline energy. The
+measured idle baseline was 249.04 W (246.68-251.40 W before/after), giving a
+direct-pipeline idle-adjusted range of `0.21602-0.21744 J/run`. As above, raw
+energy is the full NVML GPU-board delta and excludes host CPU, facility energy,
+Modal boot, allocation/context startup, warmup, and validation.
+
+The relevant B200 row in the shared [FP8 energy estimate](https://chatgpt.com/share/6a922e47-aae0-83e8-81f4-d72ddf648a11)
+uses a 4.50 PFLOP/s dense rate and 1,000 W module power. Recomputing from those
+inputs gives `0.244335917 ms` and `0.244335917 J` for a warm GEMM with inputs
+already in HBM. Multiply-only raw board energy is the closest measured scope:
+
+| Metric | B200 FP8 estimate | Modal B200 measurement | Measured / estimate |
+|---|---:|---:|---:|
+| GEMM time | 0.244336 ms | 0.269916 ms | 1.105x (+10.5%) |
+| Dense throughput | 4.500 PFLOP/s | 4.074 PFLOP/s | 0.905x (-9.5%) |
+| Raw GPU-board energy/GEMM | 0.244336 J | **0.267977 J** | **1.097x (+9.7%)** |
+| Raw direct-pipeline energy | prepacked inputs; excluded | 0.291634 J | 1.194x (+19.4%; not like-for-like) |
+
+The measured GEMM averaged 992.8 W, close to the estimate's 1,000 W basis;
+achieving 90.5% of its peak-rate assumption accounts for most of the 9.7%
+energy difference. The estimate is a peak-power calculation, not a direct
+measurement, and does not specify the FP8 encoding or scaling scheme. The
+linked page's literal final table is instead native 4-bit (its B200 NVFP4 row
+is 0.1222 J), so that different-format value is not used as the FP8 comparator.
+
+Reproduce the B200 result from the Quickstart environment:
+
+```bash
+python benchmark_8k_fp8_matmul.py --yes
 ```
 
 ## Current Leaderboard
